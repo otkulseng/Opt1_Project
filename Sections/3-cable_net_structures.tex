@@ -1,0 +1,23 @@
+\section{Cable net structures}
+In this section, we are analysing the situation where all members of the structure are cables, and where we fix certain nodes in order to ensure a solution exists.
+
+This gives us the following optimization problem:
+
+\begin{equation}
+    \underset{X}{\text{min }} E(X) = \sumset{E} \ece + \ee \quad \text{s.t. } x^{(i)} = p^{(i)}, i = 1,...,M
+    \label{cableNet}
+\end{equation}
+
+This optimization problem is $C^1$. We have already shown that a more general problem is continious, therefore \eqref{cableNet} is continious. It's clear that $\ee = \sum_{i=1}^N m_i g x_3^{(i)} \in C^{\infty}$, so the limitation is equation \eqref{cableElast}.
+
+As $\ece$ is a piecewise function, we need to ensure that the derivative at $\xnorm = \el$ is equal to zero.
+
+\begin{equation}
+    \at{\nabla \ece}{\xnorm = \el} = \at{ \frac{k}{\el^2}(\xnorm - \el)^2 \nabla (\xnorm-\el) }{\xnorm = \el} = 0
+\end{equation}
+
+which shows that it is $C^1$.
+\textbf{kommentar: Den notasjonen føltes veldig ulovlig}
+
+Note that the problem is typically not $C^2$ because that would require that the derivative above is continious, which it clearly is not
+$\sumset{E} \ece = 0$, which is only possible if we have $0$ cables or cables with $0$ energy, which is not particularly interesting.
