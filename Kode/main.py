@@ -41,7 +41,7 @@ cables = np.array([
 ])
 
 bars = np.array([
-    [p[0], x[2], 4]
+    # [p[0], x[2], 4]
 ])
 
 # Assume sol is the solution of some optimization algorithm
@@ -54,6 +54,7 @@ sol = np.array([
 ])
 
 fig, ax = plot3DTensegrityStructure(sol, pp, cables, bars)
+plt.savefig("./Bilder/oppg1.png")
 plt.show()
 
 
