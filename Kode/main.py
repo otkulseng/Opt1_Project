@@ -41,7 +41,7 @@ bars = np.array([
     [p[3], x[3], 10]
 ])
 
-f = gen_E(pp, cables, fw, bars, k=0.1, c=1, rho=0)
+f = gen_E(cables, bars, fw, pp, k=0.1, c=1, rho=0)
 
 
 x0 = np.ones(3 * len(fw))
