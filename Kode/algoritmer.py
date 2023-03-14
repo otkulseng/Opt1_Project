@@ -69,15 +69,7 @@ def plot3DTensegrityStructure(x, p, cables, bars):
     return fig, ax
 
 
-def gen_E_cable_elast(p, cables, free_weights, k=2):
-    """Takes in the position of all fixed points p,
-    and information about all the cables. Generates the
-    objective function used with E_cable_elast
-
-    Returns:
-        objective function f(x) where x is a numpy array of free
-        optimization variables
-    """
+def helper_split(p, cables):
     cable_len = cables[:, -1]
     cables = np.array(cables[:, :2], dtype=int)
 
@@ -90,25 +82,60 @@ def gen_E_cable_elast(p, cables, free_weights, k=2):
     fix_free = cables[(cables[:, 1] >= len(p)) & (cables[:, 0] < len(p))]
     fix_free_len = cable_len[(cables[:, 1] >= len(p)) & (cables[:, 0] < len(p))]
     fix_free[:, 1] -= len(p)
+    return free_free, free_free_len, fix_free, fix_free_len
+
+
+def gen_E(p, cables, free_weights, bars, k=2, c=3, rho=0):
+    """Takes in the position of all fixed points p,
+    and information about all the cables and bars. Generates the
+    objective function used with E_cable_elast
+
+    Returns:
+        objective function f(x) where x is a numpy array of free
+        optimization variables
+    """
+
+    ff_cables, ff_cables_len, fx_cables, fx_cables_len = helper_split(p, cables)
+    ff_bars, ff_bars_len, fx_bars, fx_bars_len = helper_split(p, bars)
+
 
     def func(xx):
         x = np.reshape(xx, (-1, 3))
 
-        pfree = p[fix_free[:, 0]]
-        xfree = x[fix_free[:, 1]]
-        a = np.linalg.norm(pfree-xfree, axis=1) - fix_free_len
+        # Energy of cables between fixed and free point
+        pfree = p[fx_cables[:, 0]]
+        xfree = x[fx_cables[:, 1]]
+        a = np.linalg.norm(pfree-xfree, axis=1) - fx_cables_len
         a = np.where(a<0, 0, a)
-        Efixfree = (k /fix_free_len**2 * a) @ a
 
-        xfree1 = x[free_free[:, 0]]
-        xfree2 = x[free_free[:, 1]]
-        b = np.linalg.norm(xfree1-xfree2, axis=1) - free_free_len
+        Efixfree = (k /(2*fx_cables_len**2) * a) @ a
+
+        # Energy of cables between free and free point
+        xfree1 = x[ff_cables[:, 0]]
+        xfree2 = x[ff_cables[:, 1]]
+        b = np.linalg.norm(xfree1-xfree2, axis=1) - ff_cables_len
         b = np.where(b<0, 0, b)
-        Efreefree = (k /free_free_len**2 * b) @ b
 
+        Efreefree = (k /(2*ff_cables_len**2) * b) @ b
+
+        # Energy of all free weights
         Eext = free_weights @ x[:, -1]
 
-        return Efixfree + Efreefree + Eext
+        # Energy of bars between fixed and free point
+        pfree1 = p[fx_bars[:, 0]]
+        xfree1 = x[fx_bars[:, 1]]
+        aa = np.linalg.norm(pfree1-xfree1, axis=1) - fx_bars_len
+
+        Ebar_fix_free = (c /(2*fx_bars_len**2) * aa) @ aa
+
+        # Energy of cables between free and free point
+        xfree11 = x[ff_bars[:, 0]]
+        xfree22 = x[ff_bars[:, 1]]
+        bb = np.linalg.norm(xfree11-xfree22, axis=1) - ff_bars_len
+
+        Ebar_free_free = (c /(2*ff_bars_len**2) * bb) @ bb
+
+        return Efixfree + Efreefree + Eext + Ebar_fix_free + Ebar_free_free
     return func
 
 
