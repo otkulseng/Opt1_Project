@@ -63,7 +63,7 @@ print(np.round(sol, 6))
 
 
 fig, ax = plot3DTensegrityStructure(sol, pp, cables, bars)
-plt.savefig("./Bilder/oppg1.png")
+plt.savefig("./Bilder/oppg1.pdf")
 plt.show()
 
 
