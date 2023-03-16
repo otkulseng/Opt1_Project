@@ -8,21 +8,26 @@ This gives us the following optimization problem:
     \label{cableNet}
 \end{equation}
 
-This optimization problem is $C^1$. We have already shown that a more general problem is continious, therefore \eqref{cableNet} is continious. It's clear that $\ee = \sum_{i=1}^N m_i g x_3^{(i)} \in C^{\infty}$, so the limitation is equation \eqref{cableElast}.
+In order to optimize this function with an algorithm that fits the problem, it will be useful to know wether the function is continious, $C^1$, $C^2$.
 
-As $\ece$ is a piecewise function, we need to ensure that the derivative at $\xnorm = \el$ is equal to zero.
-
+We have already shown that a more general problem is continious, therefore \eqref{cableNet} is continious. The gradient is 
 \begin{equation}
-    \at{\nabla \ece}{\xnorm = \el} = \at{ \frac{k}{\el^2}(\xnorm - \el) \nabla (\xnorm-\el) }{\xnorm = \el} = 0
+    \nabla \sum_{i=1}^N m_i g x_3^{(i)}
+    = (0,0,m_1 g, 0,0,m_2 g,...,0,0,m_N g)
+    \label{gradient_external_force}
 \end{equation}
+It's clear that $\ee = \sum_{i=1}^N m_i g x_3^{(i)} \in C^{\infty}$. 
 
-The last equality is due to the fact that
+As $\ece$ is a piecewise function, we need to ensure that the derivative at $\xnorm = \el$ is equal to zero. When $\xnorm < \el$ the gradient is always $\Vec{0}$, so we will only consider $\xnorm>\el$
 
-\begin{equation}
-    \nabla (\xnorm - \el) = \nabla \sqrt{(x^{(i)} -x^{(j)})^2} = \frac{2(x^{(i)} - x^{(j)})}{2 \sqrt{(x^{(i)} -x^{(j)})^2} } = \frac{(x^{(i)} - x^{(j)})}{\xnorm}
-\end{equation}
-which shows that it is $C^1$.
-\textbf{kommentar: Den notasjonen føltes veldig ulovlig}
+\begin{align}
+    \nabla \ece =  &\frac{k}{\el^2}(\xnorm - \el) \nabla (\sqrt{ \sum_{k= 1,2,3}(x_k^{(i)}-x_k^{(j)})^2}-\el)\\&=\frac{k}{\el^2} (\xnorm - \el) \frac{1}{2\sqrt{\sum_{k=1,2,3}(x_k^{(i)}-x_k^{(j)})^2}}\nabla \sum_{k=1,2,3}(x_k^{(i)}-x_k^{(j)})^2\\ &= \frac{k}{\el^2} (1 - \frac{\el}{\xnorm}) \frac{1}{2} 2(x_k^{(i)} - x_k^{(j)}) \nabla (x_k^{(i)} - x_k^{(j)})\\ &= \frac{k}{\el^2} (1- \frac{\el}{\xnorm}) (x_k^{(i)} - x_k^{(j)}) ( 1, 1, 1,-1,-1,-1)
+\end{align}
+Note that $\xnorm>\el$, which means that we never divide by zero. We see that inserting $\xnorm = \el$ we get $\vec{0}$, which shows that the expression is $C^1$. Thus, a sum of $C^1$ functions are $C^1$.
 
 Note that the problem is typically not $C^2$ because that would require that the derivative above is continious, which it clearly is not unless
 $\sumset{E} \ece = 0$, which is only possible if we have $0$ cables or cables with $0$ energy, and these are not particularly interesting examples..
+
+\subsection{Convexity}
+
+Convexity is another property that is of great importance when considering the choice of optimization algorithm. It turns out that our problem is in fact strictly convex: 

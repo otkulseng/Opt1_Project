@@ -83,5 +83,9 @@ The second constraint models a self-supported free standing structure, with the 
     x_3^{(i)} \geq 0 \quad \forall \quad i = 1,...,N
 \end{equation}
 
-\textbf{TO DO:}
-Finne ut hvordan vi viser at det finnes minimum når funksjonen ikke er coercive. Når vi sender to noder til $+\infty$ samtidig vil jo energien bare holde seg konstant, så det er IKKE coercive. Antar at vi må lage et kompakt sett $\Omega$ slik at vi kan bruke teoremet om at det gir en løsning, men vet ikke hvilket sett vi kan bruke.
+Note that coerciveness is not as straight forward in this case. If we let $x_1^{(i)}, x_1^{(j)} \to \infty$ and keeping all other variables constant we see that the distance between the nodes do not change, and therefore the energy does not tend to $\infty$. This can be fixed without a loss of generality by fixing the $x_1$ and $x_2$-position of a given node: $x^{(i)} = (p_1,p_2,x^{(i)}_3)$.
+
+With this setup, showing coerciveness is very similar to the previous condition. Note that this is indeed an actual constrained optimization problem. 
+
+\textbf{Kommentar: Er dette godt nok begrunnet?}
+
