@@ -20,14 +20,14 @@ def plot3DTensegrityStructure(x, p, cables, bars):
 
     # First element means cable from p0 to x1 with rest length 3
     cables = np.array([
-        (p[0], x[1], 3),
-        (p[1], x[0], 2),
-        (p[1], x[1], 4),
-        (x[1], x[0], 1)
+        [p[0], x[1], 3],
+        [p[1], x[0], 2],
+        [p[1], x[1], 4],
+        [x[1], x[0], 1]
     ])
 
     bars = np.array([
-        (p[0], x[0], 4)
+        [p[0], x[0], 4]
     ])
 
     # Assume xx is the solution of some optimization algorithm
@@ -76,11 +76,31 @@ def cable_elastic(state, cables, k):
     diff = np.where(diff < 0, 0, diff)
     return (k /(2*cables[:, 2]**2) * diff) @ diff
 
+def grad_cable_elastic(state, cables, k):
+    grad = np.zeros(state.shape)
+
+    l = state[cables[:, 0]]
+    r = state[cables[:, 1]]
+
+    norm = np.linalg.norm(l - r, axis=1)
+    diff = norm - cables[:, 2]
+    # diff = np.where(diff < 0, 0, diff)
+
+    grads = np.divide((l - r).T, norm)
+    grads = np.where(diff < 0, 0, grads)
+
+    grads = k * np.divide(grads, cables[:, 2]**2).T
+
+    grad[cables[:, 0]] += np.sum(grads[cables[:, 0]])
+    grad[cables[:, 1]] -= np.sum(grads[cables[:, 1]])
+    return grad.flatten()
+
 def bar_elastic(state, bars, c):
     l = state[bars[:, 0]]
     r = state[bars[:, 1]]
     diff = np.linalg.norm(l - r, axis=1) - bars[:, 2]
     return (c /(2*bars[:, 2]**2) * diff) @ diff
+
 
 def bar_potential(state, bars, rho):
     l = state[bars[:, 0]]
@@ -122,5 +142,15 @@ def gen_E(cables, bars, free_weights, fixed_points, k=2, c=3, rho=0):
 
     return func
 
+def gen_grad_E(cables, bars, free_weights, fixed_points, k=2, c=3, rho=0):
+
+    state = np.zeros((len(fixed_points) + len(free_weights), 3))
+    state[:len(fixed_points)] = fixed_points
+
+    def func(xx):
+        x = np.reshape(xx, (-1, 3))
+        state[len(fixed_points):] = x
+        return grad_cable_elastic(state, cables, k)[3 * len(fixed_points):]
+    return func
 
 
