@@ -25,9 +25,29 @@ As $\ece$ is a piecewise function, we need to ensure that the derivative at $\xn
 \end{align}
 Note that $\xnorm>\el$, which means that we never divide by zero. We see that inserting $\xnorm = \el$ we get $\vec{0}$, which shows that the expression is $C^1$. Thus, a sum of $C^1$ functions are $C^1$.
 
+\textbf{Mangler godt argument for hvorfor den ikke er $C^2$.}
 Note that the problem is typically not $C^2$ because that would require that the derivative above is continious, which it clearly is not unless
-$\sumset{E} \ece = 0$, which is only possible if we have $0$ cables or cables with $0$ energy, and these are not particularly interesting examples..
+$\sumset{E} \ece = 0$, which is only possible if we have $0$ cables or cables with $0$ energy, and these are not particularly interesting situations.
 
 \subsection{Convexity}
 
-Convexity is another property that is of great importance when considering the choice of optimization algorithm. It turns out that our problem is in fact strictly convex: 
+Convexity is another property that is of great importance when considering the choice of optimization algorithm.  $\ee =\sum_{i=1}^N m_i g x_3^{(i)}$ is convex, but not strictly convex:
+\begin{equation*}
+    E(\lambda X +(1-\lambda) Y) = \sum_{i=1}^N m_i g (\lambda x_3^{(i)} + (1-\lambda) y_3^{(i)})
+    =\sum_{i=1}^N \lambda m_i g x_3^{(i)} + (1-\lambda) m_i g  y_3^{(i)} = \lambda E(X) + (1-\lambda) E(Y)
+\end{equation*}
+For the elastic energy of the cable, we will consider a given edge $e_{ij}$ where we assume that $\xnorm > \el$. If $\xnorm \leq \el$, we can simply ignore the node as it does not have any energy. Note that this assumes that the mass of node $i$ and $j$ are non-zero.
+\begin{align*}
+     E^{cable}_{elast}(\lambda e_{ij} + (1-\lambda) \tilde{e_{ij}}) = \frac{k}{2 \el^2} \bigg( \lVert \lambda(x^{(i)}-x^{(j)}) + ( 1-\lambda ) (\tilde{x}^{(i)}-\tilde{x}^{(j)} )\rVert -\el\bigg)^2\\ \leq \frac{k}{2 \el^2} \bigg( \lambda \lVert (x^{(i)}-x^{(j)}) \rVert +( 1-\lambda ) \lVert (\tilde{x}^{(i)}-\tilde{x}^{(j)} \rVert -\el\bigg)^2 \\ <
+     \frac{k}{2 \el^2}\bigg( \lambda\lVert  (x^{(i)}-x^{(j)}) \rVert - \el +( 1-\lambda ) ( \lVert \tilde{x}^{(i)}-\tilde{x}^{(j)} \rVert -\el ) \bigg)^2 \quad \text{if $\el > 0$} \\
+     \leq \lambda \frac{k}{2 \el^2}\bigg( \lVert  (x^{(i)}-x^{(j)}) \rVert - \el \bigg)^2 + ( 1-\lambda )\frac{k}{2 \el^2}\bigg( ( \lVert \tilde{x}^{(i)}-\tilde{x}^{(j)} \rVert -\el ) \bigg)^2 \\= \lambda E^{cable}_{elast}(e_{ij}) + (1-\lambda) E^{cable}_{elast}(\Tilde{e_{ij}})
+\end{align*}
+
+We see that the function is strictly convex. From this, we have that the energy function is convex as the sum of a convex and strictly convex function is strictly convex. 
+
+The fact that this energy expression is convex means that we can use Quasi-Newton methods. These are very efficient methods. We choose to avoid using Newton's Method because calculating the Hessian is cumbersome.
+
+\subsection{Neccesary and sufficient optimality conditions}
+As we have a convex function that is differentiable, the neccesary and sufficient optimality condition is simply \begin{equation}
+    \nabla E(X) = 0
+\end{equation}
