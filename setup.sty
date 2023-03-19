@@ -1,5 +1,4 @@
 \ProvidesPackage{setup}
-
 \usepackage[a4paper, total={6.5in, 10in}]{geometry}
 \usepackage{graphicx} % Required for inserting images
 \usepackage[utf8]{inputenc}
@@ -17,6 +16,7 @@
 %shortcuts pga klønete tekking av ofte brukte greier
 \newcommand{\el}{\ell_{ij}}
 \newcommand{\xnorm}{\lVert x^{(i)} - x^{(j)}\rVert}
+\newcommand{\ynorm}{\lVert y^{(i)} - y^{(j)}\rVert}
 \newcommand{\e}{(e_{ij})}
 \newcommand{\sumset}[1]{\sum\limits_{e_{ij} \in \mathcal{#1}}}
 \newcommand{\ebe}{E^{bar}_{elast}(e_{ij})}
@@ -24,4 +24,5 @@
 \newcommand{\ece}{E^{cable}_{elast}(e_{ij})}
 \newcommand{\ee}{E_{ext}(X)}
 \newcommand{\xinf}{\lim\limits_{\rVert X \lVert \to \infty}}
-\newcommand\at[2]{\left.#1\right|_{#2}}
+%\newcommand\at[2]{\left.#\right|_{#2}}
+\newcommand{\xx}{x^{(i)}-x^{(j)}}

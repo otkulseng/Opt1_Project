@@ -36,19 +36,19 @@ Convexity is another property that is of great importance when considering the c
     E(\lambda X +(1-\lambda) Y) = \sum_{i=1}^N m_i g (\lambda x_3^{(i)} + (1-\lambda) y_3^{(i)})
     =\sum_{i=1}^N \lambda m_i g x_3^{(i)} + (1-\lambda) m_i g  y_3^{(i)} = \lambda E(X) + (1-\lambda) E(Y)
 \end{equation*}
-For the elastic energy of the cable, we will consider a given edge $e_{ij}$ where we assume that $\xnorm > \el$. If $\xnorm \leq \el$, we can simply ignore the node as it does not have any energy. Note that this assumes that the mass of node $i$ and $j$ are non-zero.
+For the elastic energy of the cable, we will consider a given edge $e_{ij}$ where we assume that $\xnorm > \el$. If $\xnorm \leq \el$, we can simply ignore the node as it does not have any energy. Note that this assumes that the mass of node $i$ and $j$ are non-zero. Let $0 < \lambda < 1$
 \begin{align*}
      E^{cable}_{elast}(\lambda e_{ij} + (1-\lambda) \tilde{e_{ij}}) = \frac{k}{2 \el^2} \bigg( \lVert \lambda(x^{(i)}-x^{(j)}) + ( 1-\lambda ) (\tilde{x}^{(i)}-\tilde{x}^{(j)} )\rVert -\el\bigg)^2\\ \leq \frac{k}{2 \el^2} \bigg( \lambda \lVert (x^{(i)}-x^{(j)}) \rVert +( 1-\lambda ) \lVert (\tilde{x}^{(i)}-\tilde{x}^{(j)} \rVert -\el\bigg)^2 \\ <
      \frac{k}{2 \el^2}\bigg( \lambda\lVert  (x^{(i)}-x^{(j)}) \rVert - \el +( 1-\lambda ) ( \lVert \tilde{x}^{(i)}-\tilde{x}^{(j)} \rVert -\el ) \bigg)^2 \quad \text{if $\el > 0$} \\
      \leq \lambda \frac{k}{2 \el^2}\bigg( \lVert  (x^{(i)}-x^{(j)}) \rVert - \el \bigg)^2 + ( 1-\lambda )\frac{k}{2 \el^2}\bigg( ( \lVert \tilde{x}^{(i)}-\tilde{x}^{(j)} \rVert -\el ) \bigg)^2 \\= \lambda E^{cable}_{elast}(e_{ij}) + (1-\lambda) E^{cable}_{elast}(\Tilde{e_{ij}})
 \end{align*}
 
-We see that the function is strictly convex. From this, we have that the energy function is convex as the sum of a convex and strictly convex function is strictly convex. 
+We see that the function for a given node is strictly convex. Therefore, $\sumset{E} \ece$ is also strictly convex as it's a sum of strictly convex functions. From this, we have that the energy function is strictly convex as the sum of a convex and strictly convex function is strictly convex. 
 
 The fact that this energy expression is convex means that we can use Quasi-Newton methods. These are very efficient methods. We choose to avoid using Newton's Method because calculating the Hessian is cumbersome.
 
 \subsection{Neccesary and sufficient optimality conditions}
-As we have a convex function that is differentiable, the neccesary and sufficient optimality condition is simply \begin{equation}
-    \nabla E(X) = 0
+As we have a convex function that is differentiable, the neccesary and sufficient optimality condition for a solution $X^*$ is simply \begin{equation}
+    \nabla E(X^*) = 0
 \end{equation}
 This will be a global minimizer, again due to convexity.

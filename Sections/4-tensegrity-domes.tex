@@ -1,11 +1,72 @@
 \section{Tensegrity domes}
-We will now consider the situation with bars as well. As the model is the same as cables (when the cable has $\xnorm > \el$) with a different constant $k$, we see immediatly that
+We will now consider the situation with added bars, but still using the constraint of fixed nodes. Our new optimisation problem has the following objective function:
+\begin{equation}
+\begin{aligned}
+    \label{energy}
+    &E(X) = \sumset{B}\big(\ebe + \ebg\big) + \sumset{C} \ece + \ee \\
+    & \text{such that } x^{(i)} = p^{(i)}, i=1,...,M
+\end{aligned}
+\end{equation}
+
+which still leaves us with a free optimization problem. However, the situation will be slightly more complicated.
+
+First off, the objective function \eqref{energy} is not generally differentiable. We see that the elastic energy model for bars is the same as cables for $\xnorm > \el$ with a different constant $k$, we see immediatly that
 \begin{equation*}
 \ebe = \frac{c}{\el^2} (1- \frac{\el}{\xnorm}) (x_k^{(i)} - x_k^{(j)}) ( 1, 1, 1,-1,-1,-1)
 \end{equation*}
-Note that this expression is for all values of $\xnorm$, which means that the function is not differentiable when $\xnorm = 0$. However, the distance being $0$ represents two nodes with the exact same position, so it's not a problem for all practical purphoses.
+Note that this expression is valid for all values of $\xnorm$, which means that the function is not differentiable when $\xnorm = 0$. However, the distance being $0$ would imply two nodes being in the same position which will clearly never happen in practice, so this is not a problem.
 
 \subsection{Optimality conditions for tensegrity domes}
+\textbf{Kommentar: Jeg vil egentlig flytte denne delen til under konveksitet, men per nå står den her fordi det var denne rekkefølgen oppgavene kom i.}
+As this is a free optimalization problem, the neccesary optimality conditions for a solution $X^*$ 
 
+\begin{align*}
+    &\nabla E(X^*) = 0\\
+    & H_f(X^*) \text{ is positive semi-definite}
+\end{align*}
 
-\textbf{Hva i helvete er det man liksom skal svare her? Må jeg regne ut Hessian? Pls no}
+These conditions are in general not sufficient for a minimum. The sufficient condition is that $H_f(X^*)$ is positive definite. For convex functions it would be sufficient, but it turns out that our objective function is no longer convex.
+
+\textbf{Spørsmål:} 
+Teorem: 
+f er convex hvis og bare hvis $H_f(x)$ er positive demi-definite for alle x.
+
+Teorem: Nabla x = 0 er godt nok for konvekse funksjoner til å gi minimizer. 
+
+-Men generelt må vi jo ha positive definiteness, ikke semi-definiteness? Får ikke helt dette til å stemme..
+
+\textbf{Kommentar:} Er dette det de vil frem til? Eller må jeg egentlig regne ut Hessian? Pls no
+
+\subsection{Non-convexity}
+In order for a function to be convex we need it to hold for all $X,Y \in \mathbb{R}^{3N}$ and any $0\leq \lambda \leq 1$ Therefore, we will consider $\lambda = \frac{1}{2}$, and $X,Y$ such that 
+\begin{equation*}
+    \rVert x^{(i)}-x^{(j)} \lVert, \rVert y^{(i)}-y^{(j)} \lVert < \el \quad \forall \quad i,j \in N
+\end{equation*}
+Now let $Y = -X$, that is: $\xx = -(y^{(i)}-y^{(j)}) = y^{(j)}-y^{(i)}$ such that
+\begin{equation}
+    \label{energyConv1}
+    E(\lambda X + (1-\lambda) Y) = E(\frac{1}{2}X + \frac{1}{2}(-X)) = E(0) = \sumset{E} \frac{c}{2 \el^2} ( \rVert 0 \lVert - \el)^2 = \sumset{E}\frac{c}{2}
+\end{equation}
+On the other hand, we have
+\begin{equation}
+\label{energyConv2}
+\begin{aligned}    
+    &\lambda E(X) + (1-\lambda)E(Y) = \frac{1}{2}E(X) + \frac{1}{2}E(-X) \\& 
+    = \frac{1}{2}\sumset{E} \frac{c}{2\el^2} (\xnorm - \el)^2 + \frac{1}{2} \sumset{E}\frac{c}{2\el^2} (\rVert-(\xx)\lVert)^2\\
+    &= \sumset{E}\frac{c}{2\el^2}(\rVert(\xx)\lVert - \el )^2= \sumset{E}\frac{c}{2\el^2} (\xnorm^2 - 2\xnorm \el + \el^2) \\
+    &=\sumset{E}\frac{c}{2\el^2} \xnorm (\xnorm - 2 \el) + \sumset{E}\frac{c}{2\el^2}\el^2
+    \end{aligned}
+\end{equation}
+
+In order for the function to be convex we need the difference between the two expressions to be non-negative:
+\begin{equation}
+    =\sumset{E}\frac{c}{2\el^2} \xnorm (\xnorm - 2 \el) \geq 0
+\end{equation}
+We see that the expression is only convex if 
+$$\xnorm \geq 2 \cdot \underset{{e_{ij} \in \mathcal{E}}}{\text{min}}\el$$
+which means that the expression is only convex when the bars are more than twice the length of the shortest bar. Thus, the objective function is not convex. $\square$
+\textbf{men her har vi en condition på konveksitet da, kan det brukes til noe?}
+
+The fact that the function is non-convex means that we need the general optimality conditions, as well as restricting our choice of algorithms. It also means that we have local minima that are not global, as seen in this simple example:
+
+-Fortsetter imorgen, har et eksempel i hodet
