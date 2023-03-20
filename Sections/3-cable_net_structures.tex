@@ -38,9 +38,9 @@ Convexity is another property that is of great importance when considering the c
 \end{equation*}
 For the elastic energy of the cable, we will consider a given edge $e_{ij}$ where we assume that $\xnorm > \el$. If $\xnorm \leq \el$, we can simply ignore the node as it does not have any energy. Note that this assumes that the mass of node $i$ and $j$ are non-zero. Let $0 < \lambda < 1$
 \begin{align*}
-     E^{cable}_{elast}(\lambda e_{ij} + (1-\lambda) \tilde{e_{ij}}) = \frac{k}{2 \el^2} \bigg( \lVert \lambda(x^{(i)}-x^{(j)}) + ( 1-\lambda ) (\tilde{x}^{(i)}-\tilde{x}^{(j)} )\rVert -\el\bigg)^2\\ \leq \frac{k}{2 \el^2} \bigg( \lambda \lVert (x^{(i)}-x^{(j)}) \rVert +( 1-\lambda ) \lVert (\tilde{x}^{(i)}-\tilde{x}^{(j)} \rVert -\el\bigg)^2 \\ <
+     E^{cable}_{elast}(\lambda e_{ij} + (1-\lambda) \tilde{e_{ij}}) &= \frac{k}{2 \el^2} \bigg( \lVert \lambda(x^{(i)}-x^{(j)}) + ( 1-\lambda ) (\tilde{x}^{(i)}-\tilde{x}^{(j)} )\rVert -\el\bigg)^2\\ &\leq \frac{k}{2 \el^2} \bigg( \lambda \lVert (x^{(i)}-x^{(j)}) \rVert +( 1-\lambda ) \lVert (\tilde{x}^{(i)}-\tilde{x}^{(j)} \rVert -\el\bigg)^2 \\ &<
      \frac{k}{2 \el^2}\bigg( \lambda\lVert  (x^{(i)}-x^{(j)}) \rVert - \el +( 1-\lambda ) ( \lVert \tilde{x}^{(i)}-\tilde{x}^{(j)} \rVert -\el ) \bigg)^2 \quad \text{if $\el > 0$} \\
-     \leq \lambda \frac{k}{2 \el^2}\bigg( \lVert  (x^{(i)}-x^{(j)}) \rVert - \el \bigg)^2 + ( 1-\lambda )\frac{k}{2 \el^2}\bigg( ( \lVert \tilde{x}^{(i)}-\tilde{x}^{(j)} \rVert -\el ) \bigg)^2 \\= \lambda E^{cable}_{elast}(e_{ij}) + (1-\lambda) E^{cable}_{elast}(\Tilde{e_{ij}})
+     &\leq \lambda \frac{k}{2 \el^2}\bigg( \lVert  (x^{(i)}-x^{(j)}) \rVert - \el \bigg)^2 + ( 1-\lambda )\frac{k}{2 \el^2}\bigg( ( \lVert \tilde{x}^{(i)}-\tilde{x}^{(j)} \rVert -\el ) \bigg)^2 \\&= \lambda E^{cable}_{elast}(e_{ij}) + (1-\lambda) E^{cable}_{elast}(\Tilde{e_{ij}})
 \end{align*}
 
 We see that the function for a given node is strictly convex. Therefore, $\sumset{E} \ece$ is also strictly convex as it's a sum of strictly convex functions. From this, we have that the energy function is strictly convex as the sum of a convex and strictly convex function is strictly convex. 

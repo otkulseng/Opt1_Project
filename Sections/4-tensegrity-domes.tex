@@ -45,13 +45,13 @@ In order for a function to be convex we need it to hold for all $X,Y \in \mathbb
 Now let $Y = -X$, that is: $\xx = -(y^{(i)}-y^{(j)}) = y^{(j)}-y^{(i)}$ such that
 \begin{equation}
     \label{energyConv1}
-    E(\lambda X + (1-\lambda) Y) = E(\frac{1}{2}X + \frac{1}{2}(-X)) = E(0) = \sumset{E} \frac{c}{2 \el^2} ( \rVert 0 \lVert - \el)^2 = \sumset{E}\frac{c}{2}
+    E^{cable}_{elast}(\lambda X + (1-\lambda) Y) = E^{cable}_{elast}(\frac{1}{2}X + \frac{1}{2}(-X)) = E^{cable}_{elast}(0) = \sumset{E} \frac{c}{2 \el^2} ( \rVert 0 \lVert - \el)^2 = \sumset{E}\frac{c}{2}
 \end{equation}
 On the other hand, we have
 \begin{equation}
 \label{energyConv2}
 \begin{aligned}    
-    &\lambda E(X) + (1-\lambda)E(Y) = \frac{1}{2}E(X) + \frac{1}{2}E(-X) \\& 
+    &\lambda E^{cable}_{elast}(X) + (1-\lambda)E^{cable}_{elast}(Y) \\&= \frac{1}{2}E^{cable}_{elast}(X) + \frac{1}{2}E^{cable}_{elast}(-X) \\& 
     = \frac{1}{2}\sumset{E} \frac{c}{2\el^2} (\xnorm - \el)^2 + \frac{1}{2} \sumset{E}\frac{c}{2\el^2} (\rVert-(\xx)\lVert)^2\\
     &= \sumset{E}\frac{c}{2\el^2}(\rVert(\xx)\lVert - \el )^2= \sumset{E}\frac{c}{2\el^2} (\xnorm^2 - 2\xnorm \el + \el^2) \\
     &=\sumset{E}\frac{c}{2\el^2} \xnorm (\xnorm - 2 \el) + \sumset{E}\frac{c}{2\el^2}\el^2
@@ -62,11 +62,26 @@ In order for the function to be convex we need the difference between the two ex
 \begin{equation}
     =\sumset{E}\frac{c}{2\el^2} \xnorm (\xnorm - 2 \el) \geq 0
 \end{equation}
-We see that the expression is only convex if 
+We see that the expression is only convex if we have
 $$\xnorm \geq 2 \cdot \underset{{e_{ij} \in \mathcal{E}}}{\text{min}}\el$$
 which means that the expression is only convex when the bars are more than twice the length of the shortest bar. Thus, the objective function is not convex. $\square$
 \textbf{men her har vi en condition på konveksitet da, kan det brukes til noe?}
 
-The fact that the function is non-convex means that we need the general optimality conditions, as well as restricting our choice of algorithms. It also means that we have local minima that are not global, as seen in this simple example:
+The fact that the function is non-convex means that we need the general optimality conditions, as well as restricting our choice of algorithms. It also means that we have local minima that are not global, as seen in figure \ref{fig:local_optimizer}:
 
--Fortsetter imorgen, har et eksempel i hodet
+Fix a node $p^{(1)}$, and consider a free node $x^{(2)}$ that is placed at least a distance $l_{12}$ above the $p^{(1)}$. At this starting position the bar will not have any elastic energy, so the gravity will bring the node downwards until the gravity is equally strong as the elastic force from the bar, which will be a local minima. However, it will not be a global minima as we will have lower energy if we instead placed $x^{(2)}$ below $p^{(1)}$ as seen in the rightmost drawing. 
+
+\begin{figure}
+    \centering\includegraphics[width=0.5\columnwidth]{Bilder/local_optimizer.jpeg}
+    \caption{Local optimizer to the left, global optimizer to the right.A bar is connected between the fixed node $p^{(1)}$, and free node $x^{(2)}$.}
+    \label{fig:local_optimizer}
+\end{figure}
+
+We see that we have an equillibrium in the first case where the elasticity is equal to the gravity.
+
+\section{Tensegrity domes in constrained optimization}
+We will now consider the full problem \eqref{energy} with the constraints given by 
+\begin{equation}
+    x_3^{(i)} \geq 0 \quad \forall \quad i = 1,...,N
+\end{equation}
+
