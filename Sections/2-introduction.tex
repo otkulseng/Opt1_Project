@@ -1,6 +1,6 @@
 \section{Introduction}
 \subsection{Modeling of the structures}
-Tensegrity structures consist of bars and cables that are connected with joints. We will model the structures as a \textbf{(DIRECTED?)} graph $\mathcal{G} = (\mathcal{V},\mathcal{E})$, where $\mathcal{V} = \{1,...,N\}$ is a set of vertices, and $\mathcal{E} \subset \mathcal{V} \times \mathcal{V}$ is a set of edges. The vertices naturally represent the joints of the structure, and an edge $e_{ij} = (i,j)$ with $i < j$ indicates that the joints $i$ and $j$ are connected through either a cable or a bar.
+Tensegrity structures consist of bars and cables that are connected with joints. We will model the structures as a directed graph $\mathcal{G} = (\mathcal{V},\mathcal{E})$, where $\mathcal{V} = \{1,...,N\}$ is a set of vertices, and $\mathcal{E} \subset \mathcal{V} \times \mathcal{V}$ is a set of edges. The vertices naturally represent the joints of the structure, and an edge $e_{ij} = (i,j)$ with $i < j$ indicates that the joints $i$ and $j$ are connected through either a cable or a bar.
 
 The position of a node $i$ is given by $x^{(i)} = (x_1^{(i)},x_2^{(i)},x_3^{(i)})$. Additionally, we will collect the position of all nodes in a vector $X = (x^{(1)},...,x^{(N)} \in \mathbb{R}^{3N}$
 
@@ -52,41 +52,52 @@ Note that minimizing \eqref{totalEnergy} might not admit a solution, as the ener
 The first constraint is fixing some of the nodes such that
 \begin{equation}
     x^{(i)} = p^{(i)} \qquad \text{for } i = 1,...,M
-\end{equation} for some fixed $p^{(i)} \in \mathbb{R}^3$, and $1\leq M < N$
+    \label{fixednode}
+\end{equation} for some fixed $p^{(i)} \in \mathbb{R}^3$, and $1\leq M < N$. This constraint is convenient because we still have a free optimization problem, where we have replaced some $x^{(i)}$ by $p^{(i)}$. The dimension of $X$ is now $3(N-M)$
 
-This constraint is nice because we still have a free optimization problem, where we have replaced some $x^{(i)}$ by $p^{(i)}$. The dimension of $X$ is now $3(N-M)$
+\textbf{formuler som teorem}
 
-\textbf{Kommentar: Føringen under føles ikke mega-presis, kan sikkert forbedres}
-If we assume that we have a connected graph $\mathcal{G}$, meaning the structure is connected, then simply fixing one node, for example $x^{(1)}$ in this way is enough to give us coercivity. We can show this by noticing that if we send for example $x^{(2)}$ to $-\infty$ and keep all other $x_i \in X \setminus x^{(2)}$ bounded we get
+If we assume that we have a connected graph $\mathcal{G}$, meaning the structure is connected, then simply fixing one node, for example $x^{(1)} = p^{(1)}$ in this way is enough to give us coercivity.
+
+\textbf{kommentar: teksten under føles ikke veldig presis.}
+ \textbf{Average distanse mellom noder går mt uendelig, og da også energien}
+We can see this by using the fact that our graph is connected - this means that our fixed node is connected to a cable, bar, or both. For any node $x^{(i)} \neq p^{(1)}$, it will either be directly connected to $p^{(1)}$, or there will exist a path to $p^{(1)}$ through some set of nodes in $\mathcal{E}$. If we send $\lVert X \rVert \to \infty$ through any possible combination of $x^{(i)}_1 \to \pm \infty,x^{(i)}_2 \to \pm \infty,x^{(i)}_3 \to \infty$ then we have $$\xinf E(X)\to \infty$$ because at least one of the cables/bars on the path between $x^{(i)}$ and $p^{(1)}$ will be stretched towards length $\infty$, and therefore it's elastic energy will tend to $\infty$. 
+
+If we additionally allow $x^{(i)}_3 \to -\infty$ we could potentially have some combination of sending nodes to $\pm \infty$ that give us
 \begin{equation}
   \xinf \ee = -\infty
 \quad\text{and additionally}\quad
 \xinf \sumset{B} \ebg = -\infty \quad \text{if $e_{ij}$ is a bar}
 \label{minusinf}
-\end{equation}
+\end{equation} 
 However, we also get
-\begin{equation}
-     \xinf \sumset{C}\quad \ece = \infty \quad \text{or}\quad \xinf \sumset{B }\ebe = \infty \quad
-     \label{plusinf1}
-\end{equation} (depending on whether the node is a cable or bar)
-due to the fact that both these sums contain the term \begin{equation}
- \xinf \frac{k}{2 \ell_{p2}^2}(\lVert x^{(p)} - x^{(2)} \rVert-\ell_{p2})^2 = \infty \quad \text{or} \quad \xinf \frac{c}{2 \ell_{p2}^2}(\lVert x^{(p)} - x^{(2)} \rVert-\ell_{p2})^2 = \infty
+\begin{equation} 
+\label{plusinf1}
+\begin{aligned}
+     &\xinf \sumset{C}\quad \ece = \infty \quad \text{and/or}\quad \xinf \sumset{B }\ebe = \infty \quad\\ 
+     %&\text{depending on whether the fixed node is connected to a cable or bar or both}
+\end{aligned} 
+\end{equation}
+depending on whether the fixed node is connected to a cable or bar or both. This is due to the fact that both these sums contain the term \begin{equation}
+ \xinf \frac{k}{2 \ell_{p2}^2}(\lVert x^{(p)} - x^{(2)} \rVert-\ell_{p2})^2 = \infty \quad \text{and/or} \quad \xinf \frac{c}{2 \ell_{p2}^2}(\lVert x^{(p)} - x^{(2)} \rVert-\ell_{p2})^2 = \infty
  \label{plusinf2}
 \end{equation}
-and it's clear that the terms in \eqref{minusinf} will be dominated one of the terms in \eqref{plusinf1} because they contain one of the terms in \eqref{plusinf2} with the exponent of $2$. Hence, the total energy function \eqref{totalEnergy} is coercive. If we send multiple terms to $\pm \infty$ we will get similar results, and the choice of fixing the node $x^{(i)}$ and sending $x^{(2)}$ was arbitrary, so this shows that we have coercivity in all cases of $\xinf$. We have already shown that the function is continious, therefore it's also lower semi continious, and this implies that the minimisation problem admits a solution. $\square$
+It's clear that the terms in \eqref{minusinf} will be dominated one of the terms in \eqref{plusinf1} because they contain one of the quadratic terms in \eqref{plusinf2}. Hence, the total energy function \eqref{totalEnergy} is coercive. This concludes that for every possible combination we have $\xinf E(X) = \infty$, so we have shown coercivity. We have already shown that the function is continious, therefore it's also lower semi continious, and this implies that the minimisation problem admits a solution. $\square$
 
-Note that we indeed needed to assume that the graph was connected. Without this assumption, we would have to fix one node from each of the disconnected graphs.
+If we have a disconnected graph, we would have to fix at least one node in every connected subgraph contained in the disconnected graph. \textbf{but we will not proove this}
 
 \subsection{Imposing positive z-values of the nodes}
 The second constraint models a self-supported free standing structure, with the only condition being that it's above ground:
 \begin{equation}
     x_3^{(i)} \geq 0 \quad \forall \quad i = 1,...,N
 \end{equation}
+\textbf{Rydd opp i dette}
 
-Note that coerciveness is not as straight forward in this case. If we let $x_1^{(i)}, x_1^{(j)} \to \infty$ and keeping all other variables constant we see that the distance between the nodes do not change, and therefore the energy does not tend to $\infty$. This can be fixed without a loss of generality by fixing the $x_1$ and $x_2$-position of a given node: $x^{(i)} = (p_1,p_2,x^{(i)}_3)$.
+Note that coerciveness is not as immediate in this case. If we simultaniously move all the nodes horizontally in any direction, we see that the distance between the nodes do not change, and thus the energy is constant. This can be fixed without a loss of generality by fixing the $x_1$ and $x_2$-position of a given node: $x^{(i)} = (p_1,p_2,x^{(i)}_3)$. This simply disallows moving the entire structure horisontally.
 
-With this setup, showing coerciveness is very similar to the previous condition. Note that this is indeed an actual constrained optimization problem. 
+With this setup, showing coerciveness is very similar to the previous section. In fact it's even easier because we can no longer let $x^{(i)}_3 \to -\infty$ which was the only potential issue.
 
-\textbf{Kommentar: Er dette godt nok begrunnet?}
+Note that this restriction indeed creates a constrained optimization problem, unlike the full fixation of a node \eqref{fixednode} where we still had a free optimization problem in a lower dimension.
 
-\textbf{Og hva er forskjellen på dette og P11, referer det ikke til samme problem?}
+\textbf{Kommentar: Er dette godt nok begrunnet? Føltes litt waste å kjøre hele coercive-argumentet på nytt..}
+

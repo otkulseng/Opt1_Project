@@ -1,5 +1,5 @@
 \section{Cable net structures}
-In this section, we are analysing the situation where all members of the structure are cables, and where we fix certain nodes in order to ensure a solution exists.
+In this section, we are analysing the situation where all members of the structure are cables, and where we fix certain nodes in order to ensure that a solution exists.
 
 This gives us the following optimization problem:
 
@@ -8,44 +8,86 @@ This gives us the following optimization problem:
     \label{cableNet}
 \end{equation}
 
-In order to optimize this function with an algorithm that fits the problem, it will be useful to know wether the function is continious, $C^1$, $C^2$.
+In order to solve this optimization problem, we first have to show some properties about the function.
 
-We have already shown that a more general problem is continious, therefore \eqref{cableNet} is continious. The gradient is 
+We have already shown that a more general problem is continious, therefore \eqref{cableNet} is continious.
+
+We will look at this term by term
+
+The gradient og $\ee$ is 
 \begin{equation}
-    \nabla \sum_{i=1}^N m_i g x_3^{(i)}
+    \nabla E_{\textbf{ext}} = \nabla \sum_{i=1}^N m_i g x_3^{(i)}
     = (0,0,m_1 g, 0,0,m_2 g,...,0,0,m_N g)
     \label{gradient_external_force}
 \end{equation}
 It's clear that $\ee = \sum_{i=1}^N m_i g x_3^{(i)} \in C^{\infty}$. 
 
-As $\ece$ is a piecewise function, we need to ensure that the derivative at $\xnorm = \el$ is equal to zero. When $\xnorm < \el$ the gradient is always $\Vec{0}$, so we will only consider $\xnorm>\el$
+$\ece$ is obviously differentiable When $\xnorm < \el$. If $\ece$ is to be different from zero in it's entire domain, the gradient is always $\Vec{0}$,  we need to ensure that the derivative at $\xnorm = \el$ is equal to zero. When $\xnorm < \el$ the gradient is always $\Vec{0}$, so we will only consider $\xnorm>\el$
 
+We will take the partial derivative of node $x_p^{(i)}$ in the direction $p=1,2,3$. \textbf{fix setning over}
+
+\textbf{og skriv opp utgangspunktet}
 \begin{align}
-    \nabla \ece =  &\frac{k}{\el^2}(\xnorm - \el) \nabla (\sqrt{ \sum_{k= 1,2,3}(x_k^{(i)}-x_k^{(j)})^2}-\el)\\&=\frac{k}{\el^2} (\xnorm - \el) \frac{1}{2\sqrt{\sum_{k=1,2,3}(x_k^{(i)}-x_k^{(j)})^2}}\nabla \sum_{k=1,2,3}(x_k^{(i)}-x_k^{(j)})^2\\ &= \frac{k}{\el^2} (1 - \frac{\el}{\xnorm}) \frac{1}{2} 2(x_k^{(i)} - x_k^{(j)}) \nabla (x_k^{(i)} - x_k^{(j)})\\ &= \frac{k}{\el^2} (1- \frac{\el}{\xnorm}) (x_k^{(i)} - x_k^{(j)}) ( 1, 1, 1,-1,-1,-1)
+    \delx \ece =  &\frac{k}{\el^2}(\xnorm - \el) \delx \bigg(\sqrt{ \sum_{q=1}^3 (x_q^{(i)}-x_q^{(j)})^2}-\el\bigg)\\&=\frac{k}{\el^2} (\xnorm - \el) \frac{1}{2\sqrt{\sum_{q=1}^3 (x_q^{(i)}-x_q^{(j)})^2}}\delx \sum_{q=1}^3(x_q^{(i)}-x_q^{(j)})^2\\ &= \frac{k}{\el^2} (1 - \frac{\el}{\xnorm}) (x_p^{(i)} - x_p^{(j)}) \delx (x_p^{(i)} - x_p^{(j)})\\ &= \frac{k}{\el^2} (1- \frac{\el}{\xnorm}) (x_p^{(i)} - x_p^{(j)})
 \end{align}
-Note that $\xnorm>\el$, which means that we never divide by zero. We see that inserting $\xnorm = \el$ we get $\vec{0}$, which shows that the expression is $C^1$. Thus, a sum of $C^1$ functions are $C^1$.
 
-\textbf{Mangler godt argument for hvorfor den ikke er $C^2$.}
-Note that the problem is typically not $C^2$ because that would require that the derivative above is continious, which it clearly is not unless
-$\sumset{E} \ece = 0$, which is only possible if we have $\mathcal{E} = \emptyset$, or cables with $0$ energy, and these are not particularly interesting situations.
+Similarly, we have 
+\begin{equation}
+    \frac{\partial}{\partial x_p^{(j)}} \ece =  \frac{k}{\el^2} (1- \frac{\el}{\xnorm}) (x_p^{(j)} - x_p^{(i)})
+\end{equation} where the only difference is a factor of $-1$.
+
+Note that $\xnorm>\el$, which means that we never divide by zero. We see that inserting $\xnorm = \el$ we get $\vec{0}$, which shows that the expression is $C^1$. Thus we have a sum of $C^1$ functions, which is $C^1$. However, the function is not $C^2$. We can show this by showing that the following second order partial derivative is not continuous at $\xnorm = \el$:
+\begin{align*}
+    \frac{\partial^2}{\partial (x_p^{(i)})^2} \ece &= 
+    \delx \frac{k}{\el^2} (1- \frac{\el}{\xnorm}) (x_p^{(i)} - x_p^{(j)}) \\&
+    = \delx \frac{k}{\el^2} (1- \frac{\el}{\xnorm}) (x_p^{(i)}) \\&
+    =\frac{k}{\el^2} - \frac{k}{\el} \delx \frac{x_p^{(i)}}{\xnorm} \\&
+    =\frac{k}{\el^2} -\frac{k}{\el} \frac{\xnorm - x_p^{(i)} \bigg( \delx \sqrt{\sum_{q=1}^3 x_q^{(i)}-x_q^{(j)}} \bigg)}{\xnorm^2} \\&
+    =\frac{k}{\el^2} -\frac{k}{\el} \frac{\xnorm - x_p^{(i)} \bigg( \frac{x_p^{(i)}-x_p^{(j)}}{\xnorm} \bigg)}{\xnorm^2} \\&
+    =\frac{k}{\el^2} -\frac{k}{\el} \frac{\xnorm^2 - x_p^{(i)} \bigg( x_p^{(i)}-x_p^{(j)} \bigg)}{\xnorm^3}
+\end{align*}
+Now let we want the expression above to be $0$ when $\xnorm = \el$:
+\begin{align*}
+    \frac{k}{\el^2} -\frac{k}{\el} \frac{\el^2 - x_p^{(i)} \bigg( x_p^{(i)}-x_p^{(j)} \bigg)}{\el^3} = 0 \implies
+     \el^2 = \el^2 - x_p^{(i)}(x_p^{(i)}-x_p^{(j)}) \implies
+     x_p^{(i)}(x_p^{(i)}-x_p^{(j)})=0
+\end{align*}
+Which is does not hold in general. Therefore the function is not typically $C^2$. $\square$
+
+Note that the problem is $C^2$ if we have
+$\sumset{E} \ece = 0$, but that is only possible if we have $\mathcal{E} = \emptyset$, or if no cables are stretched. These are not particularly interesting situations.
 
 \subsection{Convexity}
-
 Convexity is another property that is of great importance when considering the choice of optimization algorithm.  $\ee =\sum_{i=1}^N m_i g x_3^{(i)}$ is convex, but not strictly convex:
+
+\textbf{ledd for ledd}
 \begin{equation*}
     E(\lambda X +(1-\lambda) Y) = \sum_{i=1}^N m_i g (\lambda x_3^{(i)} + (1-\lambda) y_3^{(i)})
     =\sum_{i=1}^N \lambda m_i g x_3^{(i)} + (1-\lambda) m_i g  y_3^{(i)} = \lambda E(X) + (1-\lambda) E(Y)
 \end{equation*}
-For the elastic energy of the cable, we will consider a given edge $e_{ij}$ where we assume that $\xnorm > \el$. If $\xnorm \leq \el$, we can simply ignore the node as it does not have any energy. Note that this assumes that the mass of node $i$ and $j$ are non-zero. Let $0 < \lambda < 1$
+For the elastic energy of the cable, we will consider a given edge $e_{ij}$ where we assume that $\xnorm > \el$. If $\xnorm \leq \el$, we can simply ignore the node as it does not have any energy. Note that this assumes that the mass of node $i$ and $j$ are non-zero. Let $0 < \lambda < 1$, and define $p:=x^{(i)} - x^{(j)}, \tilde{p} = \tilde{x}^{(i)}-\tilde{x}^{(j}$ for ease of notation.
+
+
 \begin{align*}
-     E^{cable}_{elast}(\lambda e_{ij} + (1-\lambda) \tilde{e_{ij}}) &= \frac{k}{2 \el^2} \bigg( \lVert \lambda(x^{(i)}-x^{(j)}) + ( 1-\lambda ) (\tilde{x}^{(i)}-\tilde{x}^{(j)} )\rVert -\el\bigg)^2\\ &\leq \frac{k}{2 \el^2} \bigg( \lambda \lVert (x^{(i)}-x^{(j)}) \rVert +( 1-\lambda ) \lVert (\tilde{x}^{(i)}-\tilde{x}^{(j)} \rVert -\el\bigg)^2 \\ &<
-     \frac{k}{2 \el^2}\bigg( \lambda\lVert  (x^{(i)}-x^{(j)}) \rVert - \el +( 1-\lambda ) ( \lVert \tilde{x}^{(i)}-\tilde{x}^{(j)} \rVert -\el ) \bigg)^2 \quad \text{if $\el > 0$} \\
-     &\leq \lambda \frac{k}{2 \el^2}\bigg( \lVert  (x^{(i)}-x^{(j)}) \rVert - \el \bigg)^2 + ( 1-\lambda )\frac{k}{2 \el^2}\bigg( ( \lVert \tilde{x}^{(i)}-\tilde{x}^{(j)} \rVert -\el ) \bigg)^2 \\&= \lambda E^{cable}_{elast}(e_{ij}) + (1-\lambda) E^{cable}_{elast}(\Tilde{e_{ij}})
+     E^{cable}_{elast}(\lambda e_{ij} + (1-\lambda) \tilde{e_{ij}}) &= \frac{k}{2 \el^2} \bigg( \lVert \lambda p + ( 1-\lambda ) \tilde{p} \rVert -\el\bigg)^2
+\end{align*}
+\textbf{Question: Does $\ece (\nabla \el + (1-\lambda) \tilde{\el}$ notation even make sense? }
+
+Recall that if the expression inside the norm is less than $\el$, we get $0$. In either case, we can use the triangle inequality to get
+\begin{align*}    
+     &E^{cable}_{elast}(\lambda e_{ij} + (1-\lambda) \tilde{e_{ij}})\\ &=
+      \frac{k}{2 \el^2} \bigg( \lambda \p +( 1-\lambda ) \pt -\el\bigg)^2 \\ 
+     &=\frac{k}{2 \el^2} \bigg( \lambda^2 \p^2 + 2 \lambda (1-\lambda) \p \pt -2 \lambda \p \el -2(1-\lambda) \pt \el + (1-\lambda)^2 \pt^2 + \el^2 \bigg) \\
+     &<\frac{k}{2 \el^2} \bigg( \lambda \p^2 + 2 (1-\lambda) \p \pt -2 \lambda \p \el -2(1-\lambda) \pt \el + (1-\lambda) \pt^2 + \el^2 \bigg) \\ & \text{because }\lambda, (1-\lambda) < 1 \text{ and the expressions we alter are positive.} \\
+     &= \frac{k}{2 \el^2} \bigg(\lambda \p^2 + 2 (1-\lambda) \p \pt - 2 \lambda \p \el -2\pt \el +2 \lambda \pt \el + \pt^2 - \lambda \pt^2 + \el^2 \bigg) \\
+     &< \frac{k}{2 \el^2} \bigg(\lambda \p^2 - 2 \lambda \p \el -2\pt \el +2 \lambda \pt \el + \pt^2 - \lambda \pt^2 + \el^2 \bigg)\\
+     &= \frac{k}{2 \el^2} \bigg( \lambda \p^2 - 2 \lambda \p \el + \lambda \el^2 + \pt^2 - 2 \pt \el + \el^2 - \lambda \pt^2 + 2\lambda \pt \el - \lambda \el^2  \bigg)\\
+     &= \frac{k}{2 \el^2} \bigg( \lambda \big(\p^2 - 2 \p \el + \el^2\big) + (1-\lambda) \big(\pt^2 -2 \pt \el + \el^2\big) \bigg)\\
+     &= \lambda \frac{k}{2 \el^2}\bigg( \p - \el \bigg)^2 + ( 1-\lambda )\frac{k}{2 \el^2}\bigg( ( \pt -\el ) \bigg)^2 
+     \\&= \lambda E^{cable}_{elast}(e_{ij}) + (1-\lambda) E^{cable}_{elast}(\Tilde{e_{ij}})&&  \square
 \end{align*}
 
-We see that the function for a given node is strictly convex. Therefore, $\sumset{E} \ece$ is also strictly convex as it's a sum of strictly convex functions. From this, we have that the energy function is strictly convex as the sum of a convex and strictly convex function is strictly convex. 
-
-The fact that this energy expression is convex means that we can use Quasi-Newton methods. These are very efficient methods. We choose to avoid using Newton's Method because calculating the Hessian is cumbersome.
+We see that the function for a given node is strictly convex. Therefore, $\sumset{E} \ece$ is also strictly convex as it's a sum of strictly convex functions. From this, we have that the energy function is strictly convex as the sum of a convex and strictly convex function is strictly convex. The fact that this energy expression is convex means that we can use Quasi-Newton methods. These are very efficient methods. We choose to avoid using Newton's Method because calculating the Hessian is cumbersome.
 
 \subsection{Neccesary and sufficient optimality conditions}
 As we have a convex function that is differentiable, the neccesary and sufficient optimality condition for a solution $X^*$ is simply \begin{equation}

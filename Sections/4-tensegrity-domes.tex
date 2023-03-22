@@ -14,6 +14,8 @@ First off, the objective function \eqref{energy} is not generally differentiable
 \begin{equation*}
 \ebe = \frac{c}{\el^2} (1- \frac{\el}{\xnorm}) (x_k^{(i)} - x_k^{(j)}) ( 1, 1, 1,-1,-1,-1)
 \end{equation*}
+
+\textbf{fix uttrykket over}
 Note that this expression is valid for all values of $\xnorm$, which means that the function is not differentiable when $\xnorm = 0$. However, the distance being $0$ would imply two nodes being in the same position which will clearly never happen in practice, so this is not a problem. That being said, the fact that our function has such little smoothness causes us some other problems.
 
 \subsection{Optimality conditions for tensegrity domes}
@@ -83,4 +85,22 @@ We will now consider the full problem \eqref{energy} with the constraints given 
     x_3^{(i)} \geq 0 \quad \forall \quad i = 1,...,N
 \end{equation}
 
- This will
+As this is a constrained optimization problem, we will the Lagrangian \begin{equation}
+    \mathcal{L}(X,\lambda) = E(X) - \sum_{i \in \ \mathcal{I}}\lambda_i c_i(x^{(i)})
+\end{equation}
+Where $c_i(x) = x^{(i)}_3$.
+
+The first order optimality conditions for a given $(X^*,\lambda^*)$ are \begin{equation}
+\begin{aligned}
+       &\nabla_x \mathcal{L}(X,\lambda^*)=0\\ 
+       &x^{*(i)}_3 \geq 0,\quad i = 1,...,N\\
+       &\lambda_i^* \geq 0 ,\quad i = 1,...,N\\
+       & \lambda_i^* x^{*(i)}_3 = 0,\quad i = 1,...,N
+\end{aligned}
+\end{equation}
+
+LICQ: $\nabla x_3^{(i)} = \frac{\partial}{\partial_{x_3}} x_3^{(i)} =(,..., 1,...,0) \forall i$, so we have LICQ.
+
+Therefore the KKT conditions are neccesary.
+
+They are not sufficient as our problem is not convex.
