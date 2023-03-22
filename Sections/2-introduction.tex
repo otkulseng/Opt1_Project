@@ -44,7 +44,7 @@ We will also model external loads for a given node. If node $i$ is loaded with m
 We can express the total energy of the structure as \begin{equation}
     E(X) = \sumset{B}(\ebe + \ebg) + \sumset{C} \ece + \ee
     \label{totalEnergy}
-\end{equation} where $\mathcal{B}, \mathcal{C} \subset \mathcal{E}$ are the sets of bars and cables in the structure. This function is continious, the only potential problem is the piecewise function $\ece$ at the point where $L\e = \xnorm = \el$, but we see that it evaluates to $0$, so this term is also continious.
+\end{equation} where $\mathcal{B}, \mathcal{C} \subset \mathcal{E}$ are the sets of bars and cables in the structure. This function is continuous, the only potential problem is the piecewise continuous function $\ece$ at the point where $L\e = \xnorm = \el$, but we see that it evaluates to $0$, so this term is also continuous.
 
 Note that minimizing \eqref{totalEnergy} might not admit a solution, as the energy can be unbounded from below by letting all $z$-coordinates of the nodes tend to $-\infty$. We propose two constraints to prevent this issue.
 
@@ -91,10 +91,8 @@ The second constraint models a self-supported free standing structure, with the 
     x_3^{(i)} \geq 0 \quad \forall \quad i = 1,...,N
     \label{z_positive}
 \end{equation}
-\textbf{Rydd opp i dette}
-
 Note that coerciveness is not as immediate in this case. If we simultaniously move all the nodes horizontally in any direction, we see that the distance between the nodes do not change, and thus the energy is constant. This issue can be solved without a loss of generality by fixing the $x_1$ and $x_2$-position of a given node: $x^{(i)} = (p_1,p_2,x^{(i)}_3)$. This simply disallows moving the entire structure horisontally.
 
 With this setup, coerciveness follows from the proof in the theorem above, the only difference is that we do not allow $x_3 \to -\infty$ because of the constraint \eqref{z_positive}.
 
-Note that this restriction indeed creates a constrained optimization problem, unlike the full fixation of a node \eqref{fixednode} where we still had a free optimization problem in a lower dimension.
+Note that this restriction indeed creates a constrained optimization problem, unlike the constraint \eqref{fixednode} where we had a free optimization problem in a lower dimension.
