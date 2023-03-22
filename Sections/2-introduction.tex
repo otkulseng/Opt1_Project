@@ -55,49 +55,46 @@ The first constraint is fixing some of the nodes such that
     \label{fixednode}
 \end{equation} for some fixed $p^{(i)} \in \mathbb{R}^3$, and $1\leq M < N$. This constraint is convenient because we still have a free optimization problem, where we have replaced some $x^{(i)}$ by $p^{(i)}$. The dimension of $X$ is now $3(N-M)$
 
-\textbf{formuler som teorem}
+\textbf{Theorem: If the graph $\mathcal{G}$ is connected, the objective function \eqref{totalEnergy} with the constraint \eqref{fixednode} admits a solution.}
 
-If we assume that we have a connected graph $\mathcal{G}$, meaning the structure is connected, then simply fixing one node, for example $x^{(1)} = p^{(1)}$ in this way is enough to give us coercivity.
+Proof:
+We start by showing coercivity:
+Using that $\mathcal{G}$ is connected, the entire structure is connected through either cables or bars. This means that for any free node in the structure, there exists some set of nodes $\mathcal{S}$ that defines a path to a fixed node $p^{(i)}$. 
 
-\textbf{kommentar: teksten under føles ikke veldig presis.}
- \textbf{Average distanse mellom noder går mt uendelig, og da også energien}
-We can see this by using the fact that our graph is connected - this means that our fixed node is connected to a cable, bar, or both. For any node $x^{(i)} \neq p^{(1)}$, it will either be directly connected to $p^{(1)}$, or there will exist a path to $p^{(1)}$ through some set of nodes in $\mathcal{E}$. If we send $\lVert X \rVert \to \infty$ through any possible combination of $x^{(i)}_1 \to \pm \infty,x^{(i)}_2 \to \pm \infty,x^{(i)}_3 \to \infty$ then we have $$\xinf E(X)\to \infty$$ because at least one of the cables/bars on the path between $x^{(i)}$ and $p^{(1)}$ will be stretched towards length $\infty$, and therefore it's elastic energy will tend to $\infty$. 
+If we consider any possible combination of $x^{(i)}_1 \to \pm \infty,x^{(i)}_2 \to \pm \infty,x^{(i)}_3 \to \pm \infty$, the average length of edges in $\mathcal{S}$ will also tend to $\infty$. This means that for cables we will only have to consider the case when $\xnorm > \el$. The elastic energy in $E(X)$ will be given by
+\begin{equation} 
+\label{plusinf1}
+\begin{aligned}
+     &\xinf \sumset{C}\ece =\xinf \frac{k}{2 \ell_{p2}^2}(\lVert x^{(p)} - x^{(2)} \rVert-\ell_{p2})^2 = \infty \\
+     &\xinf \sumset{B }\ebe = 
+     %&\text{depending on whether the fixed node is connected to a cable or bar or both}
+      \frac{c}{2 \ell_{p2}^2}(\lVert x^{(p)} - x^{(2)} \rVert-\ell_{p2})^2 = \infty
+\end{aligned} 
+\end{equation}
 
-If we additionally allow $x^{(i)}_3 \to -\infty$ we could potentially have some combination of sending nodes to $\pm \infty$ that give us
+The fact that we allow $x^{(i)}_3 \to -\infty$ could potentially result in
 \begin{equation}
   \xinf \ee = -\infty
 \quad\text{and additionally}\quad
 \xinf \sumset{B} \ebg = -\infty \quad \text{if $e_{ij}$ is a bar}
 \label{minusinf}
 \end{equation} 
-However, we also get
-\begin{equation} 
-\label{plusinf1}
-\begin{aligned}
-     &\xinf \sumset{C}\quad \ece = \infty \quad \text{and/or}\quad \xinf \sumset{B }\ebe = \infty \quad\\ 
-     %&\text{depending on whether the fixed node is connected to a cable or bar or both}
-\end{aligned} 
-\end{equation}
-depending on whether the fixed node is connected to a cable or bar or both. This is due to the fact that both these sums contain the term \begin{equation}
- \xinf \frac{k}{2 \ell_{p2}^2}(\lVert x^{(p)} - x^{(2)} \rVert-\ell_{p2})^2 = \infty \quad \text{and/or} \quad \xinf \frac{c}{2 \ell_{p2}^2}(\lVert x^{(p)} - x^{(2)} \rVert-\ell_{p2})^2 = \infty
- \label{plusinf2}
-\end{equation}
-It's clear that the terms in \eqref{minusinf} will be dominated one of the terms in \eqref{plusinf1} because they contain one of the quadratic terms in \eqref{plusinf2}. Hence, the total energy function \eqref{totalEnergy} is coercive. This concludes that for every possible combination we have $\xinf E(X) = \infty$, so we have shown coercivity. We have already shown that the function is continious, therefore it's also lower semi continious, and this implies that the minimisation problem admits a solution. $\square$
+However, it's clear that the terms in \eqref{minusinf} will be dominated one of the terms in \eqref{plusinf1} because they contain quadratic terms. Hence, the total energy function \eqref{totalEnergy} is coercive.
 
-If we have a disconnected graph, we would have to fix at least one node in every connected subgraph contained in the disconnected graph. \textbf{but we will not proove this}
+We have already shown that the function is continious, therefore it's also lower semi continious, and this implies that the minimisation problem admits a solution. $\square$
+
+If we have a disconnected graph, we would have to split the graph into subgraphs that are connected, and fix at least one node in every connected subgraph. We will not consider these situations in this paper, so we will not prove this.
 
 \subsection{Imposing positive z-values of the nodes}
 The second constraint models a self-supported free standing structure, with the only condition being that it's above ground:
 \begin{equation}
     x_3^{(i)} \geq 0 \quad \forall \quad i = 1,...,N
+    \label{z_positive}
 \end{equation}
 \textbf{Rydd opp i dette}
 
-Note that coerciveness is not as immediate in this case. If we simultaniously move all the nodes horizontally in any direction, we see that the distance between the nodes do not change, and thus the energy is constant. This can be fixed without a loss of generality by fixing the $x_1$ and $x_2$-position of a given node: $x^{(i)} = (p_1,p_2,x^{(i)}_3)$. This simply disallows moving the entire structure horisontally.
+Note that coerciveness is not as immediate in this case. If we simultaniously move all the nodes horizontally in any direction, we see that the distance between the nodes do not change, and thus the energy is constant. This issue can be solved without a loss of generality by fixing the $x_1$ and $x_2$-position of a given node: $x^{(i)} = (p_1,p_2,x^{(i)}_3)$. This simply disallows moving the entire structure horisontally.
 
-With this setup, showing coerciveness is very similar to the previous section. In fact it's even easier because we can no longer let $x^{(i)}_3 \to -\infty$ which was the only potential issue.
+With this setup, coerciveness follows from the proof in the theorem above, the only difference is that we do not allow $x_3 \to -\infty$ because of the constraint \eqref{z_positive}.
 
 Note that this restriction indeed creates a constrained optimization problem, unlike the full fixation of a node \eqref{fixednode} where we still had a free optimization problem in a lower dimension.
-
-\textbf{Kommentar: Er dette godt nok begrunnet? Føltes litt waste å kjøre hele coercive-argumentet på nytt..}
-
