@@ -1,13 +1,9 @@
 \section{Cable net structures}
-In this section, we are analysing the situation where all members of the structure are cables, and where we fix certain nodes in order to ensure that a solution exists.
-
-This gives us the following optimization problem:
-
+In this section, we are analysing the situation where all members of the structure are cables, and where we fix certain nodes in order to ensure that a solution exists. This gives us the following optimization problem:
 \begin{equation}
     \underset{X}{\text{min }} E(X) = \sumset{E} \ece + \ee \quad \text{s.t. } x^{(i)} = p^{(i)}, i = 1,...,M
     \label{cableNet}
 \end{equation}
-
 In order to solve this optimization problem, we first have to show some properties about the function. We have already shown that the more general problem \eqref{totalEnergy} is continious, therefore \eqref{cableNet} is continious.
 
 \textbf{Theorem: The function given in \eqref{cableNet} is $C^1$.}
@@ -26,9 +22,8 @@ $\ece$ is obviously differentiable when $\xnorm \neq \el$. If $\ece$ is to be di
     \underset{\xnorm \to \el ^+}{\text{lim}} \nabla \ece = 0    
 \end{equation}
 We will calculate the partial derivative with respect to $x_s^{(i)}$ where $s$ represents one of the three directions, that is: $s=1,2,3$. As we take the limit from above, we only consider the expression of $\ece$ when $\xnorm > \el$.
-\textbf{WORK IN PROGRESS}
 \begin{align}
-    \delx \ece = &\delx  \frac{k}{e \el^2} (\xnorm - \el)^2\\ 
+    \delx \ece = &\delx  \frac{k}{2 \el^2} (\xnorm - \el)^2\\ 
     &= \delx\frac{k}{\el^2}(\xnorm - \el) \delx \bigg(\sqrt{ \sum_{q=1}^3 (x_q^{(i)}-x_q^{(j)})^2}-\el\bigg)\\&=\frac{k}{\el^2} (\xnorm - \el) \frac{1}{2\sqrt{\sum_{q=1}^3 (x_q^{(i)}-x_q^{(j)})^2}}\delx \sum_{q=1}^3(x_q^{(i)}-x_q^{(j)})^2\\ &= \frac{k}{\el^2} (1 - \frac{\el}{\xnorm}) (x_p^{(i)} - x_p^{(j)}) \delx (x_p^{(i)} - x_p^{(j)})\\ &= \frac{k}{\el^2} (1- \frac{\el}{\xnorm}) (x_p^{(i)} - x_p^{(j)})
 \end{align}
 
@@ -37,7 +32,11 @@ Similarly, we have
     \frac{\partial}{\partial x_p^{(j)}} \ece =  \frac{k}{\el^2} (1- \frac{\el}{\xnorm}) (x_p^{(j)} - x_p^{(i)})
 \end{equation} where the only difference is a factor of $-1$.
 
-Note that $\xnorm>\el$, which means that we never divide by zero. We see that inserting $\xnorm = \el$ we get $\vec{0}$, which shows that the expression is $C^1$. Thus we have a sum of $C^1$ functions, which is $C^1$. However, the function is not $C^2$. We can show this by showing that the following second order partial derivative is not continuous at $\xnorm = \el$:
+We take the limit:
+\begin{equation}
+    \underset{\xnorm \to \el ^+}{\text{lim}} \delx \ece =    \underset{\xnorm \to \el ^+}{\text{lim}} \frac{k}{\el^2} (1- \frac{\el}{\xnorm}) (x_p^{(i)} - x_p^{(j)}) = 0
+\end{equation}
+This holds for all partial derivatives, which shows that the function is $C^1$. Note that $\xnorm>\el$, which means that we never divide by zero. Thus we have a sum of $C^1$ functions, which is $C^1$. However, the function is not $C^2$. We can show this by showing that the following second order partial derivative is not continuous when $\xnorm \to \el^+$:
 \begin{align*}
     \frac{\partial^2}{\partial (x_p^{(i)})^2} \ece &= 
     \delx \frac{k}{\el^2} (1- \frac{\el}{\xnorm}) (x_p^{(i)} - x_p^{(j)}) \\&
@@ -47,28 +46,57 @@ Note that $\xnorm>\el$, which means that we never divide by zero. We see that in
     =\frac{k}{\el^2} -\frac{k}{\el} \frac{\xnorm - x_p^{(i)} \bigg( \frac{x_p^{(i)}-x_p^{(j)}}{\xnorm} \bigg)}{\xnorm^2} \\&
     =\frac{k}{\el^2} -\frac{k}{\el} \frac{\xnorm^2 - x_p^{(i)} \bigg( x_p^{(i)}-x_p^{(j)} \bigg)}{\xnorm^3}
 \end{align*}
-Now let we want the expression above to be $0$ when $\xnorm = \el$:
+Now we take the limit:
 \begin{align*}
-    \frac{k}{\el^2} -\frac{k}{\el} \frac{\el^2 - x_p^{(i)} \bigg( x_p^{(i)}-x_p^{(j)} \bigg)}{\el^3} = 0 \implies
+    \underset{\xnorm \to \el ^+}{\text{lim}} %\frac{\partial^2}{\partial (x_p^{(i)})^2} \ece
+    \frac{k}{\el^2} -\frac{k}{\el} \frac{\xnorm^2 - x_p^{(i)} \bigg( x_p^{(i)}-x_p^{(j)} \bigg)}{\xnorm^3}
+    = \frac{k}{\el^2} -\frac{k}{\el} \frac{\el^2 - x_p^{(i)} \bigg( x_p^{(i)}-x_p^{(j)} \bigg)}{\el^3}
+\end{align*}
+This is only equal to $0$ if 
+\begin{equation}
      \el^2 = \el^2 - x_p^{(i)}(x_p^{(i)}-x_p^{(j)}) \implies
      x_p^{(i)}(x_p^{(i)}-x_p^{(j)})=0
-\end{align*}
-Which is does not hold in general. Therefore the function is not typically $C^2$. $\square$
+\end{equation}
+
+Which does not hold in general. Therefore the function is not typically $C^2$. $\square$
 
 Note that the problem is $C^2$ if we have
 $\sumset{E} \ece = 0$, but that is only possible if we have $\mathcal{E} = \emptyset$, or if no cables are stretched. These are not particularly interesting situations.
 
 \subsection{Convexity}
-Convexity is another property that is of great importance when considering the choice of optimization algorithm.  $\ee =\sum_{i=1}^N m_i g x_3^{(i)}$ is convex, but not strictly convex:
-
-\textbf{ledd for ledd}
+Convexity is another property that is of great importance when considering the choice of optimization algorithm. We will look at the convexity term by term.
+$\ee =\sum_{i=1}^N m_i g x_3^{(i)}$ is convex, but not strictly convex:
 \begin{equation*}
     E(\lambda X +(1-\lambda) Y) = \sum_{i=1}^N m_i g (\lambda x_3^{(i)} + (1-\lambda) y_3^{(i)})
     =\sum_{i=1}^N \lambda m_i g x_3^{(i)} + (1-\lambda) m_i g  y_3^{(i)} = \lambda E(X) + (1-\lambda) E(Y)
 \end{equation*}
-For the elastic energy of the cable, we will consider a given edge $e_{ij}$ where we assume that $\xnorm > \el$. If $\xnorm \leq \el$, we can simply ignore the node as it does not have any energy. Note that this assumes that the mass of node $i$ and $j$ are non-zero. Let $0 < \lambda < 1$, and define $p:=x^{(i)} - x^{(j)}, \tilde{p} = \tilde{x}^{(i)}-\tilde{x}^{(j}$ for ease of notation.
+For the elastic energy of the cable, we have three cases. 
 
+If $\mathcal{E} = \emptyset $ we have $\sumset{E} \ece = 0$ which is convex, but not strictly convex. 
 
+If $\xnorm > \el \quad \forall \quad \el \in \mathcal{E}$, we have strict convexity. Proof:
+
+\textbf{Hensiktsmessig å ha dette inni beviset?}
+Note first that 
+\begin{equation}
+    \ece = E^{cable}_{elast}(L(\el)) = E^{cable}_{elast}(\xnorm,\el),
+\end{equation} thus $\ece : \mathbb{R}^+ \times \mathbb{R}^+ \rightarrow \mathbb{R}$. Define 
+
+\begin{equation}
+    E_{ij}(y) = E(y,\el) 
+    \begin{cases}
+    \frac{k}{2 \el^2} (y-\el)^2 & \text{if} \quad y > \el \\
+    0 & \text{if} \quad y \leq \el
+    \end{cases}
+\end{equation}
+
+And observe that 
+\begin{equation}
+    \ece 
+\end{equation}
+
+,$\xnorm \leq \el$ the expression is $0$, which is convex, but not strictly convex. For $\xnorm > \el$
+we will consider a given edge $e_{ij}$ where we assume that $\xnorm > \el$. Note that this assumes that the mass of node $i$ and $j$ are non-zero. Let $0 < \lambda < 1$, and define $p:=x^{(i)} - x^{(j)}, \tilde{p} = \tilde{x}^{(i)}-\tilde{x}^{(j}$ for ease of notation.
 \begin{align*}
      E^{cable}_{elast}(\lambda e_{ij} + (1-\lambda) \tilde{e_{ij}}) &= \frac{k}{2 \el^2} \bigg( \lVert \lambda p + ( 1-\lambda ) \tilde{p} \rVert -\el\bigg)^2
 \end{align*}
@@ -88,7 +116,9 @@ Recall that if the expression inside the norm is less than $\el$, we get $0$. In
      \\&= \lambda E^{cable}_{elast}(e_{ij}) + (1-\lambda) E^{cable}_{elast}(\Tilde{e_{ij}})&&  \square
 \end{align*}
 
-We see that the function for a given node is strictly convex. Therefore, $\sumset{E} \ece$ is also strictly convex as it's a sum of strictly convex functions. From this, we have that the energy function is strictly convex as the sum of a convex and strictly convex function is strictly convex. The fact that this energy expression is convex means that we can use Quasi-Newton methods. These are very efficient methods. We choose to avoid using Newton's Method because calculating the Hessian is cumbersome.
+We see that the function for a given node is convex. Therefore, $ E(X)$ is also convex as it's a sum of convex functions. The fact that this energy expression is convex means that Quasi-Newton methods are a good candidate. As our function is not $C^2$, we Newton's Method is not an option. 
+
+\textbf{QUESTION:} Do we have guaranteed convergence for BFGS when the function is convex but not $C^2$?.
 
 \subsection{Neccesary and sufficient optimality conditions}
 As we have a convex function that is differentiable, the neccesary and sufficient optimality condition for a solution $X^*$ is simply \begin{equation}

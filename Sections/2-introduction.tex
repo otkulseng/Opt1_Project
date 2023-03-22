@@ -7,14 +7,11 @@ The position of a node $i$ is given by $x^{(i)} = (x_1^{(i)},x_2^{(i)},x_3^{(i)}
 The goal is to determine the position $X$ of all the nodes. We rely on the fundamental physical principle that the structure will attain a stable resting position $X^*$ only when the total potential energy of the system has a local or global minimum. This naturally gives us an optimization problem.
 
 We will assume that all bars are made of the same material, and have identical thickness and cross section. However they can differ in length. A bar $e_{ij}$ has a resting length $\ell_{ij}>0$, where the internal elastic energy is $0$. If the bar is stretched or compressed to a new length $L(e_{ij})=\lVert x^{(i)} - x^{(j)}\rVert$, we will model the energy using a quadratic model
-
-
 \begin{equation}
     \ebe = \frac{c}{2\el^2}(L\e - \el)^2 = \frac{c}{2 \el^2}(\xnorm - \el)^2
     \label{barElast}
 \end{equation}
 where the parameter $c > 0$ depends on the material and cross section of the bar. We also consider the potential energy of the bar, as it has a considerable mass.
-
 \begin{equation}
     \ebg = \frac{\rho g \el}{2}(x_3^{(i)}+x_3^{(j)})
     \label{barGrav}
