@@ -1,156 +1,202 @@
-from mpl_toolkits import mplot3d
-import matplotlib.pyplot as plt
 import numpy as np
-
-def plot3DTensegrityStructure(x, p, cables, bars):
-    """Generates a 3D image of the tensegrity structure. Usage:
-    # Fixed points
-    pp = np.array([
-        [1, 1, 2],
-        [2, 2, 1],
-        [1, -1, 4]
-    ])
-
-    # Free points
-    num_free_points = 2
-
-    # Index lists
-    p = np.arange(0, len(pp))
-    x = np.arange(len(pp), len(pp) + num_free_points)
-
-    # First element means cable from p0 to x1 with rest length 3
-    cables = np.array([
-        [p[0], x[1], 3],
-        [p[1], x[0], 2],
-        [p[1], x[1], 4],
-        [x[1], x[0], 1]
-    ])
-
-    bars = np.array([
-        [p[0], x[0], 4]
-    ])
-
-    # Assume xx is the solution of some optimization algorithm
-    # xx = BFGS(problem)
-    xx = np.array([
-        [0, 0, 0],
-        [0, 1, -1],
-    ])
-
-    fig, ax = plot3DTensegrityStructure(xx, pp, cables, bars)
-    plt.show()
-    """
-
-    fig = plt.figure(figsize=(10, 10))
-    ax = plt.axes(projection = '3d')
-
-    points = np.concatenate((p, x))
-
-    for i in range(len(p)):
-        ax.scatter(p[i][0], p[i][1], p[i][2], c='k')
-        ax.text(p[i][0], p[i][1], p[i][2], r'$p_{%d}$'%i, size=20, zorder=1, color='k')
+from numpy.linalg import norm
+from scipy.optimize import approx_fprime
 
 
-    for i in range(len(x)):
-        ax.scatter(x[i][0], x[i][1], x[i][2], c='g')
-        ax.text(x[i][0], x[i][1], x[i][2], r'$x_{%d}$'%i, size=20, zorder=1, color='k')
 
-    for elem in cables:
-        a = elem[0]
-        b = elem[1]
-        cable = np.array([points[a], points[b]]).T
-        ax.plot(cable[0], cable[1], cable[2], c='k', linestyle='dashed')
+def StrongWolfe(f, gradf, x,p,
+                initial_value,
+                initial_descent,
+                initial_step_length = 1.0,
+                c1 = 1e-2,
+                c2 = 0.9,
+                max_extrapolation_iterations = 50,
+                max_interpolation_iterations = 20,
+                rho = 2.0):
+    '''
+    Implementation of a bisection based bracketing method
+    for the strong Wolfe conditions
+    '''
+    # initialise the bounds of the bracketing interval
+    alphaR = initial_step_length
+    alphaL = 0.0
+    # Armijo condition and the two parts of the Wolfe condition
+    # are implemented as Boolean variables
+    next_x = x+alphaR*p
+    next_value = f(next_x)
+    next_grad = gradf(next_x)
+    Armijo = (next_value <= initial_value+c1*alphaR*initial_descent)
+    descentR = np.inner(p,next_grad)
+    curvatureLow = (descentR >= c2*initial_descent)
+    curvatureHigh = (descentR <= -c2*initial_descent)
+    # We start by increasing alphaR as long as Armijo and curvatureHigh hold,
+    # but curvatureLow fails (that is, alphaR is definitely too small).
+    # Note that curvatureHigh is automatically satisfied if curvatureLow fails.
+    # Thus we only need to check whether Armijo holds and curvatureLow fails.
+    itnr = 0
+    while (itnr < max_extrapolation_iterations and (Armijo and (not curvatureLow))):
+        itnr += 1
+        # alphaR is a new lower bound for the step length
+        # the old upper bound alphaR needs to be replaced with a larger step length
+        alphaL = alphaR
+        alphaR *= rho
+        # update function value and gradient
+        next_x = x+alphaR*p
+        next_value = f(next_x)
+        next_grad = gradf(next_x)
+        # update the Armijo and Wolfe conditions
+        Armijo = (next_value <= initial_value+c1*alphaR*initial_descent)
+        descentR = np.inner(p,next_grad)
+        curvatureLow = (descentR >= c2*initial_descent)
+        curvatureHigh = (descentR <= -c2*initial_descent)
+    # at that point we should have a situation where alphaL is too small
+    # and alphaR is either satisfactory or too large
+    # (Unless we have stopped because we used too many iterations. There
+    # are at the moment no exceptions raised if this is the case.)
+    alpha = alphaR
+    itnr = 0
+    # Use bisection in order to find a step length alpha that satisfies
+    # all conditions.
+    while (itnr < max_interpolation_iterations and (not (Armijo and curvatureLow and curvatureHigh))):
+        itnr += 1
+        if (Armijo and (not curvatureLow)):
+            # the step length alpha was still too small
+            # replace the former lower bound with alpha
+            alphaL = alpha
+        else:
+            # the step length alpha was too large
+            # replace the upper bound with alpha
+            alphaR = alpha
+        # choose a new step length as the mean of the new bounds
+        alpha = (alphaL+alphaR)/2
+        # update function value and gradient
+        next_x = x+alphaR*p
+        next_value = f(next_x)
+        next_grad = gradf(next_x)
+        # update the Armijo and Wolfe conditions
+        Armijo = (next_value <= initial_value+c1*alphaR*initial_descent)
+        descentR = np.inner(p,next_grad)
+        curvatureLow = (descentR >= c2*initial_descent)
+        curvatureHigh = (descentR <= -c2*initial_descent)
+    # return the next iterate as well as the function value and gradient there
+    # (in order to save time in the outer iteration; we have had to do these
+    # computations anyway)
+    return alpha
 
-    for elem in bars:
-        a = elem[0]
-        b = elem[1]
-        bar = np.array([points[a], points[b]]).T
-        ax.plot(bar[0], bar[1], bar[2], c='k')
-    return fig, ax
+def other_linesearch(pk,
+               xk,
+               f,
+               gradf,
+               alpha_max = 10,
+               rho = 2,
+               c1 = 1e-2,
+               c2 = 0.9,
+               Niter=100):
+    return StrongWolfe(f, gradf, xk, pk, f(xk), np.dot(gradf(xk), pk))
+
+def lineSearch(pk,
+               xk,
+               f,
+               gradf,
+               rho = 2,
+               c1 = 1e-2,
+               c2 = 0.9):
+
+    Niter_extrapolate = 50
+    Niter_interpolate = 20
+
+    descent = np.dot(gradf(xk), pk)
+    fxk = f(xk)
+
+    alpha_high = 1
+    alpha_low = 0
+
+    # Strong wolfe conditions
+    # 3.7a
+    armijo = lambda alpha: f(xk + alpha * pk) <= fxk + c1 * alpha * descent
+
+    # 3.7b
+    curvatureLow = lambda alpha: c2 * descent <= np.dot(gradf(xk + alpha * pk), pk)
+    curvatureHigh = lambda alpha: -c2 * descent >= np.dot(gradf(xk + alpha * pk), pk)
+
+    for _ in range(Niter_extrapolate):
+        if (not armijo(alpha_high)) or curvatureLow(alpha_high):
+            break
+
+        alpha_low = alpha_high
+        alpha_high = rho * alpha_high
+
+    alpha = (alpha_low + alpha_high)/2
+    ar = armijo(alpha)
+    cl = curvatureLow(alpha)
+    ch = curvatureHigh(alpha)
+
+    for _ in range(Niter_interpolate):
+        if ar and cl and ch:
+            break
+
+        if ar and (not cl):
+            alpha_low = alpha
+        else:
+            alpha_high = alpha
+        alpha = (alpha_low + alpha_high)/2
+
+        ar = armijo(alpha)
+        cl = curvatureLow(alpha)
+        ch = curvatureHigh(alpha)
+    return alpha
+
+def bfgs(x0, f, gradf=None, Niter=100, grad_epsilon=1e-12):
+    if gradf is None:
+        gradf = lambda xk : approx_fprime(xk, f, epsilon=grad_epsilon).astype('float64')
+
+    x_current = x0
+    x_next = np.copy(x0)
+    grad_current = gradf(x0)
 
 
-def cable_elastic(state, cables, k):
-    l = state[cables[:, 0]]
-    r = state[cables[:, 1]]
-    diff = np.linalg.norm(l - r, axis=1) - cables[:, 2]
-    diff = np.where(diff < 0, 0, diff)
-    return (k /(2*cables[:, 2]**2) * diff) @ diff
+    Hk = np.identity(np.size(x0))
+    I = np.identity(np.size(x0))
 
-def grad_cable_elastic(state, cables, k):
-    grad = np.zeros(state.shape)
+    n = 0
 
-    l = state[cables[:, 0]]
-    r = state[cables[:, 1]]
+    sk = np.zeros((len(x_current), 1))
+    yk = np.zeros((len(x_current), 1))
 
-    norm = np.linalg.norm(l - r, axis=1)
-    diff = norm - cables[:, 2]
-    # diff = np.where(diff < 0, 0, diff)
+    while norm(grad_current) > grad_epsilon and n < Niter:
+        n += 1
+        pk = -Hk @ grad_current
 
-    grads = np.divide((l - r).T, norm)
-    grads = np.where(diff < 0, 0, grads)
+        alpha = lineSearch(pk, x_current, f, gradf)
 
-    grads = k * np.divide(grads, cables[:, 2]**2).T
+        x_next = x_current + alpha * pk
+        grad_next = gradf(x_next)
 
-    grad[cables[:, 0]] += np.sum(grads[cables[:, 0]])
-    grad[cables[:, 1]] -= np.sum(grads[cables[:, 1]])
-    return grad.flatten()
+        sk = x_next - x_current
+        yk = grad_next - grad_current
 
-def bar_elastic(state, bars, c):
-    l = state[bars[:, 0]]
-    r = state[bars[:, 1]]
-    diff = np.linalg.norm(l - r, axis=1) - bars[:, 2]
-    return (c /(2*bars[:, 2]**2) * diff) @ diff
+        rhok = 1 / np.dot(yk, sk)
+
+        if n==1:
+            Hk = Hk*(1/(rhok*np.inner(yk,yk)))
+
+        A = I - rhok * np.outer(sk, yk)
+        B = rhok * np.outer(sk, sk)
+        Hk = A @ Hk @ A.T
+        Hk = Hk + B
+
+        # z = Hk.dot(yk)
+        # Hk += -rhok*(np.outer(sk,z) + np.outer(z,sk)) + rhok*(rhok*np.inner(yk,z)+1)*np.outer(sk,sk)
+
+        x_current = x_next
+        grad_current = grad_next
 
 
-def bar_potential(state, bars, rho):
-    l = state[bars[:, 0]]
-    r = state[bars[:, 1]]
-    return 0.5 * rho * bars[:, 2] @ (l[:, 2] + r[:, 2])
+    if n == Niter:
+        print("Maximum iteration obtained in BFGS method")
+        print(f'Norm: {norm(grad_current)}')
 
-def gen_E(cables, bars, free_weights, fixed_points, k=2, c=3, rho=0):
-    """Takes in the position of all fixed points p,
-    and information about all the cables and bars. Generates the
-    objective function used with E_cable_elast
+    return x_current
 
-    Returns:
-        objective function f(x) where x is a numpy array of free
-        optimization variables
-    """
-
-    state = np.zeros((len(fixed_points) + len(free_weights), 3))
-    state[:len(fixed_points)] = fixed_points
-
-    def func(xx):
-        x = np.reshape(xx, (-1, 3))
-        state[len(fixed_points):] = x
-        E_cable_elastic = cable_elastic(state, cables, k)
-        E_bar_elastic = bar_elastic(state, bars, c)
-        E_bar_potential = bar_potential(state, bars, rho)
-        E_ext = free_weights @ x[:, 2]
-        return E_cable_elastic + E_bar_elastic + E_bar_potential + E_ext
-
-    def func_without_bars(xx):
-        x = np.reshape(xx, (-1, 3))
-        state[len(fixed_points):] = x
-        E_cable_elastic = cable_elastic(state, cables, k)
-        E_ext = free_weights @ x[:, 2]
-        return E_cable_elastic + E_ext
-
-    if len(bars) == 0:
-        print("Using function without bars")
-        return func_without_bars
-
-    return func
-
-def gen_grad_E(cables, bars, free_weights, fixed_points, k=2, c=3, rho=0):
-
-    state = np.zeros((len(fixed_points) + len(free_weights), 3))
-    state[:len(fixed_points)] = fixed_points
-
-    def func(xx):
-        x = np.reshape(xx, (-1, 3))
-        state[len(fixed_points):] = x
-        return grad_cable_elastic(state, cables, k)[3 * len(fixed_points):]
-    return func
 
 

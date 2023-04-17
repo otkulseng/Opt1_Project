@@ -1,66 +1,33 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import minimize, approx_fprime
-from algoritmer import plot3DTensegrityStructure, gen_E, gen_grad_E
-
-# Fixed points
-pp = np.array([
-    [1, 1, 0],
-    [-1, 1, 0],
-    [-1, -1, 0],
-    [1, -1, 0]
-])
-
-# Free point weights
-fw = np.array([
-    0,
-    0,
-    0,
-    0
-])
-
-# Index lists
-p = np.arange(0, len(pp))
-x = np.arange(len(pp), len(pp) + len(fw))
-
-cables = np.array([
-    [p[0], x[3], 8],
-    [p[1], x[0], 8],
-    [p[2], x[1], 8],
-    [p[3], x[2], 8],
-    [x[0], x[3], 1],
-    [x[0], x[1], 1],
-    [x[1], x[2], 1],
-    [x[2], x[3], 1]
-])
-print(cables)
-
-bars = np.array([
-    # [p[0], x[0], 10],
-    # [p[1], x[1], 10],
-    # [p[2], x[2], 10],
-    # [p[3], x[3], 10]
-])
-
-f = gen_E(cables, bars, fw, pp, k=0.1, c=1, rho=0)
-grad = gen_grad_E(cables, bars, fw, pp, k=0.1, c=1, rho=0)
+import tests as TEST
+from algoritmer import bfgs
 
 
-x0 = np.ones(3 * len(fw)) * 31
-approx = approx_fprime(x0, f, epsilon=1.4901161193847656e-08)
+# x0 = np.array([
+#     [-7.09729653e-01,-2.19841562e-05,9.54286612e+00],
+#  [-1.92495992e-05 ,-7.09732144e-01 , 9.54286984e+00],
+#  [ 7.09690896e-01, -2.17653342e-05,  9.54287599e+00],
+#  [-1.95179315e-05  ,7.09688419e-01 , 9.54287231e+00]], dtype=np.float64)
+# x0 = x0.flatten()
 
-mine = grad(x0)
-print(np.matrix(approx))
-print(np.matrix(mine))
-# res = minimize(f, x0, method='CG', tol=1e-12)
-# points = res.x
-# sol = np.reshape(points, (-1, 3))
-# print(np.round(sol, 6))
+# res = bfgs(x0, ts.func, Niter=150)
+# res = np.reshape(res,(-1, 3))
+# print(res)
 
-# print(sol)
+ts = TEST.P69
+x0 = np.ones(3 * len(ts.free_weights))
+res = minimize(ts.func, x0, tol=1e-20, method="BFGS")
+res = np.reshape(res.x, (-1, 3))
+print(np.round(res, 6))
 
-# fig, ax = plot3DTensegrityStructure(sol, pp, cables, bars)
+
+# fig, ax = ts.plot(res)
 # plt.savefig("./Bilder/oppg1.pdf")
 # plt.show()
+
+
+
 
 
