@@ -130,17 +130,21 @@ LOCALMIN = TensegrityStructure(fixpoints,
 
 
 fixpoints = np.array([
-    [0, 0, 0.1],
 ])
 
-freeweights = np.zeros(7)
+freeweights = np.zeros(8)
+
+freeweights[0] = 10
+freeweights[1] = 10
+freeweights[2] = 10
+freeweights[3] = 10
 
 
 cables = np.array([
-    [1, 2, 2],
-    [2, 3, 2],
-    [3, 4, 2],
-    [1, 4, 2],
+    [1, 2, 4],
+    [2, 3, 4],
+    [3, 4, 4],
+    [1, 4, 4],
     [1, 8, 9],
     [2, 5, 9],
     [3, 6, 9],
@@ -166,6 +170,42 @@ FREESTANDING = TensegrityStructure(fixpoints,
                           bars,
                           k=0.1,
                           c=1,
-                          rho=0,
+                          rho=1e-3,
+                          mu=1)
+
+
+
+fixpoints = np.array([
+    [10, 10, 20.1],
+    [10, -10, 20.1],
+    [-10, -10, 20.1],
+    [-10, 10, 20.1]
+])
+
+freeweights = np.ones(4)/100
+
+
+
+cables = np.array([
+    [0, 4, 20],
+    [1, 5, 20],
+    [2, 6, 20],
+    [3, 7, 20],
+    [4, 5, 20],
+    [5, 6, 20],
+    [6, 7, 20],
+    [4, 7, 20]
+])
+
+bars = np.array([
+])
+
+
+SANITYCHECK = TensegrityStructure(fixpoints,
+                          freeweights,
+                          cables,
+                          bars,
+                          k=0.1,
+                          c=1,
                           mu=1)
 

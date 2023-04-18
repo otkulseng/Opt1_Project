@@ -16,24 +16,36 @@ from algoritmer import bfgs
 
 
 
-ts = TEST.FREESTANDING
+
+
+ts = TEST.SANITYCHECK
 x0 = np.arange(3 * len(ts.free_weights))
+muMax = 10
+for mu in np.linspace(1, muMax, 20):
+    # x0 = bfgs(x0, ts.func(mu), ts.grad(mu), Niter=100)
+    x0 = minimize(ts.func(mu), x0, jac=ts.grad(mu), method="CG", tol=1e-12).x
 
-# xx = x0
-# x = np.reshape(xx, (-1, 3))
-# grad = np.zeros(x.shape).T
-# z = x[:, 2].copy()
-# print(z)
-# grad[-1] = np.where(z < 0, -z, 0)
-# print(grad.T)
-# print(x)
+res = bfgs(x0, ts.func(muMax), ts.grad(muMax), Niter=0, plot_summary=True)
+# res = x0
 
-                # return orig(x) + mu * (grad.T).flatten()
 
-res, conv = bfgs(x0, ts.func, ts.grad, Niter=500, quadratic_penalty=True, plot_summary=True, convergence_plot=True)
-
-plt.plot(conv)
 ts.plot(res)
+
+res = np.array([
+    [10, 10, 0],
+    [10, -10, 0],
+    [-10, -10, 0],
+    [-10, 10, 0]
+])
+
+# ts.plot(res)
+
+norm = np.linalg.norm(ts.grad(muMax)(res))
+print(norm)
+
+norm = np.linalg.norm(ts.func(muMax)(res))
+print(norm)
+
 plt.show()
 
 

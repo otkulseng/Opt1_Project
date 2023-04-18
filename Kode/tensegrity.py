@@ -29,7 +29,10 @@ class TensegrityStructure:
 
         fig = plt.figure(figsize=(10, 10))
         ax = plt.axes(projection = '3d')
-        points = np.concatenate((p, x))
+        if len(p) > 0:
+            points = np.concatenate((p, x))
+        else:
+            points = x
 
         for i in range(len(p)):
             ax.scatter(p[i][0], p[i][1], p[i][2], c='k')
@@ -92,16 +95,24 @@ def gen_E(cables, bars, free_weights, fixed_points, k, c, rho, mu=0):
 
             def inner(xx):
                 x = np.reshape(xx, (-1, 3))
-                h = x[:, 2].copy()
-                h[h>0] = 0
-                return orig(xx) + 1/2 * mu_input * h @ h
+
+                # E = x[0][0]**2 + x[0][1] ** 2
+                E = 0
+                for  i in range(len(x)):
+                    z = x[i][2]
+                    curVal = max(-z, 0)
+                    E += curVal
+
+
+                return orig(xx) + 1/2 * mu_input * E
 
             return inner
         return func
 
 
     state = np.zeros((len(fixed_points) + len(free_weights), 3))
-    state[:len(fixed_points)] = fixed_points
+    if len(fixed_points) > 0:
+        state[:len(fixed_points)] = fixed_points
 
     def func(xx):
         x = np.reshape(xx, (-1, 3))
@@ -118,6 +129,7 @@ def gen_E(cables, bars, free_weights, fixed_points, k, c, rho, mu=0):
         state[len(fixed_points):] = x
         E_cable_elastic = cable_elastic(state, cables, k)
         E_ext = free_weights @ x[:, 2]
+
         return E_cable_elastic + E_ext
 
     def func_without_cables(xx):
@@ -143,18 +155,24 @@ def gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho, mu=0):
     if np.abs(mu) > 0:
         def func(mu):
             orig = gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho, 0)
+            vec = np.array([0, 0, 1])
 
             def inner(xx):
                 x = np.reshape(xx, (-1, 3))
-                grad = np.zeros(x.shape).T
-                z = x[:, 2].copy()
-                grad[-1] = np.where(z < 0, z, 0)
-                return orig(x) + mu * (grad.T).flatten()
+                grad = np.zeros(x.shape)
+
+
+                for i in range(len(x)):
+                    z = max(-x[i][2], 0)
+                    grad[i] += mu * z * vec
+
+                return orig(x) + grad.flatten()
             return inner
         return func
 
     state = np.zeros((len(fixed_points) + len(free_weights), 3))
-    state[:len(fixed_points)] = fixed_points
+    if len(fixed_points) > 0:
+        state[:len(fixed_points)] = fixed_points
 
     def func(xx):
         x = np.reshape(xx, (-1, 3))
@@ -162,7 +180,9 @@ def gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho, mu=0):
         grad = np.zeros(x.shape)
 
         # free weights
-        grad[:, 2] = grad[:, 2] + free_weights
+        for i in range(len(grad)):
+            grad[i][2] += free_weights[i]
+        # grad[:, 2] = grad[:, 2] + free_weights
 
         # cables
         for [i, j, lij] in cables:
