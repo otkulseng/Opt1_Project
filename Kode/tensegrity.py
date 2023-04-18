@@ -33,12 +33,12 @@ class TensegrityStructure:
 
         for i in range(len(p)):
             ax.scatter(p[i][0], p[i][1], p[i][2], c='k')
-            ax.text(p[i][0], p[i][1], p[i][2], r'$p_{%d}$'%i, size=20, zorder=1, color='k')
+            ax.text(p[i][0], p[i][1], p[i][2], r'$p_{%d} {%s}$'%(i, str(list(np.round(p[i], 2)))), size=20, zorder=1, color='k')
 
 
         for i in range(len(x)):
             ax.scatter(x[i][0], x[i][1], x[i][2], c='g')
-            ax.text(x[i][0], x[i][1], x[i][2], r'$x_{%d}$'%i, size=20, zorder=1, color='k')
+            ax.text(x[i][0], x[i][1], x[i][2], r'$x_{%d} {%s}$'%(i, str(list(np.round(x[i], 2)))), size=20, zorder=1, color='k')
 
         for elem in self.cables:
             a = elem[0]
@@ -107,8 +107,20 @@ def gen_E(cables, bars, free_weights, fixed_points, k, c, rho):
         E_ext = free_weights @ x[:, 2]
         return E_cable_elastic + E_ext
 
+    def func_without_cables(xx):
+        x = np.reshape(xx, (-1, 3))
+        state[len(fixed_points):] = x
+
+        E_bar_elastic = bar_elastic(state, bars, c)
+        E_bar_potential = bar_potential(state, bars, rho)
+        E_ext = free_weights @ x[:, 2]
+        return  E_bar_elastic + E_bar_potential + E_ext
+
     if len(bars) == 0:
         return func_without_bars
+
+    if len(cables) == 0:
+        return func_without_cables
 
     return func
 
@@ -123,8 +135,6 @@ def gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho):
         state[len(fixed_points):] = x
         grad = np.zeros(x.shape)
 
-
-
         # free weights
         grad[:, 2] = free_weights
 
@@ -135,6 +145,7 @@ def gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho):
             num = k / lij**2 * (1 - lij / np.linalg.norm(xl - xr))
             num = np.max(num, 0) # 0 if lij / norm < 1
             elem = num * (xl - xr)
+
             if i >= len(fixed_points):
                 idx = i - len(fixed_points)
                 grad[idx] = grad[idx] + elem
@@ -147,11 +158,10 @@ def gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho):
         for [i, j, lij] in bars:
             if i >= len(fixed_points):
                 i = i - len(fixed_points)
+                grad[i] += 0.5 * rho * lij
             if j >= len(fixed_points):
                 j = j - len(fixed_points)
-
-            grad[i] += 0.5 * rho * lij
-            grad[j] += 0.5 * rho * lij
+                grad[j] += 0.5 * rho * lij
         # end bar potential
 
         # bar elastic

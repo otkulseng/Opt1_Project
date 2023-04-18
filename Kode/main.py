@@ -13,16 +13,18 @@ from algoritmer import bfgs
 # x0 = x0.flatten()
 # print(res)
 
-ts = TEST.P25
-x0 = np.arange(3 * len(ts.free_weights))
-res = bfgs(x0, ts.func, ts.grad, Niter=1000)
-res = np.reshape(res,(-1, 3))
-fig, ax = ts.plot(res)
 
 
+x0 = +np.array([1, 1, 1])
+
+ts = TEST.LOCALMIN
+res = bfgs(x0, ts.func, ts.grad, Niter=100, plot_summary=True)
+
+ts.plot(res)
 plt.show()
 
-
+# 0.15280676109681207
+# -0.17294678450908882
 
 
 

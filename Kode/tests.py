@@ -64,7 +64,7 @@ freeweights = np.array([
     0,
     0,
     0
-])
+], dtype=np.float64)
 
 # Index lists
 p = np.arange(0, len(fixpoints))
@@ -96,3 +96,37 @@ P69 = TensegrityStructure(fixpoints,
                           k=0.1,
                           c=1,
                           rho=0.0)
+
+
+
+fixpoints = np.array([
+    [0, 0, 0],
+    [2, 0, 0],
+    [1, np.sqrt(3), 0],
+])
+
+freeweights = np.array([
+    0.1
+], dtype=np.float64)
+
+# Index lists
+p = np.arange(0, len(fixpoints))
+x = np.arange(len(fixpoints), len(fixpoints) + len(freeweights))
+
+cables = np.array([
+])
+
+bars = np.array([
+    [p[0], x[0], 2],
+    [p[1], x[0], 2],
+    [p[2], x[0], 2],
+])
+
+LOCALMIN = TensegrityStructure(fixpoints,
+                          freeweights,
+                          cables,
+                          bars,
+                          c=1)
+
+
+

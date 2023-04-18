@@ -1,5 +1,4 @@
 import numpy as np
-from numpy.linalg import norm
 from scipy.optimize import approx_fprime
 
 
@@ -146,14 +145,20 @@ def lineSearch(pk,
         ch = curvatureHigh(alpha)
     return alpha
 
-def bfgs(x0, f, gradf=None, Niter=100, grad_epsilon=1e-12):
+def bfgs(x0, f, gradf=None, Niter=100, grad_epsilon=1e-12, plot_summary=False, convergence_plot=False):
     if gradf is None:
-        gradf = lambda xk : approx_fprime(xk, f, epsilon=grad_epsilon).astype('float64')
+        gradf = lambda xk : approx_fprime(xk, f, epsilon=grad_epsilon)
+
+
 
     x_current = x0
     x_next = np.copy(x0)
     grad_current = gradf(x0)
+    norm = np.linalg.norm(grad_current)
 
+    if convergence_plot:
+        convergence = np.zeros(Niter)
+        convergence[0] = norm
 
     Hk = np.identity(np.size(x0))
     I = np.identity(np.size(x0))
@@ -163,7 +168,7 @@ def bfgs(x0, f, gradf=None, Niter=100, grad_epsilon=1e-12):
     sk = np.zeros((len(x_current), 1))
     yk = np.zeros((len(x_current), 1))
 
-    while norm(grad_current) > grad_epsilon and n < Niter:
+    while norm > grad_epsilon and n < Niter:
         n += 1
         pk = -Hk @ grad_current
 
@@ -181,22 +186,28 @@ def bfgs(x0, f, gradf=None, Niter=100, grad_epsilon=1e-12):
             Hk = Hk*(1/(rhok*np.inner(yk,yk)))
 
         A = I - rhok * np.outer(sk, yk)
-        B = rhok * np.outer(sk, sk)
-        Hk = A @ Hk @ A.T
-        Hk = Hk + B
-
-        # z = Hk.dot(yk)
-        # Hk += -rhok*(np.outer(sk,z) + np.outer(z,sk)) + rhok*(rhok*np.inner(yk,z)+1)*np.outer(sk,sk)
+        Hk = A @ Hk @ A.T + rhok * np.outer(sk, sk)
 
         x_current = x_next
         grad_current = grad_next
+        norm = np.linalg.norm(grad_current)
+
+        if convergence_plot:
+            convergence[n] = norm
 
 
-    if n == Niter:
-        print("Maximum iteration obtained in BFGS method")
-        print(f'Norm: {norm(grad_current)}')
-    else:
-        print(f'Gradient at solution: \n {np.reshape(grad_current, (-1, 3))} \n with norm: \n{norm(grad_current)}\n')
+
+    if plot_summary:
+        if n == Niter:
+            print("Maximum iteration obtained in BFGS method")
+        else:
+            print("BFGS converged!")
+
+        print(f'Gradient at solution: \n {np.reshape(grad_current, (-1, 3))} \n with norm: \n{np.linalg.norm(grad_current)}\n')
+        print(f'Solution: \n{np.reshape(x_current, (-1, 3))}\n with function value: \n{f(x_current)}\n')
+
+    if convergence_plot:
+        return x_current, convergence[:n]
 
     return x_current
 
