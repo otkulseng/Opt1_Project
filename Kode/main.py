@@ -15,16 +15,30 @@ from algoritmer import bfgs
 
 
 
-x0 = +np.array([1, 1, 1])
 
-ts = TEST.LOCALMIN
-res = bfgs(x0, ts.func, ts.grad, Niter=100, plot_summary=True)
+ts = TEST.FREESTANDING
+x0 = np.arange(3 * len(ts.free_weights))
 
+# xx = x0
+# x = np.reshape(xx, (-1, 3))
+# grad = np.zeros(x.shape).T
+# z = x[:, 2].copy()
+# print(z)
+# grad[-1] = np.where(z < 0, -z, 0)
+# print(grad.T)
+# print(x)
+
+                # return orig(x) + mu * (grad.T).flatten()
+
+res, conv = bfgs(x0, ts.func, ts.grad, Niter=500, quadratic_penalty=True, plot_summary=True, convergence_plot=True)
+
+plt.plot(conv)
 ts.plot(res)
 plt.show()
 
-# 0.15280676109681207
-# -0.17294678450908882
+
+
+
 
 
 

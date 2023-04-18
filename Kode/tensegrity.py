@@ -4,14 +4,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 class TensegrityStructure:
-    def __init__(self, fixed_points, free_weights, cables, bars, k=0, c=0, rho=0, solution = None) -> None:
+    def __init__(self, fixed_points, free_weights, cables, bars, k=0, c=0, rho=0, mu=0, solution = None) -> None:
         self.fixed_points = fixed_points
         self.free_weights = free_weights
         self.cables = cables
         self.bars = bars
 
-        self.func = gen_E(cables, bars, free_weights, fixed_points, k, c, rho)
-        self.grad = gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho)
+        self.func = gen_E(cables, bars, free_weights, fixed_points, k, c, rho, mu)
+        self.grad = gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho, mu)
 
         self.solution = solution
 
@@ -33,12 +33,12 @@ class TensegrityStructure:
 
         for i in range(len(p)):
             ax.scatter(p[i][0], p[i][1], p[i][2], c='k')
-            ax.text(p[i][0], p[i][1], p[i][2], r'$p_{%d} {%s}$'%(i, str(list(np.round(p[i], 2)))), size=20, zorder=1, color='k')
+            ax.text(p[i][0], p[i][1], p[i][2], r'$p_{%d}$'%i, size=20, zorder=1, color='k')
 
 
         for i in range(len(x)):
             ax.scatter(x[i][0], x[i][1], x[i][2], c='g')
-            ax.text(x[i][0], x[i][1], x[i][2], r'$x_{%d} {%s}$'%(i, str(list(np.round(x[i], 2)))), size=20, zorder=1, color='k')
+            ax.text(x[i][0], x[i][1], x[i][2], r'$x_{%d}$'%i, size=20, zorder=1, color='k')
 
         for elem in self.cables:
             a = elem[0]
@@ -77,7 +77,7 @@ def bar_potential(state, bars, rho):
 
 
 
-def gen_E(cables, bars, free_weights, fixed_points, k, c, rho):
+def gen_E(cables, bars, free_weights, fixed_points, k, c, rho, mu=0):
     """Takes in the position of all fixed points p,
     and information about all the cables and bars. Generates the
     objective function used with E_cable_elast
@@ -86,6 +86,19 @@ def gen_E(cables, bars, free_weights, fixed_points, k, c, rho):
         objective function f(x) where x is a numpy array of free
         optimization variables
     """
+    if np.abs(mu) > 0:
+        def func(mu_input):
+            orig = gen_E(cables, bars, free_weights, fixed_points, k, c, rho, 0)
+
+            def inner(xx):
+                x = np.reshape(xx, (-1, 3))
+                h = x[:, 2].copy()
+                h[h>0] = 0
+                return orig(xx) + 1/2 * mu_input * h @ h
+
+            return inner
+        return func
+
 
     state = np.zeros((len(fixed_points) + len(free_weights), 3))
     state[:len(fixed_points)] = fixed_points
@@ -125,7 +138,20 @@ def gen_E(cables, bars, free_weights, fixed_points, k, c, rho):
     return func
 
 
-def gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho):
+def gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho, mu=0):
+
+    if np.abs(mu) > 0:
+        def func(mu):
+            orig = gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho, 0)
+
+            def inner(xx):
+                x = np.reshape(xx, (-1, 3))
+                grad = np.zeros(x.shape).T
+                z = x[:, 2].copy()
+                grad[-1] = np.where(z < 0, z, 0)
+                return orig(x) + mu * (grad.T).flatten()
+            return inner
+        return func
 
     state = np.zeros((len(fixed_points) + len(free_weights), 3))
     state[:len(fixed_points)] = fixed_points
@@ -136,7 +162,7 @@ def gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho):
         grad = np.zeros(x.shape)
 
         # free weights
-        grad[:, 2] = free_weights
+        grad[:, 2] = grad[:, 2] + free_weights
 
         # cables
         for [i, j, lij] in cables:
