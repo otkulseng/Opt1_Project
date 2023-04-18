@@ -15,6 +15,7 @@ freeweights = np.array([
     1/6
 ])
 
+
 # Index lists
 p = np.arange(0, len(fixpoints))
 x = np.arange(len(fixpoints), len(fixpoints) + len(freeweights))
@@ -39,6 +40,8 @@ solution = np.array([
     [-2, -2, -3/2],
     [2, -2, -3/2]
 ])
+
+
 
 
 # Test for problem 2 - 5

@@ -11,14 +11,16 @@ from algoritmer import bfgs
 #  [ 7.09690896e-01, -2.17653342e-05,  9.54287599e+00],
 #  [-1.95179315e-05  ,7.09688419e-01 , 9.54287231e+00]], dtype=np.float64)
 # x0 = x0.flatten()
-
-# res = bfgs(x0, ts.func, Niter=150)
-# res = np.reshape(res,(-1, 3))
 # print(res)
 
 ts = TEST.P69
-x0 = np.ones(3 * len(ts.free_weights))
-res = minimize(ts.func, x0, tol=1e-20, method="BFGS")
+x0 = np.arange(3 * len(ts.free_weights))
+
+res = bfgs(x0, ts.func, ts.grad, Niter=300)
+res = np.reshape(res,(-1, 3))
+print(np.round(res, 6))
+
+res = minimize(ts.func, x0, tol=1e-12, method="BFGS")
 res = np.reshape(res.x, (-1, 3))
 print(np.round(res, 6))
 

@@ -66,6 +66,7 @@ def bar_elastic(state, bars, c):
     l = state[bars[:, 0]]
     r = state[bars[:, 1]]
     diff = np.linalg.norm(l - r, axis=1) - bars[:, 2]
+
     return (c /(2*bars[:, 2]**2) * diff) @ diff
 
 
@@ -73,6 +74,8 @@ def bar_potential(state, bars, rho):
     l = state[bars[:, 0]]
     r = state[bars[:, 1]]
     return 0.5 * rho * bars[:, 2] @ (l[:, 2] + r[:, 2])
+
+
 
 def gen_E(cables, bars, free_weights, fixed_points, k, c, rho):
     """Takes in the position of all fixed points p,
@@ -90,6 +93,7 @@ def gen_E(cables, bars, free_weights, fixed_points, k, c, rho):
     def func(xx):
         x = np.reshape(xx, (-1, 3))
         state[len(fixed_points):] = x
+
         E_cable_elastic = cable_elastic(state, cables, k)
         E_bar_elastic = bar_elastic(state, bars, c)
         E_bar_potential = bar_potential(state, bars, rho)
@@ -108,7 +112,51 @@ def gen_E(cables, bars, free_weights, fixed_points, k, c, rho):
 
     return func
 
-def gen_grad_E(cables, bars, free_weights, fixed_points, k=2, c=3, rho=0):
-    pass
+
+def gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho):
+
+    state = np.zeros((len(fixed_points) + len(free_weights), 3))
+    state[:len(fixed_points)] = fixed_points
+
+    def func(xx):
+        x = np.reshape(xx, (-1, 3))
+        state[len(fixed_points):] = x
+        grad = np.zeros(x.shape)
 
 
+
+        # free weights
+        grad[:, 2] = free_weights
+
+        # cables
+        for [i, j, lij] in cables:
+            xl = state[i]
+            xr = state[j]
+            num = k / lij**2 * (1 - lij / np.linalg.norm(xl - xr))
+            num = np.max(num, 0) # 0 if lij / norm < 1
+            elem = num * (xl - xr)
+            if i >= len(fixed_points):
+                idx = i - len(fixed_points)
+                grad[idx] = grad[idx] + elem
+            if j >= len(fixed_points):
+                idx = j - len(fixed_points)
+                grad[idx] = grad[idx] - elem
+        # end cables
+
+        # bars
+        for [i, j, lij] in bars:
+            xl = state[i]
+            xr = state[j]
+            num = c / lij**2 * (1 - lij / np.linalg.norm(xl - xr))
+            elem = num * (xl - xr)
+            if i >= len(fixed_points):
+                idx = i - len(fixed_points)
+                grad[idx] = grad[idx] + elem
+            if j >= len(fixed_points):
+                idx = j - len(fixed_points)
+                grad[idx] = grad[idx] - elem
+        # end bars
+
+        return grad.flatten()
+
+    return func
