@@ -95,4 +95,4 @@ P69 = TensegrityStructure(fixpoints,
                           bars,
                           k=0.1,
                           c=1,
-                          rho=0)
+                          rho=0.0)

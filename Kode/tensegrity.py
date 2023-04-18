@@ -143,10 +143,22 @@ def gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho):
                 grad[idx] = grad[idx] - elem
         # end cables
 
-        # bars
+        # bar potential
+        for [i, j, lij] in bars:
+            if i >= len(fixed_points):
+                i = i - len(fixed_points)
+            if j >= len(fixed_points):
+                j = j - len(fixed_points)
+
+            grad[i] += 0.5 * rho * lij
+            grad[j] += 0.5 * rho * lij
+        # end bar potential
+
+        # bar elastic
         for [i, j, lij] in bars:
             xl = state[i]
             xr = state[j]
+
             num = c / lij**2 * (1 - lij / np.linalg.norm(xl - xr))
             elem = num * (xl - xr)
             if i >= len(fixed_points):
@@ -155,7 +167,7 @@ def gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho):
             if j >= len(fixed_points):
                 idx = j - len(fixed_points)
                 grad[idx] = grad[idx] - elem
-        # end bars
+        # end bar elastic
 
         return grad.flatten()
 

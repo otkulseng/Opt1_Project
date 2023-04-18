@@ -13,21 +13,14 @@ from algoritmer import bfgs
 # x0 = x0.flatten()
 # print(res)
 
-ts = TEST.P69
+ts = TEST.P25
 x0 = np.arange(3 * len(ts.free_weights))
-
-res = bfgs(x0, ts.func, ts.grad, Niter=300)
+res = bfgs(x0, ts.func, ts.grad, Niter=1000)
 res = np.reshape(res,(-1, 3))
-print(np.round(res, 6))
-
-res = minimize(ts.func, x0, tol=1e-12, method="BFGS")
-res = np.reshape(res.x, (-1, 3))
-print(np.round(res, 6))
+fig, ax = ts.plot(res)
 
 
-# fig, ax = ts.plot(res)
-# plt.savefig("./Bilder/oppg1.pdf")
-# plt.show()
+plt.show()
 
 
 

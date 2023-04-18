@@ -195,6 +195,8 @@ def bfgs(x0, f, gradf=None, Niter=100, grad_epsilon=1e-12):
     if n == Niter:
         print("Maximum iteration obtained in BFGS method")
         print(f'Norm: {norm(grad_current)}')
+    else:
+        print(f'Gradient at solution: \n {np.reshape(grad_current, (-1, 3))} \n with norm: \n{norm(grad_current)}\n')
 
     return x_current
 
