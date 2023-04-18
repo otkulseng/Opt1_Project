@@ -80,7 +80,9 @@ def bar_potential(state, bars, rho):
 
 
 
-def gen_E(cables, bars, free_weights, fixed_points, k, c, rho, mu=0):
+
+
+def gen_E(cables, bars, free_weights, fixed_points, k, c, rho, mu=0, lambda=0):
     """Takes in the position of all fixed points p,
     and information about all the cables and bars. Generates the
     objective function used with E_cable_elast
@@ -101,10 +103,10 @@ def gen_E(cables, bars, free_weights, fixed_points, k, c, rho, mu=0):
                 for  i in range(len(x)):
                     z = x[i][2]
                     curVal = max(-z, 0)
-                    E += curVal
+                    E += 0.5 * mu * curVal**2
 
 
-                return orig(xx) + 1/2 * mu_input * E
+                return orig(xx) +
 
             return inner
         return func
