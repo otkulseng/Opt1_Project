@@ -186,6 +186,7 @@ def gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho, quadratic_pe
 
                 grad[0] += mu * np.array([x[0][0], x[0][1], 0]) # equality constraint to origo
 
+
                 diff = mu * (xx[0] - xx[3]) * np.array([1, 0, 0])
                 grad[0] += diff
                 grad[1] -= diff

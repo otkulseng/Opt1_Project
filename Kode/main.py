@@ -6,8 +6,8 @@ from algoritmer import bfgs
 
 
 
-ts = TEST.FREESTANDING
-x0 = np.arange(3 * len(ts.free_weights)) * 10
+ts = TEST.FREESTANDING2
+x0 = np.arange(3 * len(ts.free_weights))
 
 mu = 1
 res = x0.copy()
@@ -26,7 +26,6 @@ for i in range(10):
         mu *= 2
 
     mu = min(mu, 1e10)
-
 
     if np.linalg.norm(res - prev) < 1e-12:
         break

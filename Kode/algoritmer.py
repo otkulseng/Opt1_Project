@@ -145,7 +145,7 @@ def lineSearch(pk,
         ch = curvatureHigh(alpha)
     return alpha
 
-def bfgs(x0, f, gradf=None, Niter=100, grad_epsilon=1e-12, plot_summary=False, convergence_plot=False, return_iteration=False):
+def bfgs(x0, f, gradf=None, Niter=100, grad_epsilon=1e-10, plot_summary=False, convergence_plot=False, return_iteration=False):
     if gradf is None:
         gradf = lambda xk : approx_fprime(xk, f, epsilon=grad_epsilon)
 
