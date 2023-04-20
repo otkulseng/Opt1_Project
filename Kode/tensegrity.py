@@ -104,7 +104,16 @@ def gen_E(cables, bars, free_weights, fixed_points, k, c, rho, quadratic_penaliz
                 E = np.where(x[:, 2] < 0, x[:, 2], 0)
                 return orig(xx) + 0.5 * mu_input * E @ E
 
+
+
+            def without_fixed(xx):
+                return inner(xx) + 0.5 * mu_input * (xx[0]**2 + xx[1] ** 2)
+
+            if len(fixed_points) == 0:
+                return without_fixed
+
             return inner
+
         return func
 
 
@@ -161,9 +170,24 @@ def gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho, quadratic_pe
 
                 for i in range(len(x)):
                     z = max(-x[i][2], 0)
-                    grad[i] += mu * z * vec
+                    grad[i] -= mu * z * vec
 
-                return orig(x) - grad.flatten()
+                return orig(x) + grad.flatten()
+
+            def without_fixed(xx):
+                x = np.reshape(xx, (-1, 3))
+                grad = np.zeros(x.shape)
+
+                for i in range(len(x)):
+                    z = max(-x[i][2], 0)
+                    grad[i] -= mu * z * vec
+
+                grad[0] += mu * np.array([x[0][0], x[0][1], 0])
+
+                return orig(x) + grad.flatten()
+
+            if len(fixed_points) == 0:
+                return without_fixed
             return inner
         return func
 

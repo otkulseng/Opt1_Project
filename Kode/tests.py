@@ -136,7 +136,7 @@ fixpoints = np.array([
 freeweights = np.zeros(8, dtype=np.float64)
 
 for i in range(4):
-    freeweights[i] = 1/100
+    freeweights[i] = 1e-5
 
 # Index lists
 cables = np.array([
@@ -154,8 +154,6 @@ cables = np.array([
     [0, 3, 2]
 ])
 
-for i in range(3):
-    freeweights[i] = 1e-5
 
 bars = np.array([
     [0, 4, 10],
