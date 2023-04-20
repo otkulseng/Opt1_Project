@@ -95,12 +95,14 @@ def gen_E(cables, bars, free_weights, fixed_points, k, c, rho, quadratic_penaliz
             def inner(xx):
                 x = np.reshape(xx, (-1, 3))
 
-                E = 0
-                for  i in range(len(x)):
-                    z = x[i][2]
-                    curVal = max(-z, 0)
-                    E += curVal**2
-                return orig(xx) + 0.5 * mu_input * E
+                # E = 0
+                # for  i in range(len(x)):
+                #     z = x[i][2]
+                #     curVal = max(-z, 0)
+                #     E += curVal**2
+
+                E = np.where(x[:, 2] < 0, x[:, 2], 0)
+                return orig(xx) + 0.5 * mu_input * E @ E
 
             return inner
         return func

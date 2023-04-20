@@ -9,8 +9,7 @@ from algoritmer import bfgs
 ts = TEST.FREESTANDING
 x0 = np.arange(3 * len(ts.free_weights)) * 10
 
-
-mu = 1e-5
+mu = 1
 res = x0.copy()
 
 prev = x0
