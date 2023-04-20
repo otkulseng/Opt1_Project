@@ -107,7 +107,9 @@ def gen_E(cables, bars, free_weights, fixed_points, k, c, rho, quadratic_penaliz
 
 
             def without_fixed(xx):
-                return inner(xx) + 0.5 * mu_input * (xx[0]**2 + xx[1] ** 2)
+                E0 = 0.5 * mu_input * (xx[0]**2 + xx[1] ** 2)
+                E1 = 0.5 * mu_input * (xx[0] - xx[3])**2
+                return inner(xx) + E0 + E1
 
             if len(fixed_points) == 0:
                 return without_fixed
@@ -182,7 +184,12 @@ def gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho, quadratic_pe
                     z = max(-x[i][2], 0)
                     grad[i] -= mu * z * vec
 
-                grad[0] += mu * np.array([x[0][0], x[0][1], 0])
+                grad[0] += mu * np.array([x[0][0], x[0][1], 0]) # equality constraint to origo
+
+                diff = mu * (xx[0] - xx[3]) * np.array([1, 0, 0])
+                grad[0] += diff
+                grad[1] -= diff
+
 
                 return orig(x) + grad.flatten()
 
