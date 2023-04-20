@@ -11,7 +11,26 @@ except FileExistsError:
     print("Directory already created")
 
 
-RUNALL = True
+RUNALL = False
+################################################################################
+if RUNALL:
+    print("START LOCALMIN")
+    ts =  TEST.LOCALMIN
+
+    x0 = np.arange(3 * len(ts.free_weights))
+    res, conv = bfgs(x0, ts.func, ts.grad, Niter=1000, convergence_plot=True)
+    fig, ax = ts.plot(res)
+    plt.savefig("Bilder/localminpos.pdf") # Used in report.
+
+    x0 = -np.arange(3 * len(ts.free_weights))
+    res, conv = bfgs(x0, ts.func, ts.grad, Niter=1000, convergence_plot=True)
+    fig, ax = ts.plot(res)
+    plt.savefig("Bilder/localminneg.pdf") # Used in report.
+
+    print("END LOCALMIN")
+################################################################################¨
+
+
 ################################################################################
 if RUNALL:
     print("START TEST P25")
