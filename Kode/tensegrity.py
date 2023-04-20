@@ -4,14 +4,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 class TensegrityStructure:
-    def __init__(self, fixed_points, free_weights, cables, bars, k=0, c=0, rho=0, mu=0, solution = None) -> None:
+    def __init__(self, fixed_points, free_weights, cables, bars, k=0, c=0, rho=0, quadratic_penalization=False, solution = None) -> None:
         self.fixed_points = fixed_points
         self.free_weights = free_weights
         self.cables = cables
         self.bars = bars
 
-        self.func = gen_E(cables, bars, free_weights, fixed_points, k, c, rho, mu)
-        self.grad = gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho, mu)
+        self.func = gen_E(cables, bars, free_weights, fixed_points, k, c, rho, quadratic_penalization)
+        self.grad = gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho, quadratic_penalization)
 
         self.solution = solution
 
@@ -79,10 +79,7 @@ def bar_potential(state, bars, rho):
     return 0.5 * rho * bars[:, 2] @ (l[:, 2] + r[:, 2])
 
 
-
-
-
-def gen_E(cables, bars, free_weights, fixed_points, k, c, rho, mu=0, lambda=0):
+def gen_E(cables, bars, free_weights, fixed_points, k, c, rho, quadratic_penalization=False):
     """Takes in the position of all fixed points p,
     and information about all the cables and bars. Generates the
     objective function used with E_cable_elast
@@ -91,22 +88,19 @@ def gen_E(cables, bars, free_weights, fixed_points, k, c, rho, mu=0, lambda=0):
         objective function f(x) where x is a numpy array of free
         optimization variables
     """
-    if np.abs(mu) > 0:
+    if quadratic_penalization:
         def func(mu_input):
-            orig = gen_E(cables, bars, free_weights, fixed_points, k, c, rho, 0)
+            orig = gen_E(cables, bars, free_weights, fixed_points, k, c, rho, quadratic_penalization=False)
 
             def inner(xx):
                 x = np.reshape(xx, (-1, 3))
 
-                # E = x[0][0]**2 + x[0][1] ** 2
                 E = 0
                 for  i in range(len(x)):
                     z = x[i][2]
                     curVal = max(-z, 0)
-                    E += 0.5 * mu * curVal**2
-
-
-                return orig(xx) +
+                    E += curVal**2
+                return orig(xx) + 0.5 * mu_input * E
 
             return inner
         return func
@@ -152,23 +146,22 @@ def gen_E(cables, bars, free_weights, fixed_points, k, c, rho, mu=0, lambda=0):
     return func
 
 
-def gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho, mu=0):
+def gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho, quadratic_penalization=False):
+    vec = np.array([0, 0, 1])
 
-    if np.abs(mu) > 0:
+    if quadratic_penalization:
         def func(mu):
-            orig = gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho, 0)
-            vec = np.array([0, 0, 1])
+            orig = gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho, quadratic_penalization=False)
 
             def inner(xx):
                 x = np.reshape(xx, (-1, 3))
                 grad = np.zeros(x.shape)
 
-
                 for i in range(len(x)):
                     z = max(-x[i][2], 0)
                     grad[i] += mu * z * vec
 
-                return orig(x) + grad.flatten()
+                return orig(x) - grad.flatten()
             return inner
         return func
 
@@ -190,8 +183,10 @@ def gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho, mu=0):
         for [i, j, lij] in cables:
             xl = state[i]
             xr = state[j]
-            num = k / lij**2 * (1 - lij / np.linalg.norm(xl - xr))
-            num = np.max(num, 0) # 0 if lij / norm < 1
+
+            temp_norm = np.linalg.norm(xl - xr) + 1e-20
+            num = k / lij**2 * (1 - lij / temp_norm)
+            num = max(num, 0) # 0 if lij / norm < 1
             elem = num * (xl - xr)
 
             if i >= len(fixed_points):
@@ -206,10 +201,10 @@ def gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho, mu=0):
         for [i, j, lij] in bars:
             if i >= len(fixed_points):
                 i = i - len(fixed_points)
-                grad[i] += 0.5 * rho * lij
+                grad[i] += 0.5 * rho * lij * vec
             if j >= len(fixed_points):
                 j = j - len(fixed_points)
-                grad[j] += 0.5 * rho * lij
+                grad[j] += 0.5 * rho * lij * vec
         # end bar potential
 
         # bar elastic
@@ -217,7 +212,8 @@ def gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho, mu=0):
             xl = state[i]
             xr = state[j]
 
-            num = c / lij**2 * (1 - lij / np.linalg.norm(xl - xr))
+            temp_norm = np.linalg.norm(xl - xr) + 1e-20
+            num = c / lij**2 * (1 - lij / temp_norm)
             elem = num * (xl - xr)
             if i >= len(fixed_points):
                 idx = i - len(fixed_points)

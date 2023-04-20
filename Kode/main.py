@@ -5,52 +5,35 @@ import tests as TEST
 from algoritmer import bfgs
 
 
-# x0 = np.array([
-#     [-7.09729653e-01,-2.19841562e-05,9.54286612e+00],
-#  [-1.92495992e-05 ,-7.09732144e-01 , 9.54286984e+00],
-#  [ 7.09690896e-01, -2.17653342e-05,  9.54287599e+00],
-#  [-1.95179315e-05  ,7.09688419e-01 , 9.54287231e+00]], dtype=np.float64)
-# x0 = x0.flatten()
-# print(res)
+
+ts = TEST.FREESTANDING
+x0 = np.arange(3 * len(ts.free_weights)) * 10
 
 
+mu = 1e-5
+res = x0.copy()
+
+prev = x0
+for i in range(10):
+    res, num = bfgs(res, ts.func(mu), ts.grad(mu), Niter=1000, return_iteration=True)
+    print(f' {i}: {num}, {mu} ')
+
+    mu *= 1.5
+    if num < 1000:
+        mu *= 2
+    if num < 500:
+        mu *= 2
+    if num < 250:
+        mu *= 2
+
+    mu = min(mu, 1e10)
 
 
+    if np.linalg.norm(res - prev) < 1e-12:
+        break
+    prev = res.copy()
 
 
-ts = TEST.SANITYCHECK
-x0 = np.arange(3 * len(ts.free_weights))
-muMax = 10
-for mu in np.linspace(1, muMax, 20):
-    # x0 = bfgs(x0, ts.func(mu), ts.grad(mu), Niter=100)
-    x0 = minimize(ts.func(mu), x0, jac=ts.grad(mu), method="CG", tol=1e-12).x
-
-res = bfgs(x0, ts.func(muMax), ts.grad(muMax), Niter=0, plot_summary=True)
-# res = x0
-
-
+res = bfgs(res, ts.func(mu), ts.grad(mu), Niter=1000, plot_summary=True)
 ts.plot(res)
-
-res = np.array([
-    [10, 10, 0],
-    [10, -10, 0],
-    [-10, -10, 0],
-    [-10, 10, 0]
-])
-
-# ts.plot(res)
-
-norm = np.linalg.norm(ts.grad(muMax)(res))
-print(norm)
-
-norm = np.linalg.norm(ts.func(muMax)(res))
-print(norm)
-
 plt.show()
-
-
-
-
-
-
-
