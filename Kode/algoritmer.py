@@ -145,10 +145,9 @@ def lineSearch(pk,
         ch = curvatureHigh(alpha)
     return alpha
 
-def bfgs(x0, f, gradf=None, Niter=100, grad_epsilon=1e-12, plot_summary=False, convergence_plot=False):
+def bfgs(x0, f, gradf=None, Niter=100, grad_epsilon=1e-10, plot_summary=False, convergence_plot=False, return_iteration=False):
     if gradf is None:
         gradf = lambda xk : approx_fprime(xk, f, epsilon=grad_epsilon)
-
 
 
     x_current = x0
@@ -157,7 +156,7 @@ def bfgs(x0, f, gradf=None, Niter=100, grad_epsilon=1e-12, plot_summary=False, c
     norm = np.linalg.norm(grad_current)
 
     if convergence_plot:
-        convergence = np.zeros(Niter)
+        convergence = np.zeros(Niter + 1)
         convergence[0] = norm
 
     Hk = np.identity(np.size(x0))
@@ -180,7 +179,10 @@ def bfgs(x0, f, gradf=None, Niter=100, grad_epsilon=1e-12, plot_summary=False, c
         sk = x_next - x_current
         yk = grad_next - grad_current
 
-        rhok = 1 / np.dot(yk, sk)
+        tempdot = np.dot(yk, sk)
+        if tempdot == 0:
+            break;
+        rhok = 1 / tempdot
 
         if n==1:
             Hk = Hk*(1/(rhok*np.inner(yk,yk)))
@@ -203,11 +205,15 @@ def bfgs(x0, f, gradf=None, Niter=100, grad_epsilon=1e-12, plot_summary=False, c
         else:
             print("BFGS converged!")
 
+
         print(f'Gradient at solution: \n {np.reshape(grad_current, (-1, 3))} \n with norm: \n{np.linalg.norm(grad_current)}\n')
         print(f'Solution: \n{np.reshape(x_current, (-1, 3))}\n with function value: \n{f(x_current)}\n')
 
     if convergence_plot:
         return x_current, convergence[:n]
+
+    if return_iteration:
+        return x_current, n
 
     return x_current
 
