@@ -15,16 +15,16 @@ The objective function \eqref{energy} is not generally differentiable. We see th
 \delx \ebe = \frac{c}{\el^2} (1- \frac{\el}{\xnorm}) (x_s^{(i)} - x_s^{(j)})
 \end{equation*}
 
-Note that this expression is valid for all values of $\xnorm$, which means that the function is not differentiable when $\xnorm = 0$. However, the distance being $0$ would imply two nodes being in the same position which will clearly never happen in practice, so this is not a problem. That being said, the fact that our function has such little smoothness causes us some other problems.
+Note that this expression is valid for all values of $\xnorm$, which means that the function is not differentiable when $\xnorm = 0$. However, the distance being $0$ would imply two nodes being in the same position which would never happen in practice, so this is not a problem. However, our function has such little smoothness causes us some other problems.
 
 \subsection{Optimality conditions for tensegrity domes}
-For $C^2$ optimization problems, the general necessary optimality conditions for a solution $X^*$ is
+For $C^2$ optimisation problems, the general necessary optimality conditions for a solution $X^*$ is
 
 \begin{align*}
     &\nabla E(X^*) = 0\\
     & H_f(X^*) \text{ is positive semi-definite}
 \end{align*}
-Unfortunately our objective function is not $C^2$. For all practical purposes we have the necessary condition $\nabla E(X^*) = 0$, as long as all nodes have unique positions, but we have no neccesary second order conditions.
+Unfortunately our objective function is not $C^2$. For all practical purposes as long as all nodes have unique positions, we have the necessary condition $\nabla E(X^*) = 0$,  but we have no neccesary second order conditions.
 
 Similarly, the typical sufficient condition of $H_f(X^*)$ being positive definite is not applicable. For convex functions, the one condition we actually do have of $\nabla E(X)=0$ would be sufficient. However it turns out that our objective function is no longer convex.
 
@@ -83,6 +83,8 @@ As for LICQ we have
 \begin{align*}
     \nabla c_1(X) = \bigg( \frac{\partial c_1}{\partial x^{(1)}},\frac{\partial c_1}{\partial x^{(2)}},...,\frac{\partial c_1}{\partial x^{(i)}},...,\frac{\partial c_1}{\partial x^{(N)}} \bigg) =\bigg( (0,0,1),(0,0,0),...,(0,0,0),...,(0,0,0) \bigg) \\
     \nabla c_2(X) = \bigg( (0,0,0),(0,0,1),...,(0,0,0),...,(0,0,0) \bigg) \\
+    \vdots 
+    \hspace{200pt}\\
     \nabla c_i(X) = \bigg( (0,0,0),(0,0,0),...,\underbrace{(0,0,1)}_{i^{\text{th}}\text{ term}},...,(0,0,0) \bigg)\\
     \nabla c_N(X) = \bigg( (0,0,0),(0,0,0),...,(0,0,0),...,(0,0,1) \bigg) \\
 \end{align*}
