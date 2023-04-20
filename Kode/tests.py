@@ -172,45 +172,43 @@ FREESTANDING = TensegrityStructure(fixpoints,
                           rho=1e-10,
                           quadratic_penalization=True)
 
-fixpoints = np.array([
-])
+def STORIES(N):
+    fixpoints = np.array([
+    ])
+    freeweights = np.zeros(4 + 4 * N, dtype=np.float64)
+
+    for i in range(4):
+        freeweights[i] = 1e-4
+
+    cables = []
+    for i in range(N+1):
+        cables.append([0 + 4*i, 1 + 4*i, 1])
+        cables.append([1 + 4*i, 2 + 4*i, 1])
+        cables.append([2 + 4*i, 3 + 4*i, 1])
+        cables.append([0 + 4*i, 3 + 4*i, 1])
+        if i < N:
+            cables.append([0 + 4*i, 7 + 4*i, 8])
+            cables.append([1 + 4*i, 4 + 4*i, 8])
+            cables.append([2 + 4*i, 5 + 4*i, 8])
+            cables.append([3 + 4*i, 6 + 4*i, 8])
+    cables = np.array(cables)
+
+    bars = []
+    for i in range(len(freeweights)):
+        if i + 4 == len(freeweights):
+            break
+        bars.append([i, i+4, 10])
+    bars = np.array(bars)
 
 
-N = 25
-freeweights = np.zeros(4 + 4 * N, dtype=np.float64)
-
-for i in range(4):
-    freeweights[i] = 1e-4
-
-cables = []
-for i in range(N+1):
-    cables.append([0 + 4*i, 1 + 4*i, 1])
-    cables.append([1 + 4*i, 2 + 4*i, 1])
-    cables.append([2 + 4*i, 3 + 4*i, 1])
-    cables.append([0 + 4*i, 3 + 4*i, 1])
-    if i < N:
-        cables.append([0 + 4*i, 7 + 4*i, 8])
-        cables.append([1 + 4*i, 4 + 4*i, 8])
-        cables.append([2 + 4*i, 5 + 4*i, 8])
-        cables.append([3 + 4*i, 6 + 4*i, 8])
-cables = np.array(cables)
-
-bars = []
-for i in range(len(freeweights)):
-    if i + 4 == len(freeweights):
-        break
-    bars.append([i, i+4, 10])
-bars = np.array(bars)
-
-
-FREESTANDING2 = TensegrityStructure(fixpoints,
-                          freeweights,
-                          cables,
-                          bars,
-                          k=0.1,
-                          c=1,
-                          rho=1e-10,
-                          quadratic_penalization=True)
+    return TensegrityStructure(fixpoints,
+                            freeweights,
+                            cables,
+                            bars,
+                            k=0.1,
+                            c=1,
+                            rho=1e-10,
+                            quadratic_penalization=True)
 
 
 

@@ -6,8 +6,10 @@ from algoritmer import bfgs
 
 
 
-ts = TEST.FREESTANDING2
+
+ts = TEST.SANITYCHECK
 x0 = np.arange(3 * len(ts.free_weights))
+# x0 = np.random.uniform(10, 20, size=(3 * len(ts.free_weights)))
 
 mu = 1
 res = x0.copy()
@@ -32,6 +34,6 @@ for i in range(10):
     prev = res.copy()
 
 
-res = bfgs(res, ts.func(mu), ts.grad(mu), Niter=1000, plot_summary=True)
+res, conv = bfgs(res, ts.func(mu), ts.grad(mu), Niter=1000, plot_summary=True, convergence_plot=True)
 ts.plot(res)
 plt.show()

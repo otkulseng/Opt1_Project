@@ -180,6 +180,8 @@ def bfgs(x0, f, gradf=None, Niter=100, grad_epsilon=1e-10, plot_summary=False, c
         yk = grad_next - grad_current
 
         tempdot = np.dot(yk, sk)
+        if tempdot == 0:
+            break;
         rhok = 1 / tempdot
 
         if n==1:
