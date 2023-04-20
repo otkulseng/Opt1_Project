@@ -10,10 +10,11 @@ We will now consider the situation with added bars, but still using the constrai
 
 which still leaves us with a free optimization problem. However, the situation will be slightly more complicated.
 
-The objective function \eqref{energy} is not generally differentiable. We see that the elastic energy model for bars is the same as cables for $\xnorm > \el$ with a different constant $k$, which gives us similar partial derivatives:
+The objective function \eqref{energy} is not generally differentiable. We see that the elastic energy model for bars is the same as cables for $\xnorm > \el$ with a different material parameter, which gives us similar partial derivatives:
 \begin{equation*}
 \delx \ebe = \frac{c}{\el^2} (1- \frac{\el}{\xnorm}) (x_s^{(i)} - x_s^{(j)})
 \end{equation*}
+where $c > 0$ is the material parameter.
 
 Note that this expression is valid for all values of $\xnorm$, which means that the function is not differentiable when $\xnorm = 0$. However, the distance being $0$ would imply two nodes being in the same position which would never happen in practice, so this is not a problem. However, our function has such little smoothness causes us some other problems.
 
@@ -49,10 +50,21 @@ On the other hand, we have
 Thus, the objective function is not convex. \hfill $\square$
 
 The fact that the function is non-convex means that we need the general optimality conditions, as well as restricting our choice of algorithms. It also means that there can exist local minima that are not global, as seen in figure \ref{fig:local_optimizer}. \textbf{OPPDATER TEKST HER pga 3 faste noder ikke 1}
-\begin{figure}[h]
-    \centering\includegraphics[width=0.5\columnwidth]{Bilder/local_optimizer3.jpeg}
-    \caption{Local optimizer to the left, global optimizer to the right.A bar is connected between the fixed node $p^{(1)}$, and free node $x^{(2)}$.}
-    \label{fig:local_optimizer}
+
+\begin{figure}
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{Bilder/localminpos.pdf}
+  \label{fig:}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{Bilder/localminneg.pdf}
+  \label{fig:sub2}
+\end{subfigure}
+\caption{Local optimizer to the left, global optimizer to the right.A bar is connected between the fixed node $p^{(1)}$, and free node $x^{(2)}$.}
+\label{fig:local_optimizer}
 \end{figure}
 
 Fix a node $p^{(1)}$, and consider a free node $x^{(2)}$ that is placed at least a distance $l_{12}$ above the $p^{(1)}$. At this starting position the bar will not have any elastic energy, so the gravity will bring the node downwards until the gravity is equally strong as the elastic force from the bar, which will be a local minima. However, it will not be a global minima as we will have lower energy if we instead placed $x^{(2)}$ below $p^{(1)}$ as seen in the rightmost drawing. 
@@ -86,6 +98,8 @@ As for LICQ we have
     \vdots 
     \hspace{200pt}\\
     \nabla c_i(X) = \bigg( (0,0,0),(0,0,0),...,\underbrace{(0,0,1)}_{i^{\text{th}}\text{ term}},...,(0,0,0) \bigg)\\
+    \vdots
+    \hspace{200pt}\\
     \nabla c_N(X) = \bigg( (0,0,0),(0,0,0),...,(0,0,0),...,(0,0,1) \bigg) \\
 \end{align*}
 
