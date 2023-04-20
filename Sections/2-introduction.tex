@@ -87,10 +87,10 @@ The second constraint models is a self-supported free standing structure, with t
     x_3^{(i)} \geq 0 \quad \forall \quad i = 1,...,N
     \label{z_positive}
 \end{equation}
-Note that coerciveness is not as immediate in this case. If we simultaniously move all the nodes horizontally in any direction, we see that the distance between the nodes do not change, and thus the energy is constant. This issue can be solved without a loss of generality by fixing the $x_1$ and $x_2$-position of a given node: $x^{(i)} = (p_1,p_2,x^{(i)}_3)$. This simply disallows moving the entire structure horisontally.
+Note that coerciveness is not as immediate in this case. If we simultaneously move all the nodes horizontally in any direction, we see that the distance between the nodes do not change, and thus the energy is constant. This issue can be solved without a loss of generality by fixing the $x_1$ and $x_2$-position of a given node: $x^{(i)} = (p_1,p_2,x^{(i)}_3)$. This simply disallows moving the entire structure horizontally.
 
 \textbf{Theorem: If the graph $\mathcal{G}$ is connected, the objective function \eqref{totalEnergy} with the constraint \eqref{z_positive} admits a solution.}
 
-With this setup, coerciveness mostly follows from the proof in the theorem above. Note that we do not allow $x_3 \to -\infty$ because of the constraint \eqref{z_positive}. Additionally, note that the energy from $\ece$ and $\ebe$ does not tend to $\infty$ when we increase $z$ simultaniously for all nodes. However, in this case the external force and bar weight will increase, and thus the total energy function is coercive. \hfill $\square$
+With this setup, coerciveness mostly follows from the proof in the theorem above. Note that we do not allow $x_3 \to -\infty$ because of the constraint \eqref{z_positive}. Additionally, note that the energy from $\ece$ and $\ebe$ does not tend to $\infty$ when we increase $z$ simultaneously for all nodes. However, in this case the external force and bar weight will increase, and thus the total energy function is coercive. \hfill $\square$
 
 Note that this restriction indeed creates a constrained optimization problem, unlike the constraint \eqref{fixednode} where we had a free optimization problem in a lower dimension.
