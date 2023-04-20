@@ -41,12 +41,12 @@ We will also model external loads for a given node. If node $i$ is loaded with m
 We can express the total energy of the structure as \begin{equation}
     E(X) = \sumset{B}(\ebe + \ebg) + \sumset{C} \ece + \ee
     \label{totalEnergy}
-\end{equation} where $\mathcal{B}, \mathcal{C} \subset \mathcal{E}$ are the sets of bars and cables in the structure. This function is continuous, the only potential problem is the piecewise continuous function $\ece$ at the point where $L\e = \xnorm = \el$, but we see that it evaluates to $0$, so this term is also continuous.
+\end{equation} where $\mathcal{B}, \mathcal{C} \subset \mathcal{E}$ are the sets of bars and cables in the structure. This function is continuous, the only potential problem is the piecewise continuous function $\ece$ at the point where $L\e = \xnorm = \el$. However, we see that it evaluates to $0$, so this term is also continuous.
 
-Note that minimizing \eqref{totalEnergy} might not admit a solution, as the energy can be unbounded from below by letting all $z$-coordinates of the nodes tend to $-\infty$. We propose two constraints to prevent this issue.
+Note that minimizing \eqref{totalEnergy} might not admit a solution, as the energy can be unbounded from below by letting all $z$-coordinates of the nodes tend to $-\infty$. We propose two solutions to this issue.
 
 \subsection{Fixing the position of a set of nodes}
-The first constraint is fixing some of the nodes such that
+The first option is fixing some of the nodes such that
 \begin{equation}
     x^{(i)} = p^{(i)} \qquad \text{for } i = 1,...,M
     \label{fixednode}
@@ -58,14 +58,13 @@ Proof:
 We start by showing coercivity:
 Using that $\mathcal{G}$ is connected, the entire structure is connected through either cables or bars. This means that for any free node in the structure, there exists some set of nodes $\mathcal{S}$ that defines a path to a fixed node $p^{(i)}$. 
 
-If we consider any possible combination of $x^{(i)}_1 \to \pm \infty,x^{(i)}_2 \to \pm \infty,x^{(i)}_3 \to \pm \infty$, the average length of edges in $\mathcal{S}$ will also tend to $\infty$. This means that for cables we will only have to consider the case when $\xnorm > \el$. The elastic energy in $E(X)$ will be given by
+If we consider any possible combination of $x^{(i)}_1 \to \pm \infty,x^{(i)}_2 \to \pm \infty,x^{(i)}_3 \to \pm \infty$, the average length of edges in $\mathcal{S}$ will also tend to $\infty$. For cables we will only consider the case when $\xnorm > \el$ as the energy will be equal. The elastic energy in $E(X)$ will be given by
 \begin{equation} 
 \label{plusinf1}
 \begin{aligned}
-     &\xinf \sumset{C}\ece =\xinf \frac{k}{2 \ell_{p2}^2}(\lVert x^{(p)} - x^{(2)} \rVert-\ell_{p2})^2 = \infty \\
+     &\xinf \sumset{C}\ece =\xinf \sumset{C} \frac{k}{2 \el ^2}(\lVert x^{(i)} - x^{(j)} \rVert-\el)^2 = \infty \\
      &\xinf \sumset{B }\ebe = 
-     %&\text{depending on whether the fixed node is connected to a cable or bar or both}
-      \frac{c}{2 \ell_{p2}^2}(\lVert x^{(p)} - x^{(2)} \rVert-\ell_{p2})^2 = \infty
+      \sumset{B} \frac{c}{2 \el ^2}(\lVert x^{(i)} - x^{(j)} \rVert-\el)^2 = \infty
 \end{aligned} 
 \end{equation}
 
@@ -76,20 +75,22 @@ The fact that we allow $x^{(i)}_3 \to -\infty$ could potentially result in
 \xinf \sumset{B} \ebg = -\infty \quad \text{if $e_{ij}$ is a bar}
 \label{minusinf}
 \end{equation} 
-However, it's clear that the terms in \eqref{minusinf} will be dominated one of the terms in \eqref{plusinf1} because they contain quadratic terms. Hence, the total energy function \eqref{totalEnergy} is coercive.
+However, it's clear that the terms in \eqref{minusinf} will be dominated by one of the terms in \eqref{plusinf1} because they contain quadratic terms. Hence, the total energy function \eqref{totalEnergy} is coercive.
 
-We have already shown that the function is continious, therefore it's also lower semi continious, and this implies that the minimisation problem admits a solution. $\square$
+We have already shown that the function is continuous, therefore it's also lower semi-continuous and this implies that the minimisation problem admits a solution. \hfill $\square$
 
 If we have a disconnected graph, we would have to split the graph into subgraphs that are connected, and fix at least one node in every connected subgraph. We will not consider these situations in this paper, so we will not prove this.
 
 \subsection{Imposing positive z-values of the nodes}
-The second constraint models a self-supported free standing structure, with the only condition being that it's above ground:
+The second constraint models is a self-supported free standing structure, with the only condition being that it's above ground:
 \begin{equation}
     x_3^{(i)} \geq 0 \quad \forall \quad i = 1,...,N
     \label{z_positive}
 \end{equation}
 Note that coerciveness is not as immediate in this case. If we simultaniously move all the nodes horizontally in any direction, we see that the distance between the nodes do not change, and thus the energy is constant. This issue can be solved without a loss of generality by fixing the $x_1$ and $x_2$-position of a given node: $x^{(i)} = (p_1,p_2,x^{(i)}_3)$. This simply disallows moving the entire structure horisontally.
 
-With this setup, coerciveness follows from the proof in the theorem above, the only difference is that we do not allow $x_3 \to -\infty$ because of the constraint \eqref{z_positive}.
+\textbf{Theorem: If the graph $\mathcal{G}$ is connected, the objective function \eqref{totalEnergy} with the constraint \eqref{z_positive} admits a solution.}
+
+With this setup, coerciveness mostly follows from the proof in the theorem above. Note that we do not allow $x_3 \to -\infty$ because of the constraint \eqref{z_positive}. Additionally, note that the energy from $\ece$ and $\ebe$ does not tend to $\infty$ when we increase $z$ simultaniously for all nodes. However, in this case the external force and bar weight will increase, and thus the total energy function is coercive. \hfill $\square$
 
 Note that this restriction indeed creates a constrained optimization problem, unlike the constraint \eqref{fixednode} where we had a free optimization problem in a lower dimension.
