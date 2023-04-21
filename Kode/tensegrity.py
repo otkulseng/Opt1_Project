@@ -35,12 +35,12 @@ class TensegrityStructure:
             points = x
 
         for i in range(len(p)):
-            ax.scatter(p[i][0], p[i][1], p[i][2], c='k')
+            ax.scatter(p[i][0], p[i][1], p[i][2], c='k',s=200)
             ax.text(p[i][0], p[i][1], p[i][2], r'$p_{%d}$'%i, size=20, zorder=1, color='k')
 
 
         for i in range(len(x)):
-            ax.scatter(x[i][0], x[i][1], x[i][2], c='g')
+            ax.scatter(x[i][0], x[i][1], x[i][2], c='g',s=200)
             ax.text(x[i][0], x[i][1], x[i][2], r'$x_{%d}$'%i, size=20, zorder=1, color='k')
 
         for elem in self.cables:
