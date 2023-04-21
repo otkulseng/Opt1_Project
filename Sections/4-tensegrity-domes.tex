@@ -49,8 +49,7 @@ On the other hand, we have
 \end{equation}
 Thus, the objective function is not convex. \hfill $\square$
 
-The fact that the function is non-convex means that we need the general optimality conditions, as well as restricting our choice of algorithms. It also means that there can exist local minima that are not global, as seen in figure \ref{fig:local_optimizer}. \textbf{OPPDATER TEKST HER pga 3 faste noder ikke 1}
-
+The fact that the function is non-convex means that we need the general optimality conditions, as well as restricting our choice of algorithms. It also means that there can exist local minima that are not global, as seen in figure \ref{fig:local_optimizer}. 
 \begin{figure}
 \centering
 \begin{subfigure}{.5\textwidth}
@@ -63,11 +62,12 @@ The fact that the function is non-convex means that we need the general optimali
   \includegraphics[width=1\linewidth]{Bilder/localminneg.pdf}
   \label{fig:sub2}
 \end{subfigure}
-\caption{Local optimizer to the left, global optimizer to the right.A bar is connected between the fixed node $p^{(1)}$, and free node $x^{(2)}$.}
+\caption{Local optimizer to the left, global optimizer to the right. The free node $x^{(0)}$ is connected through bars to three fixed nodes  $p^{(0)}$, $p^{(1)}$, and $p^{(2)}$.}
 \label{fig:local_optimizer}
 \end{figure}
 
-Fix a node $p^{(1)}$, and consider a free node $x^{(2)}$ that is placed at least a distance $l_{12}$ above the $p^{(1)}$. At this starting position the bar will not have any elastic energy, so the gravity will bring the node downwards until the gravity is equally strong as the elastic force from the bar, which will be a local minima. However, it will not be a global minima as we will have lower energy if we instead placed $x^{(2)}$ below $p^{(1)}$ as seen in the rightmost drawing. 
+Fix a three nodes $p^{(0)}$, $p^{(1)}$, and $p^{(2)}$, and consider a free node $x^{(0)}$ that initially is placed above the $xy$-plane. The position of $x^{(0)}$ will be determined by  
+At this starting position the bar will not have any elastic energy, so the gravity will bring the node downwards until the gravity is equally strong as the elastic force from the bar, which will be a local minima. However, it will not be a global minima as we will have lower energy if we instead placed $x^{(2)}$ below $p^{(1)}$ as seen in the rightmost drawing. 
 
 
 
