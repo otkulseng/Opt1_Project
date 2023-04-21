@@ -11,7 +11,7 @@ except FileExistsError:
     print("Directory already created")
 
 
-RUNALL = False
+RUNALL = True
 ################################################################################
 if RUNALL:
     print("START LOCALMIN")
