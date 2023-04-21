@@ -34,7 +34,7 @@ $\mu$ is initialized as 1, an
 
 \subsection{Experiments}
 \subsubsection{Cable nets}
-For the first experiment we will consider $4$ free and $4$ fixed nodes along with following parameters:
+For the first experiment we will consider $4$ free and $4$ fixed nodes along with the following parameters:
 \begin{equation*}
 \begin{gathered}
     4 \text{ fixed nodes } p^{(1)} = (5,5,0),\; p^{(2)} = (-5,5,0),\; p^{(3)} = (-5,-5,0),\; p^{(4)} = (5,-5,0) \\
@@ -43,7 +43,25 @@ For the first experiment we will consider $4$ free and $4$ fixed nodes along wit
 \end{gathered}
 \end{equation*}
 
-This problem has a analytical solution for the free nodes:
+This problem has a analytical solution which is given in \eqref{P25Table} along with the numerically obtained solution.
+
+\begin{gather}    
+\label{P25Table}
+\begin{tabular}{||c c c||} 
+ \hline
+ Node & Numerical solution & Analytical solution \\ [0.5ex] 
+ \hline
+$x^{(5)}$ & $(2,2,-1.5)$ & $(2,2,-1.5)$  \\ 
+ \hline
+ $x^{(6)}$ & $(-2,2,-1.5)$& $(-2,2,-1.5)$  \\ 
+ \hline
+ $x^{(7)}$ & $(-2,-2,-1.5)$ & $(-2,-2,-1.5)$\\ 
+ \hline
+ $x^{(8)}$ & $(2,-2,-1.5)$ & $(2,-2,-1.5)$ \\ 
+ \hline
+\end{tabular}
+\end{gather}
+
 \begin{equation*}
     \begin{gathered}
     x^{(5)} = (2,2,-\frac{3}{2}),\;x^{(6)} = (-2,2,-\frac{3}{2}),\;x^{(5)} = (-2,-2,-\frac{3}{2}),\;x^{(5)} = (2,-2,-\frac{3}{2})
@@ -53,11 +71,11 @@ This problem has a analytical solution for the free nodes:
 
 \begin{figure}[!ht]
 \centering
-\begin{subfigure}{.72\textwidth}
+\begin{subfigure}{.75\textwidth}
   \centering
   \includegraphics[width=0.99\linewidth]{Bilder/p25.pdf}
 \end{subfigure}%
-\begin{subfigure}{.3\textwidth}
+\begin{subfigure}{.28\textwidth}
   \centering
   \includegraphics[width=0.99\linewidth]{Bilder/P25conv.pdf}
   \label{fig:sub2}
@@ -86,7 +104,7 @@ We now consider bars as well, and will use the $4$ fixed nodes and the following
 \centering
 \begin{subfigure}{.72\textwidth}
   \centering
-  \includegraphics[width=0.99\linewidth]{Bilder/P25.pdf}
+  \includegraphics[width=0.99\linewidth]{Bilder/P69.pdf}
 \end{subfigure}%
 \begin{subfigure}{.3\textwidth}
   \centering
@@ -101,12 +119,31 @@ We now consider bars as well, and will use the $4$ fixed nodes and the following
 
 
 
-Again, we have an analytical solution to this problem, namely 
+Again, we have an analytical solution to this problem, a comparison is given in \eqref{P69Table} 
 \begin{equation*}
     \begin{gathered}
     x^{(5)} = (-s,0,t),x^{(6)} = (0,-s,t),x^{(7)} = (s,0,t),x^{(8)} = (0,s,t),  \text{with}\; s \approx 0.70970, \; t \approx 9.54287
     \end{gathered}
 \end{equation*}
+
+\textbf{fix innmat}
+\begin{gather}    
+\label{P69Table}
+\begin{tabular}{||c c c||} 
+ \hline
+ Node & Numerical solution & Analytical solution \\ [0.5ex] 
+ \hline
+$x^{(5)}$ & $(2,2,-1.5)$ & $(2,2,-1.5)$  \\ 
+ \hline
+ $x^{(6)}$ & $(-2,2,-1.5)$& $(-2,2,-1.5)$  \\ 
+ \hline
+ $x^{(7)}$ & $(-2,-2,-1.5)$ & $(-2,-2,-1.5)$\\ 
+ \hline
+ $x^{(8)}$ & $(2,-2,-1.5)$ & $(2,-2,-1.5)$ \\ 
+ \hline
+\end{tabular}
+\end{gather}
+
 
 
 \begin{figure}[!ht]

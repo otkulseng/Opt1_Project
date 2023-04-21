@@ -6,12 +6,12 @@ The position of a node $i$ is given by $x^{(i)} = (x_1^{(i)},x_2^{(i)},x_3^{(i)}
 
 The goal is to determine the position $X$ of all the nodes. We rely on the fundamental physical principle that the structure will attain a stable resting position $X^*$ only when the total potential energy of the system has a local or global minimum. This naturally gives us an optimization problem.
 
-We will assume that all bars are made of the same material, and have identical thickness and cross section. However they can differ in length. A bar $e_{ij}$ has a resting length $\ell_{ij}>0$, where the internal elastic energy is $0$. If the bar is stretched or compressed to a new length $L(e_{ij})=\lVert x^{(i)} - x^{(j)}\rVert$, we will model the energy using a quadratic model
+We will assume that all bars are made of the same material, and have identical thickness and cross section. However, they can differ in length. A bar $e_{ij}$ has a resting length $\ell_{ij}>0$, where the internal elastic energy is $0$. If the bar is stretched or compressed to a new length $L(e_{ij})=\lVert x^{(i)} - x^{(j)}\rVert$, we will model the energy using a quadratic model
 \begin{equation}
     \ebe = \frac{c}{2\el^2}(L\e - \el)^2 = \frac{c}{2 \el^2}(\xnorm - \el)^2
     \label{barElast}
 \end{equation}
-where the parameter $c > 0$ depends on the material and cross section of the bar. We also consider the potential energy of the bar, as it has a considerable mass.
+where the parameter $c > 0$ depends on the material and cross section of the bar. We also consider the potential energy of the bar, as it has a considerable mass. With $\rho$ denoting the line density of the bar and $g$ the gravitational acceleration, we have that
 \begin{equation}
     \ebg = \frac{\rho g \el}{2}(x_3^{(i)}+x_3^{(j)})
     \label{barGrav}
@@ -26,11 +26,7 @@ Cables are modeled similarly, we only permit varying length. A cable has a resti
     \end{cases}
     \label{cableElast}
 \end{equation}
-where $k > 0$ is a material parameter, $\rho$ is the mass density, and $g$ is the gravitational acceleration. Additionally, we consider the weight of the cables negligible compared to the weight of the bars. That is:
-\begin{equation}
-    E^{cable}_{bar}\e = 0
-    \label{cableGrav}
-\end{equation}
+where $k > 0$ is a material parameter. Additionally, we consider the weight of the cables negligible compared to the weight of the bars.
 
 We will also model external loads for a given node. If node $i$ is loaded with mass $m_i \geq 0$, this will result in the total external energy
 \begin{equation}
@@ -38,7 +34,7 @@ We will also model external loads for a given node. If node $i$ is loaded with m
     \label{externalEnergy}
 \end{equation}
 
-We can express the total energy of the structure as \begin{equation}
+Hence, we can express the total energy of the structure as \begin{equation}
     E(X) = \sumset{B}(\ebe + \ebg) + \sumset{C} \ece + \ee
     \label{totalEnergy}
 \end{equation} where $\mathcal{B}, \mathcal{C} \subset \mathcal{E}$ are the sets of bars and cables in the structure. This function is continuous, the only potential problem is the piecewise continuous function $\ece$ at the point where $L\e = \xnorm = \el$. However, we see that it evaluates to $0$, so this term is also continuous.
