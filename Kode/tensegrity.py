@@ -83,7 +83,7 @@ class TensegrityStructure:
             self.__plot(ax1, sol,  (25, 10))
         
         self.__plot(ax2, sol, (25, 10),title="Solution")
-        self.__plot(ax3, sol, (90, 10),title="Solution seen from above",)
+        self.__plot(ax3, sol, (90, 5),title="Solution seen from above")
 
         return fig, axes
 
