@@ -7,7 +7,8 @@ from algoritmer import bfgs
 
 
 
-ts = TEST.FREESTANDING
+ts = TEST.SANITYCHECK
+
 x0 = np.arange(3 * len(ts.free_weights))
 # x0 = np.random.uniform(10, 20, size=(3 * len(ts.free_weights)))
 

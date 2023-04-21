@@ -81,7 +81,7 @@ class TensegrityStructure:
             self.__plot(ax1, x0,  (25, 10),title="Initialisation")
         else:
             self.__plot(ax1, sol,  (25, 10))
-        
+
         self.__plot(ax2, sol, (25, 10),title="Solution")
         self.__plot(ax3, sol, (90, 5),title="Solution seen from above")
 
@@ -275,7 +275,7 @@ def gen_grad_E(cables, bars, free_weights, fixed_points, k, c, rho, quadratic_pe
             xl = state[i]
             xr = state[j]
 
-            temp_norm = np.linalg.norm(xl - xr) + 1e-20
+            temp_norm = np.linalg.norm(xl - xr) + 1e-16
             num = c / lij**2 * (1 - lij / temp_norm)
             elem = num * (xl - xr)
             if i >= len(fixed_points):

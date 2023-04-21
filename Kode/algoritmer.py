@@ -53,7 +53,12 @@ def lineSearch(pk,
         ch = curvatureHigh(alpha)
     return alpha
 
-def bfgs(x0, f, gradf=None, Niter=100, grad_epsilon=1e-10, plot_summary=False, convergence_plot=False, return_iteration=False):
+def bfgs(x0, f, gradf=None, Niter=100, grad_epsilon=1e-14,
+         plot_summary=False,
+         convergence_plot=False,
+         return_iteration=False,
+         convergence_sol=False,
+         solution = None):
     if gradf is None:
         gradf = lambda xk : approx_fprime(xk, f, epsilon=grad_epsilon)
 
@@ -66,6 +71,10 @@ def bfgs(x0, f, gradf=None, Niter=100, grad_epsilon=1e-10, plot_summary=False, c
     if convergence_plot:
         convergence = np.zeros(Niter + 1)
         convergence[0] = norm
+
+    if convergence_sol:
+        conv_sol = np.zeros(Niter + 1)
+        conv_sol[0] = np.linalg.norm(x0 - solution)
 
     Hk = np.identity(np.size(x0))
     I = np.identity(np.size(x0))
@@ -105,6 +114,9 @@ def bfgs(x0, f, gradf=None, Niter=100, grad_epsilon=1e-10, plot_summary=False, c
         if convergence_plot:
             convergence[n] = norm
 
+        if convergence_sol:
+            conv_sol[n] = np.linalg.norm(x_current-solution)
+
     if plot_summary:
         if n == Niter:
             print("Maximum iteration obtained in BFGS method")
@@ -118,8 +130,12 @@ def bfgs(x0, f, gradf=None, Niter=100, grad_epsilon=1e-10, plot_summary=False, c
     if convergence_plot:
         return x_current, convergence[:n]
 
+    if convergence_sol:
+        return x_current, conv_sol[:n]
+
     if return_iteration:
         return x_current, n
+
 
     return x_current
 

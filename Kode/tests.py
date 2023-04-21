@@ -213,7 +213,6 @@ def STORIES(N):
                             quadratic_penalization=True)
 
 
-
 fixpoints = np.array([
     [10, 10, 20.1],
     [10, -10, 20.1],
@@ -289,4 +288,36 @@ TABLE = TensegrityStructure(fixpoints,
                             c=1e5,
                             # rho=freeweights[0]/30,
                             quadratic_penalization=True)
+
+
+
+fixpoints = np.array([
+    [0, 0, 0],
+    [1, 0, 0],
+    [1, 1, 0],
+    [0, 1, 0],
+])*10
+
+freeweights = np.ones(2)*10000
+
+
+cables = np.array([
+])
+
+bars = np.array([
+    [0, 4, 1000],
+    [1, 4, 1000],
+    [2, 5, 1000],
+    [3, 5, 1000],
+    [4, 5, 1]
+])
+
+
+CONVBARS = TensegrityStructure(fixpoints,
+                          freeweights,
+                          cables,
+                          bars,
+                          k=0.1,
+                          c=1,
+                          quadratic_penalization=True)
 
