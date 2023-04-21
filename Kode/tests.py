@@ -102,7 +102,8 @@ P69 = TensegrityStructure(fixpoints,
 fixpoints = np.array([
     [0, 0, 0],
     [2, 0, 0],
-    [1, np.sqrt(3), 0],
+    [2, 2, 0],
+    [0, 2, 0]
 ])
 
 freeweights = np.array([
@@ -120,6 +121,7 @@ bars = np.array([
     [p[0], x[0], 2],
     [p[1], x[0], 2],
     [p[2], x[0], 2],
+    [p[3], x[0], 2]
 ])
 
 LOCALMIN = TensegrityStructure(fixpoints,
@@ -253,14 +255,13 @@ m = int(2*h/3)
 u = int(np.sqrt(0.5*l**2 + m**2))
 
 fixpoints = np.array([
-
 ])
 freeweights = np.ones(10)
 for i in range(4):
-    freeweights[i] = 2
+    freeweights[i] = 1/10
 
 cables = np.array([
-    [8, 9, int(h/10)],
+    [8, 9, 2],
     [0, 4, h],
     [1, 5, h],
     [2, 6, h],
@@ -284,8 +285,8 @@ TABLE = TensegrityStructure(fixpoints,
                             freeweights,
                             cables,
                             bars,
-                            k=1e9,
-                            c=1e7,
+                            k=1e10,
+                            c=1e5,
                             # rho=freeweights[0]/30,
                             quadratic_penalization=True)
 

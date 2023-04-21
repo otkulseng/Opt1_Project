@@ -11,7 +11,7 @@ except FileExistsError:
     print("Directory already created")
 
 
-RUNALL = True
+RUNALL = False
 ################################################################################
 if RUNALL:
     print("START LOCALMIN")
@@ -47,14 +47,12 @@ if RUNALL:
 
 
 ################################################################################
-if True:
+if RUNALL:
     print("START TEST P69")
     ts =  TEST.P69
     x0 = np.arange(3 * len(ts.free_weights))
     res, conv = bfgs(x0, ts.func, ts.grad, Niter=1000, convergence_plot=True)
 
-    #ts.plot(res, x0)
-    
     plt.figure()
     plt.plot(np.log10(conv))
     plt.savefig("Bilder/P69conv.pdf") # Used in report.
@@ -173,4 +171,42 @@ if RUNALL:
 ################################################################################
 
 
+################################################################################
+if RUNALL:
+    print("START CHAIR")
+    ts = TEST.TABLE
+    x0 = np.arange(3 * len(ts.free_weights))
 
+    mu = 1
+    prev = x0
+    for i in range(10):
+        res, num = bfgs(prev, ts.func(mu), ts.grad(mu), Niter=1000, return_iteration=True)
+        print(f' {i}: {num}, {mu} ')
+
+        mu *= 1.5
+        if num < 1000:
+            mu *= 2
+        if num < 500:
+            mu *= 2
+        if num < 250:
+            mu *= 2
+
+        mu = min(mu, 1e10)
+
+        if np.linalg.norm(res - prev) < 1e-12:
+            break
+
+        prev = res
+
+    res, conv = bfgs(res, ts.func(mu), ts.grad(mu), Niter=1000, convergence_plot=True)
+    plt.figure()
+    plt.plot(np.log10(conv))
+    plt.savefig(f'Bilder/table.pdf') # Used in report.
+    ts.plot(res, x0)
+    plt.savefig(f'Bilder/table.pdf') # Used in report.
+    print("END TABLE")
+################################################################################
+
+
+
+plt.show()
