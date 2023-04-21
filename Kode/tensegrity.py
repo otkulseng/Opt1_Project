@@ -35,14 +35,14 @@ class TensegrityStructure:
             points = x
 
         for i in range(len(p)):
-            ax.scatter(p[i][0], p[i][1], p[i][2], c='k', s=100)
+            ax.scatter(p[i][0], p[i][1], p[i][2], c='k', s=100,zorder=-1)
             ax.text(p[i][0], p[i][1], p[i][2],
-                    r'$p_{%d}$' % i, size=10, zorder=1, color='b')
+                    r'${%d}$' % i, size=12, zorder=1, color='b')
 
         for i in range(len(x)):
-            ax.scatter(x[i][0], x[i][1], x[i][2], c='g', s=100)
+            ax.scatter(x[i][0], x[i][1], x[i][2], facecolors='r', edgecolors='r', s=100,zorder=1)
             ax.text(x[i][0], x[i][1], x[i][2],
-                    r'$x_{%d}$' % i, size=10, zorder=1, color='b')
+                    r'${%d}$' % i, size=12, zorder=-1, color='b')
 
         for elem in self.cables:
             a = elem[0]
@@ -62,9 +62,9 @@ class TensegrityStructure:
             #elev, azim = angle
             ax.view_init(elev=elev, azim=azim)
             #ax.view_init(elev=90, azim=0)
-        ax.set_ylabel("y")
-        ax.set_xlabel("x")
-        ax.set_zlabel("z")
+        ax.set_xlabel(r"$x_1$")
+        ax.set_ylabel(r"$x_2$")
+        ax.set_zlabel(r"$x_3$")
         ax.set_title(title)
         #ax.set_title("Automatisert tittel?")
 
@@ -83,7 +83,7 @@ class TensegrityStructure:
             self.__plot(ax1, sol,  (25, 10))
 
         self.__plot(ax2, sol, (25, 10),title="Solution")
-        self.__plot(ax3, sol, (90, 5),title="Solution seen from above")
+        self.__plot(ax3, sol, (90, 5),title="Solution, second above")
 
         return fig, axes
 

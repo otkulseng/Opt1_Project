@@ -5,7 +5,7 @@ The next section include a number of numerical experiments and results. This sec
 One part is a completely generic implementation of the BFGS method in the \href{https://github.com/otkulseng/Opt1_Project/blob/main/Kode/algoritmer.py}{algoritmer.py} file. This implementation follows closely that of algorithm 6.1 in \cite{NW}, the only difference being the choice of steplength. Our implementation use a line search method to find a steplength that satisfies the \emph{strong} Wolfe conditions, rather than the regular ones used in the book.
 
 The linesearch method is based on algorithm 3.5 in \cite{NW}, with a bisecting interpolation implementation of zoom (algorithm 3.6). The next steplength is chosen according to $\alpha_{k+1} = \rho \alpha_k$. The number $\rho$ together with $c_1$ and $c_2$ completely specify the algorithm, and are preset as
-
+\begin{gather}    
 \begin{tabular}{||c c c||} 
  \hline
  $\rho$ & $c_1$ & $c_2$ \\ [0.5ex] 
@@ -13,6 +13,8 @@ The linesearch method is based on algorithm 3.5 in \cite{NW}, with a bisecting i
 2 & 0.01 & 0.9  \\ 
  \hline
 \end{tabular}
+\end{gather}
+
 
 The BFGS iterations stop either when some predetermined maximum iterations has been reached, or when the norm of the gradient is below a threshold of $\num{1e-10}$
 
@@ -21,35 +23,63 @@ The second part is the generation of objective and gradient functions, and can b
 
 When creating a TensegrityStructure, the functions \lstinline{gen_E}  and \lstinline{gen_grad_E} are called with the corresponding cables, bars, free weights, fixed points and rest lengths and returns the objective and gradient function of the setup according to the equations in the previous sections. The returned functions take as input only the position of the free points, which are the variables to be optimized. This is neat, as it allows us to use any generic optimization algorithm to solve the problem.
 
-All tests can be found in the \href{https://github.com/otkulseng/Opt1_Project/blob/main/Kode/tests.py}{tests.py} file, but the Tensegrity setup for all the numerical experiments below is given before the corresponding results.
-
 \subsubsection{Freestanding structures}
 Instead of solving \eqref{energy} subject to \eqref{eq:aboveground}, we added quadratic penalization to the energy and gradient functions. The objective function thus gained a term of the from 
 \begin{equation}
     E_{qp} = \sum_{i \in \mathcal{N}} \frac{1}{2} \mu (x_3^{(i)})^2
 \end{equation}
-where $\mathcal{N}$ is the set of all points with z-component smaller than zero. 
 
-$\mu$ is initialized as 1, an
+where $\mathcal{N}$ is the set of all points with z-component smaller than zero. This $\mu$ should be large enough to counteract the gravity of the free nodes. To avoid having to modify the BFGS method to account for quadratic penalty, we ran BFGS multiple times for increasing values of $\mu$ like in the code snippet below.
 
+\begin{lstlisting}
+prev = x0
+for _ in range(Max_iter):
+    res, num = bfgs(prev, ts.func(mu), ts.grad(mu), Niter=1000)
+    mu *= 1.5
+    if num < 1000:
+        mu *= 2
+    if num < 500:
+        mu *= 2
+    if num < 250:
+        mu *= 2
+
+    mu = min(mu, 1e10)
+    if np.linalg.norm(res - prev) < 1e-12:
+        break
+    prev = res.copy()
+\end{lstlisting}
+The code snippet above was used for all freestanding structures.
+ 
 \subsection{Experiments}
+The setup for all numerical experiments may be found in the \href{https://github.com/otkulseng/Opt1_Project/blob/main/Kode/tests.py}{tests.py} file. The Tensegrity structure setup is also for convenience given below, before every experiment.
 \subsubsection{Cable nets}
-For the first experiment we will consider $4$ free and $4$ fixed nodes along with following parameters:
+For the first experiment we will consider $4$ free and $4$ fixed nodes along with the following parameters:
 \begin{equation*}
 \begin{gathered}
     4 \text{ fixed nodes } p^{(1)} = (5,5,0),\; p^{(2)} = (-5,5,0),\; p^{(3)} = (-5,-5,0),\; p^{(4)} = (5,-5,0) \\
     \mathcal{E} = \{(1,5),\;(2,6),\;(3,7),\;(4,8),\; (5,6),\; (6,7),\; (7,8),\; (8,5) \}\\
-    k=3,\quad \el = 3 \quad \forall \quad (i,j) \in \mathcal{E}, \quad m_i g = \frac{1}{6}, \quad i= 5,6,7,8 
+    \el = 3 \quad \forall \quad (i,j) \in \mathcal{E}, \quad k = 3, \quad m_i g = \frac{1}{6}, \quad i= 5,6,7,8 
 \end{gathered}
 \end{equation*}
 
-This problem has a analytical solution for the free nodes:
-\begin{equation*}
-    \begin{gathered}
-    x^{(5)} = (2,2,-\frac{3}{2}),\;x^{(6)} = (-2,2,-\frac{3}{2}),\;x^{(5)} = (-2,-2,-\frac{3}{2}),\;x^{(5)} = (2,-2,-\frac{3}{2})
-    \end{gathered}
-\end{equation*}
+This problem has a analytical solution which is given in \eqref{P25Table} along with the numerically obtained solution.
 
+\begin{gather}    
+\label{P25Table}
+\begin{tabular}{||c c c||} 
+ \hline
+ Node & Numerical solution & Analytical solution \\ [0.5ex] 
+ \hline
+$x^{(5)}$ & $(2,2,-1.5)$ & $(2,2,-1.5)$  \\ 
+ \hline
+ $x^{(6)}$ & $(-2,2,-1.5)$& $(-2,2,-1.5)$  \\ 
+ \hline
+ $x^{(7)}$ & $(-2,-2,-1.5)$ & $(-2,-2,-1.5)$\\ 
+ \hline
+ $x^{(8)}$ & $(2,-2,-1.5)$ & $(2,-2,-1.5)$ \\ 
+ \hline
+\end{tabular}
+\end{gather}
 
 \begin{figure}[!ht]
 \centering
@@ -68,8 +98,6 @@ This problem has a analytical solution for the free nodes:
 
 We see from \eqref{P25} that we indeed reach this configuration of nodes. 
 
-\textbf{Noe om at den ender opp i samme løsning uansett startkonfigurasjon?}
-
 \subsubsection{Tensegrity domes}
 We now consider bars as well, and will use the $4$ fixed nodes and the following parameters:
 
@@ -86,7 +114,7 @@ We now consider bars as well, and will use the $4$ fixed nodes and the following
 \centering
 \begin{subfigure}{.72\textwidth}
   \centering
-  \includegraphics[width=0.99\linewidth]{Bilder/P25.pdf}
+  \includegraphics[width=0.99\linewidth]{Bilder/P69.pdf}
 \end{subfigure}%
 \begin{subfigure}{.3\textwidth}
   \centering
@@ -101,12 +129,31 @@ We now consider bars as well, and will use the $4$ fixed nodes and the following
 
 
 
-Again, we have an analytical solution to this problem, namely 
+Again, we have an analytical solution to this problem, a comparison is given in \eqref{P69Table} 
 \begin{equation*}
     \begin{gathered}
     x^{(5)} = (-s,0,t),x^{(6)} = (0,-s,t),x^{(7)} = (s,0,t),x^{(8)} = (0,s,t),  \text{with}\; s \approx 0.70970, \; t \approx 9.54287
     \end{gathered}
 \end{equation*}
+
+\textbf{fix innmat}
+\begin{gather}    
+\label{P69Table}
+\begin{tabular}{||c c c||} 
+ \hline
+ Node & Numerical solution & Analytical solution \\ [0.5ex] 
+ \hline
+$x^{(5)}$ & $(2,2,-1.5)$ & $(2,2,-1.5)$  \\ 
+ \hline
+ $x^{(6)}$ & $(-2,2,-1.5)$& $(-2,2,-1.5)$  \\ 
+ \hline
+ $x^{(7)}$ & $(-2,-2,-1.5)$ & $(-2,-2,-1.5)$\\ 
+ \hline
+ $x^{(8)}$ & $(2,-2,-1.5)$ & $(2,-2,-1.5)$ \\ 
+ \hline
+\end{tabular}
+\end{gather}
+
 
 
 \begin{figure}[!ht]

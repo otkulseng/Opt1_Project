@@ -4,20 +4,23 @@ Tensegrity structures consist of bars and cables that are connected with joints.
 
 The position of a node $i$ is given by $x^{(i)} = (x_1^{(i)},x_2^{(i)},x_3^{(i)})$. Additionally, we will collect the position of all nodes in a vector $X = (x^{(1)},...,x^{(N)} \in \mathbb{R}^{3N}$
 
-The goal is to determine the position $X$ of all the nodes. We rely on the fundamental physical principle that the structure will attain a stable resting position $X^*$ only when the total potential energy of the system has a local or global minimum. This naturally gives us an optimization problem.
+The goal is to determine the position $X$ of all the nodes. We rely on the physical principle that the structure will assume a stable resting position $X^*$ only when the total potential energy of the system has attains a local minimum. This naturally give rise to an optimization problem.
 
-We will assume that all bars are made of the same material, and have identical thickness and cross section. However they can differ in length. A bar $e_{ij}$ has a resting length $\ell_{ij}>0$, where the internal elastic energy is $0$. If the bar is stretched or compressed to a new length $L(e_{ij})=\lVert x^{(i)} - x^{(j)}\rVert$, we will model the energy using a quadratic model
+We will assume that all bars are made of the same material with identical thickness and cross section. They can, however, have different \emph{rest length}. The rest length of a bar between node $i$ and node $j$, $\ell_{ij}$, is defined to be the positive real number at which the internal elastic energy is $0$. If the bar is stretched or compressed to a new length $L(e_{ij})=\lVert x^{(i)} - x^{(j)}\rVert$, we will model the energy using a quadratic model
 \begin{equation}
     \ebe = \frac{c}{2\el^2}(L\e - \el)^2 = \frac{c}{2 \el^2}(\xnorm - \el)^2
     \label{barElast}
 \end{equation}
-where the parameter $c > 0$ depends on the material and cross section of the bar. We also consider the potential energy of the bar, as it has a considerable mass.
+where the parameter $c > 0$ depends on the material and cross section of the bar. 
+
+We also consider the effects of gravity on the bars, as they may be of considerable mass. Introducing $\rho$ as the line density of all the bars in the system, we will use
 \begin{equation}
     \ebg = \frac{\rho g \el}{2}(x_3^{(i)}+x_3^{(j)})
     \label{barGrav}
 \end{equation}
+where $g$ is the acceleration due to gravity.
 
-Cables are modeled similarly, we only permit varying length. A cable has a resting length $\el > 0$, where the internal elastic energy is $0$. Compression of a cable yields no energy, but stretching will be modeled similarly to a bar. This gives us
+Cables are modeled similarly to bars. We will assume them to be massless, and only extendable. They too have a rest length, but the energy function is $0$ if the length between the nodes is smaller than the rest length. Thus
 
 \begin{equation}
 \ece = \begin{cases}
@@ -26,22 +29,23 @@ Cables are modeled similarly, we only permit varying length. A cable has a resti
     \end{cases}
     \label{cableElast}
 \end{equation}
-where $k > 0$ is a material parameter, $\rho$ is the mass density, and $g$ is the gravitational acceleration. Additionally, we consider the weight of the cables negligible compared to the weight of the bars. That is:
-\begin{equation}
-    E^{cable}_{bar}\e = 0
-    \label{cableGrav}
-\end{equation}
+where $k > 0$ is a material parameter.
 
-We will also model external loads for a given node. If node $i$ is loaded with mass $m_i \geq 0$, this will result in the total external energy
+The resulting structures give more physical meaning if we let the nodes be point particles with a finite mass, contributing a value of
+
 \begin{equation}
     \ee = \sum_{i=1}^{N} m_i g x_3^{(i)}
     \label{externalEnergy}
 \end{equation}
 
-We can express the total energy of the structure as \begin{equation}
+to the energy. The objective function to be minimized is then the total energy given by the following equation:
+
+\begin{equation}
     E(X) = \sumset{B}(\ebe + \ebg) + \sumset{C} \ece + \ee
     \label{totalEnergy}
-\end{equation} where $\mathcal{B}, \mathcal{C} \subset \mathcal{E}$ are the sets of bars and cables in the structure. This function is continuous, the only potential problem is the piecewise continuous function $\ece$ at the point where $L\e = \xnorm = \el$. However, we see that it evaluates to $0$, so this term is also continuous.
+\end{equation} where $\mathcal{B}, \mathcal{C} \subset \mathcal{E}$ are the sets of bars and cables in the structure.
+
+The elastic potential for the cables is a piecewise continuous function. To show that it is everywhere continuous, we need to show that it is also continuous at the branch points. This is, however, straighforward as $L\e - \el \rightarrow 0$ when $L\e \rightarrow \el$. As \eqref{totalEnergy} then is a sum of continuous functions, we conclude that it is continuous.
 
 Note that minimizing \eqref{totalEnergy} might not admit a solution, as the energy can be unbounded from below by letting all $z$-coordinates of the nodes tend to $-\infty$. We propose two solutions to this issue.
 
@@ -50,15 +54,16 @@ The first option is fixing some of the nodes such that
 \begin{equation}
     x^{(i)} = p^{(i)} \qquad \text{for } i = 1,...,M
     \label{fixednode}
-\end{equation} for some fixed $p^{(i)} \in \mathbb{R}^3$, and $1\leq M < N$. This constraint is convenient because we still have a free optimization problem, where we have replaced some $x^{(i)}$ by $p^{(i)}$. The dimension of $X$ is now $3(N-M)$
+\end{equation} for some fixed $p^{(i)} \in \mathbb{R}^3$, and $1\leq M < N$. This constraint is convenient because the resulting problem is an unconstrained one when we can treat the fixed nodes as constants. The dimension of this free optimization problem would then be $3(N-M)$. Constraining just one node will, in fact, theoretically guarantee a solution:
 
 \textbf{Theorem: If the graph $\mathcal{G}$ is connected, the objective function \eqref{totalEnergy} with the constraint \eqref{fixednode} admits a solution.}
 
 Proof:
-We start by showing coercivity:
-Using that $\mathcal{G}$ is connected, the entire structure is connected through either cables or bars. This means that for any free node in the structure, there exists some set of nodes $\mathcal{S}$ that defines a path to a fixed node $p^{(i)}$. 
+We have already shown that \eqref{totalEnergy} is continuous and thus lower semi-continuous. It is therefore sufficient to show coercivity.
 
-If we consider any possible combination of $x^{(i)}_1 \to \pm \infty,x^{(i)}_2 \to \pm \infty,x^{(i)}_3 \to \pm \infty$, the average length of edges in $\mathcal{S}$ will also tend to $\infty$. For cables we will only consider the case when $\xnorm > \el$ as the energy will be equal. The elastic energy in $E(X)$ will be given by
+Let $p$ be a fixed node and let $x$ be any free node. Without loss of generality, we may set $p_1 = p_2 = 0$. As $\mathcal{G}$ is connected, there must exist some set of nodes $\mathcal{S}$ defining a path from $x$ to $p$.
+
+The key observation is that under any combination of $x^{(i)}_1 \to \pm \infty,x^{(i)}_2 \to \pm \infty,x^{(i)}_3 \to \pm \infty$ the average length of edges in $\mathcal{S}$ will tend to $\infty$. For cables we will only consider the case when $\xnorm > \el$ as the energy will be equal. The elastic energy in $E(X)$ will be given by
 \begin{equation} 
 \label{plusinf1}
 \begin{aligned}
@@ -67,7 +72,6 @@ If we consider any possible combination of $x^{(i)}_1 \to \pm \infty,x^{(i)}_2 \
       \sumset{B} \frac{c}{2 \el ^2}(\lVert x^{(i)} - x^{(j)} \rVert-\el)^2 = \infty
 \end{aligned} 
 \end{equation}
-
 The fact that we allow $x^{(i)}_3 \to -\infty$ could potentially result in
 \begin{equation}
   \xinf \ee = -\infty

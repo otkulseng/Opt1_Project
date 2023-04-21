@@ -41,9 +41,7 @@ However, the function is not $C^2$. Again consider the situation when $\xnorm > 
 \begin{equation*}
     \frac{\partial}{\partial x_2^{(i)}} \frac{\partial}{\partial x_1^{(i)}} \ece = \frac{\partial}{\partial x_2^{(i)}}  \bigg (\frac{k}{\el^2} (1- \frac{\el}{\xnorm}) (x_1^{(i)} - x_1^{(j)}) \bigg) = \frac{k}{\el} \frac{(x_1^{(i)} - x_1^{(j)}) (x_2^{(i)}-x_2^{(j)})}{\xnorm^3} = 
 \end{equation*}
-Now look at the limit: $$ \underset{\xnorm \to \el ^+}{\text{lim}} \frac{k}{\el}\frac{ (x_1^{(i)} - x_1^{(j)}) (x_2^{(i)}-x_2^{(j)})}{\xnorm^3} = \frac{k (x_1^{(i)} - x_1^{(j)}) (x_2^{(i)}-x_2^{(j)})}{\el^4} \neq 0 $$, and therefore the function is not $C^2$ in general. (Note that the problem is $C^2$ if we have
-$\sumset{E} \ece = 0$, but that is only possible if we have $\mathcal{E} = \emptyset$, or if no cables are stretched past $\el$. These are not particularly interesting situations.)
-\textbf{Kanskje slett dette? idk}
+Now look at the limit: $$ \underset{\xnorm \to \el ^+}{\text{lim}} \frac{k}{\el}\frac{ (x_1^{(i)} - x_1^{(j)}) (x_2^{(i)}-x_2^{(j)})}{\xnorm^3} = \frac{k (x_1^{(i)} - x_1^{(j)}) (x_2^{(i)}-x_2^{(j)})}{\el^4} \neq 0 $$ and therefore the function is not $C^2$ in general.
 
 
 \subsection{Convexity}
@@ -83,6 +81,8 @@ $t = \|x^{(i)} - x^{(j)}\|, \mu = l_{ij} \text{ and } \kappa = \frac{k}{2l^2_{ij
 Since $\kappa$ is a constant and $f(t)$ is a convex function, it implies that $\ece$ is a convex function.
 
 Thus proving that \eqref{cableNet} is a convex function as it is a sum of convex functions. \hfill $\square$
+
+Note that \eqref{cableNet} is not strictly convex as it's possible to exclusively place cables between nodes positioned such that no cable has any energy, resulting in $\ece = 0 \implies E(X) = \ee$
 
 The fact that this energy expression is convex means that Quasi-Newton methods are a good candidate. As our function is not $C^2$, Newton's Method is not an option. 
 
