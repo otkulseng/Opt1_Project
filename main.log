@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.5.3)  21 APR 2023 13:56
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.5.3)  21 APR 2023 16:04
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -850,86 +850,91 @@ File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 ) (/Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Sections/1-abstract.tex) (/Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Sections/2-introduction.tex [1
 
 {/usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]) (/Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Sections/3-cable_net_structures.tex [3]
+Overfull \hbox (19.08597pt too wide) in paragraph at lines 44--47
+\OT1/cmr/m/n/10.95 and there-fore the func-tion is not $\OML/cmm/m/it/10.95 C[]$ \OT1/cmr/m/n/10.95 in gen-eral. (Note that the prob-lem is $\OML/cmm/m/it/10.95 C[]$ \OT1/cmr/m/n/10.95 if we have $[] \OML/cmm/m/it/10.95 E[]\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 e[]\OT1/cmr/m/n/10.95 ) =
+ []
+
+
 Overfull \hbox (2.11284pt too wide) detected at line 59
 \OML/cmm/m/it/10.95 E\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 ^^UX \OT1/cmr/m/n/10.95 + (1 \OMS/cmsy/m/n/10.95 ^^@ \OML/cmm/m/it/10.95 ^^U\OT1/cmr/m/n/10.95 )\OML/cmm/m/it/10.95 Y\OT1/cmr/m/n/10.95 ) = [] \OML/cmm/m/it/10.95 m[]g\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 ^^Ux[] \OT1/cmr/m/n/10.95 + (1 \OMS/cmsy/m/n/10.95 ^^@ \OML/cmm/m/it/10.95 ^^U\OT1/cmr/m/n/10.95 )\OML/cmm/m/it/10.95 y[]\OT1/cmr/m/n/10.95 ) = [] \OML/cmm/m/it/10.95 ^^Um[]gx[] \OT1/cmr/m/n/10.95 + (1 \OMS/cmsy/m/n/10.95 ^^@ \OML/cmm/m/it/10.95 ^^U\OT1/cmr/m/n/10.95 )\OML/cmm/m/it/10.95 m[]gy[] \OT1/cmr/m/n/10.95 = \OML/cmm/m/it/10.95 ^^UE\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 X\OT1/cmr/m/n/10.95 ) + (1 \OMS/cmsy/m/n/10.95 ^^@ \OML/cmm/m/it/10.95 ^^U\OT1/cmr/m/n/10.95 )\OML/cmm/m/it/10.95 E\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 Y\OT1/cmr/m/n/10.95 )
  []
 
 [4]) (/Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Sections/4-tensegrity-domes.tex [5]
-<Bilder/localminpos.pdf, id=164, 583.99265pt x 197.52794pt>
+<Bilder/localminpos.pdf, id=164, 588.27855pt x 197.9804pt>
 File: Bilder/localminpos.pdf Graphic file (type pdf)
 <use Bilder/localminpos.pdf>
 Package pdftex.def Info: Bilder/localminpos.pdf  used on input line 65.
-(pdftex.def)             Requested size: 234.87749pt x 79.44379pt.
-<Bilder/localminneg.pdf, id=165, 583.99265pt x 197.52794pt>
+(pdftex.def)             Requested size: 234.87749pt x 79.04573pt.
+<Bilder/localminneg.pdf, id=165, 588.27855pt x 197.9804pt>
 File: Bilder/localminneg.pdf Graphic file (type pdf)
 <use Bilder/localminneg.pdf>
 Package pdftex.def Info: Bilder/localminneg.pdf  used on input line 70.
-(pdftex.def)             Requested size: 234.87749pt x 79.44379pt.
+(pdftex.def)             Requested size: 234.87749pt x 79.04573pt.
  [6 </Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Bilder/localminpos.pdf> </Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Bilder/localminneg.pdf>]) (/Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Sections/5-numerical.tex [7]
-<Bilder/p25.pdf, id=266, 583.99265pt x 197.52794pt>
+<Bilder/p25.pdf, id=261, 588.27855pt x 197.9804pt>
 File: Bilder/p25.pdf Graphic file (type pdf)
 <use Bilder/p25.pdf>
-Package pdftex.def Info: Bilder/p25.pdf  used on input line 58.
-(pdftex.def)             Requested size: 334.84377pt x 113.25818pt.
-<Bilder/P25conv.pdf, id=267, 383.32584pt x 280.3938pt>
+Package pdftex.def Info: Bilder/p25.pdf  used on input line 76.
+(pdftex.def)             Requested size: 348.795pt x 117.38742pt.
+<Bilder/P25conv.pdf, id=262, 383.32584pt x 275.40642pt>
 File: Bilder/P25conv.pdf Graphic file (type pdf)
 <use Bilder/P25conv.pdf>
-Package pdftex.def Info: Bilder/P25conv.pdf  used on input line 62.
-(pdftex.def)             Requested size: 139.51941pt x 102.05835pt.
+Package pdftex.def Info: Bilder/P25conv.pdf  used on input line 80.
+(pdftex.def)             Requested size: 130.21623pt x 93.55708pt.
 
-Overfull \hbox (9.39708pt too wide) in paragraph at lines 56--65
- []$[]$$[]$ 
- []
-
-<Bilder/P25.pdf, id=269, 583.99265pt x 197.52794pt>
-File: Bilder/P25.pdf Graphic file (type pdf)
-<use Bilder/P25.pdf>
-Package pdftex.def Info: Bilder/P25.pdf  used on input line 89.
-(pdftex.def)             Requested size: 334.84377pt x 113.25818pt.
-<Bilder/P69conv.pdf, id=270, 383.32584pt x 280.3938pt>
-File: Bilder/P69conv.pdf Graphic file (type pdf)
-<use Bilder/P69conv.pdf>
-Package pdftex.def Info: Bilder/P69conv.pdf  used on input line 93.
-(pdftex.def)             Requested size: 139.51941pt x 102.05835pt.
-
-Overfull \hbox (9.39708pt too wide) in paragraph at lines 87--96
+Overfull \hbox (14.09207pt too wide) in paragraph at lines 74--83
  []$[]$$[]$ 
  []
 
 [8]
-<Bilder/FREESTANDING.pdf, id=277, 583.99265pt x 197.52794pt>
+<Bilder/P69.pdf, id=271, 588.27855pt x 197.9804pt>
+File: Bilder/P69.pdf Graphic file (type pdf)
+<use Bilder/P69.pdf>
+Package pdftex.def Info: Bilder/P69.pdf  used on input line 107.
+(pdftex.def)             Requested size: 334.84377pt x 112.69289pt.
+<Bilder/P69conv.pdf, id=272, 383.32584pt x 275.40642pt>
+File: Bilder/P69conv.pdf Graphic file (type pdf)
+<use Bilder/P69conv.pdf>
+Package pdftex.def Info: Bilder/P69conv.pdf  used on input line 111.
+(pdftex.def)             Requested size: 139.51941pt x 100.24304pt.
+
+Overfull \hbox (9.39708pt too wide) in paragraph at lines 105--114
+ []$[]$$[]$ 
+ []
+
+<Bilder/FREESTANDING.pdf, id=274, 588.27855pt x 197.9804pt>
 File: Bilder/FREESTANDING.pdf Graphic file (type pdf)
 <use Bilder/FREESTANDING.pdf>
-Package pdftex.def Info: Bilder/FREESTANDING.pdf  used on input line 116.
-(pdftex.def)             Requested size: 334.84377pt x 113.25818pt.
-<Bilder/FREESTANDINGconv.pdf, id=278, 383.32584pt x 272.34811pt>
+Package pdftex.def Info: Bilder/FREESTANDING.pdf  used on input line 153.
+(pdftex.def)             Requested size: 334.84377pt x 112.69289pt.
+<Bilder/FREESTANDINGconv.pdf, id=275, 383.32584pt x 275.40642pt>
 File: Bilder/FREESTANDINGconv.pdf Graphic file (type pdf)
 <use Bilder/FREESTANDINGconv.pdf>
-Package pdftex.def Info: Bilder/FREESTANDINGconv.pdf  used on input line 120.
-(pdftex.def)             Requested size: 139.51941pt x 99.12987pt.
+Package pdftex.def Info: Bilder/FREESTANDINGconv.pdf  used on input line 157.
+(pdftex.def)             Requested size: 139.51941pt x 100.24304pt.
 
-Overfull \hbox (9.39708pt too wide) in paragraph at lines 114--123
+Overfull \hbox (9.39708pt too wide) in paragraph at lines 151--160
  []$[]$$[]$ 
  []
 
-<Bilder/2FREESTANDING.pdf, id=279, 583.99265pt x 197.52794pt>
+<Bilder/2FREESTANDING.pdf, id=276, 588.27855pt x 197.9804pt>
 File: Bilder/2FREESTANDING.pdf Graphic file (type pdf)
 <use Bilder/2FREESTANDING.pdf>
-Package pdftex.def Info: Bilder/2FREESTANDING.pdf  used on input line 132.
-(pdftex.def)             Requested size: 334.84377pt x 113.25818pt.
-<Bilder/2FREESTANDINGconv.pdf, id=280, 383.32584pt x 272.34811pt>
+Package pdftex.def Info: Bilder/2FREESTANDING.pdf  used on input line 169.
+(pdftex.def)             Requested size: 334.84377pt x 112.69289pt.
+<Bilder/2FREESTANDINGconv.pdf, id=277, 383.32584pt x 280.3938pt>
 File: Bilder/2FREESTANDINGconv.pdf Graphic file (type pdf)
 <use Bilder/2FREESTANDINGconv.pdf>
-Package pdftex.def Info: Bilder/2FREESTANDINGconv.pdf  used on input line 136.
-(pdftex.def)             Requested size: 139.51941pt x 99.12987pt.
+Package pdftex.def Info: Bilder/2FREESTANDINGconv.pdf  used on input line 173.
+(pdftex.def)             Requested size: 139.51941pt x 102.05835pt.
 
-Overfull \hbox (9.39708pt too wide) in paragraph at lines 130--139
+Overfull \hbox (9.39708pt too wide) in paragraph at lines 167--176
  []$[]$$[]$ 
  []
 
-) (/Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Sections/6-conclusion.tex) [9 </Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Bilder/p25.pdf> </Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Bilder/P25conv.pdf> </Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Bilder/P25.pdf> </Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Bilder/P69conv.pdf> </Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Bilder/FREESTANDING.pdf> </Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Bilder/FREESTANDINGconv.pdf> </Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Bilder/2FREESTANDING.pdf> </Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Bilder/2FREESTANDINGconv.pdf>]
+) (/Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Sections/6-conclusion.tex)
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 16.
- [10]
+ [9 </Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Bilder/p25.pdf> </Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Bilder/P25conv.pdf> </Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Bilder/P69.pdf> </Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Bilder/P69conv.pdf>] [10 </Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Bilder/FREESTANDING.pdf> </Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Bilder/FREESTANDINGconv.pdf> </Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Bilder/2FREESTANDING.pdf> </Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/Bilder/2FREESTANDINGconv.pdf>]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 16.
  (/Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/main.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 16.
@@ -945,18 +950,18 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 20840 strings out of 480608
- 382592 string characters out of 5903631
- 1031151 words of memory out of 5000000
- 36367 multiletter control sequences out of 15000+600000
+ 20842 strings out of 480608
+ 382614 string characters out of 5903631
+ 1031182 words of memory out of 5000000
+ 36368 multiletter control sequences out of 15000+600000
  545139 words of font info for 75 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 56i,15n,50p,984b,1642s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 56i,16n,50p,984b,1138s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on /Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/main.pdf (10 pages, 385190 bytes).
+Output written on /Users/matiasoiesvold/Dokumenter/Øvinger/LinMet/Opt1_project_2/Opt1_Project/main.pdf (10 pages, 382201 bytes).
 PDF statistics:
- 691 PDF objects out of 1000 (max. 8388607)
- 342 compressed objects within 4 object streams
- 64 named destinations out of 1000 (max. 500000)
+ 675 PDF objects out of 1000 (max. 8388607)
+ 346 compressed objects within 4 object streams
+ 65 named destinations out of 1000 (max. 500000)
  219 words of extra memory for PDF output out of 10000 (max. 10000000)
 
