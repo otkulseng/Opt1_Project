@@ -27,7 +27,7 @@ if RUNALL:
     x0 = np.arange(3 * len(ts.free_weights))
     res, conv = bfgs(x0, ts.func, ts.grad, Niter=1000, convergence_plot=True)
     fig, ax = ts.plot(res, x0)
-    plt.savefig("Bilder/localminpos.pdf") # Used in report.
+    plt.savefig("Bilder/localminpos.pdf", bbox_inches='tight',pad_inches = 0) # Used in report.
 
     x0 = -np.arange(3 * len(ts.free_weights))
     res, conv = bfgs(x0, ts.func, ts.grad, Niter=1000, convergence_plot=True)
