@@ -16,7 +16,7 @@ The linesearch method is based on algorithm 3.5 in \cite{NW}, with a bisecting i
 \end{gather}
 The BFGS iterations stop either when some predetermined maximum iterations has been reached, or when the norm of the gradient is below a threshold of $\num{1e-10}$.
 
-BFGS has been shown to converge under certain assumptions, most notably convexity and the objective function being twice continiously differentiable. The objective functions we consider in this project are not $C^2$, and only \eqref{cableNet} is convex. One could consider applying other methods such as gradient descent as they have better theoretical guarantees of convergence, but they are significantly slower than BFGS. As BFGS is known to work very well in practice, we will exclusively use this algorithm in this project. \textbf{LEST OVER DETTE?}
+BFGS has been shown to converge under certain assumptions, most notably convexity and the objective function being twice continiously differentiable. The objective functions we consider in this project are not $C^2$, and only \eqref{cableNet} is convex. One could consider applying other methods such as gradient descent as they have better theoretical guarantees of convergence, but they are significantly slower than BFGS. As BFGS is known to work very well in practice, we will exclusively use this algorithm in this project.
 
 \subsubsection{Tensegrity}
 This is the generation of objective and gradient functions, and can be found in the \href{https://github.com/otkulseng/Opt1_Project/blob/main/Kode/tensegrity.py}{tensegrity.py} file. 
@@ -29,7 +29,6 @@ Instead of solving \eqref{totalEnergy} subject to \eqref{z_positive}, we added q
     E_{qp} = \sum_{i \in \mathcal{N}} \frac{1}{2} \mu (x_3^{(i)})^2
 \end{equation}
 where $\mathcal{N}$ is the set of all points with z-component smaller than zero. This $\mu$ should be large enough to counteract the gravitational pull on the nodes. To avoid having to modify the BFGS method to account for quadratic penalty, we ran BFGS multiple times for increasing values of $\mu$ like in the code snippet below.
-
 \begin{lstlisting}
 prev = x0
 for _ in range(Max_iter):
@@ -50,17 +49,18 @@ for _ in range(Max_iter):
 The code snippet above was used for all freestanding structures.
 
 Freestanding structures may be shifted along any vector in the $x_1$ - $x_2$ plane without change in energy, as shown in section \ref{sec:invariance}. The structure may also be rotated around any axis parallel to the $x_3$-axis. These observations affected our convergence. We therefore put three extra constraints on \ref{totalEnergy}:
-
 \begin{equation}
     x_{1}^{(1)} = x_{2}^{(1)} = 0 \textbf{ and } x_{1}^{(1)} = x_{1}^{(2)}
 \end{equation}
-
 The first two constraints fix the position of the structure so that one point ends up close to $(0, 0, 0)$. The last one fixes the orientation of the structure, by requiring that two neigboring points share the same $x_1$ value. We should only do this with structures having at least two points on the ground. 
- 
+
 \subsection{Experiments}\label{sec:experiments}
 The setup for all numerical experiments may be found in the \href{https://github.com/otkulseng/Opt1_Project/blob/main/Kode/tests.py}{tests.py} file. The Tensegrity structure setup is also for convenience given below, before every experiment.
+
+To generate the convergence plots, we compared the intermediate solutions with the correct one. If the solution was unknown, we ran the BFGS routine twice and treated the first iterates solution as the 'analytical' one.
+
 \subsubsection{Cable nets}
-For the first experiment we will consider $4$ free and $4$ fixed nodes along with the following parameters:
+For the first experiment we consider $4$ free and $4$ fixed nodes along with the following parameters:
 \begin{equation*}
 \begin{gathered}
     4 \text{ fixed nodes } p^{(1)} = (5,5,0),\; p^{(2)} = (-5,5,0),\; p^{(3)} = (-5,-5,0),\; p^{(4)} = (5,-5,0) \\
@@ -68,7 +68,6 @@ For the first experiment we will consider $4$ free and $4$ fixed nodes along wit
     k = 3, \quad m_i g = \frac{1}{6}, \quad i= 5,6,7,8 
 \end{gathered}
 \end{equation*}
-
 We will initialise the free nodes with a random node placement. This problem has a analytical solution which is given in \eqref{P25Table} along with the numerically obtained solution. 
 
 \begin{figure}    
@@ -103,14 +102,11 @@ We will initialise the free nodes with a random node placement. This problem has
   \centering
   \includegraphics[width=0.99\linewidth]{Bilder/P25conv.pdf}
 \end{subfigure}
-\caption{Cable net. Left: Randomized initial node placement. Centre left: Solution. Centre right: Solution from a different viewpoint. Right: Convergence plot.}
+\caption{Cable net. Left: Randomized initial node placement. Centre left: Solution. Centre right: Solution from a different viewpoint. Right: Convergence plot using analytical solution.}
 \label{P25}
 \end{figure}
 
-We see from figure \ref{P25} that we indeed reach this configuration of nodes. We see from the convergence plot that the gradient never increases, presumably a consequence of the function being convex. \textbf{Hadde vært nice å ha noe mer konkret å vise til her, men tror ikke det finnes noe..?}
-\textbf{HVIS VI ENDRER CONV-PLOT MÅ DETTE ENDRES} 
-
-\subsubsection{Tensegrity domes}
+We see from figure \ref{P25} that we indeed reach this configuration of nodes. We see from the convergence plot that the error norm never increases, presumably a consequence of the function being convex. \subsubsection{Tensegrity domes}
 We now consider bars as well. The objective function is no longer convex. As discussed previously, $E(X)$ is technically not $C^1$, but as long as we do not initialize free nodes in the same position, it will be fine in practice. We will test our algorithm with $4$ fixed nodes and the following parameters:
 \begin{equation*}
     \begin{gathered}
@@ -121,11 +117,10 @@ We now consider bars as well. The objective function is no longer convex. As dis
     \end{gathered}
 \end{equation*}
 
-We have an analytical solution to this problem, a comparison is given in \eqref{P69Table}. 
+We have an analytical solution to this problem, a comparison is given in \ref{P69Table}. 
 \begin{figure}
 \caption{Comparison of numerical and analytical solution for the cable net}
 \begin{gather}   
-\label{P69Table}
 \begin{tabular}{||c c c||} 
  \hline
  Node & Numerical solution & Analytical solution \\ [0.5ex] 
@@ -140,6 +135,8 @@ $x^{(5)}$ & $(0.70971,2.30372 \cdot 10^{-8},9.54287)$ & $(-0.70970,0,9.54287)$  
  \hline
 \end{tabular}
 \end{gather}
+\label{P69Table}
+
 \end{figure}
 
 \begin{figure}[!ht]
@@ -152,7 +149,7 @@ $x^{(5)}$ & $(0.70971,2.30372 \cdot 10^{-8},9.54287)$ & $(-0.70970,0,9.54287)$  
   \centering
   \includegraphics[width=0.99\linewidth]{Bilder/P69conv.pdf}
 \end{subfigure}
-\caption{Tensegrity dome. Left: Randomized initial node placement. Centre left: Solution. Centre right: Solution from a different viewpoint. Right: Convergence plot.}
+\caption{Tensegrity dome. Left: Randomized initial node placement. Centre left: Solution. Centre right: Solution from a different viewpoint. Right: Convergence plot using analytical solution.}
 \label{P69}
 \end{figure}
 
@@ -160,7 +157,7 @@ Again, we see from \eqref{P69} that we reach the desired configuration of nodes 
 
 
 As for the free standing structure, we will consider a configuration fairly close to the Tensegrity dome in order to verify the results. We use the same parameters, but in addition we add the cables 
-$\ell_{12} = \ell_{23} = \ell_{34} = \ell_{41} = 2 $ and use a small positive value of $\rho = 10^{-10}$
+$\ell_{12} = \ell_{23} = \ell_{34} = \ell_{41} = 2 $ and use a small positive value of $\rho = 10^{-10}$.
 
 \begin{figure}[!ht]
 \centering
@@ -172,22 +169,26 @@ $\ell_{12} = \ell_{23} = \ell_{34} = \ell_{41} = 2 $ and use a small positive va
   \centering
   \includegraphics[width=0.99\linewidth]{Bilder/FREESTANDINGconv.pdf}
 \end{subfigure}
-\caption{Free standing tensegrity dome. Left: Randomized initial node placement. Centre left: Solution. Centre right: Solution from a different viewpoint. Right: Convergence plot.}
+\caption{Free standing tensegrity dome. Left: Randomized initial node placement. Centre left: Solution. Centre right: Solution from a different viewpoint. Right: Convergence plot using approximate solution.}
 \label{Freestanding}
 \end{figure}
 
+We see in \eqref{Freestanding} that we indeed obtain a solution very similar to the tensegrity dome.
 
+As a final experiment, we stack two domes on top of eachother:
 
 \begin{figure}[!ht]
 \centering
 \begin{subfigure}{.72\textwidth}
   \centering
-  \includegraphics[width=0.99\linewidth]{Bilder/2FREESTANDING.pdf}
+  \includegraphics[width=0.99\linewidth]{Bilder/2freestanding.pdf}
 \end{subfigure}%
 \begin{subfigure}{.3\textwidth}
   \centering
-  \includegraphics[width=0.99\linewidth]{Bilder/2FREESTANDINGconv.pdf}
+  \includegraphics[width=0.99\linewidth]{Bilder/2.pdf}
 \end{subfigure}
 \caption{Two free standing tensegrity domes stacked on top of eachothers. Left: Randomized initial node placement. Centre left: Solution. Centre right: Solution from a different viewpoint. Right: Convergence plot.}
 \label{2free}
 \end{figure}
+
+Note that the convergence plot in this particular case is measuring the norm of the gradient, and not the comparison between some analytic or approximately analytic function evaluation.
