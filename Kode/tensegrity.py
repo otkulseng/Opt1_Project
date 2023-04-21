@@ -78,12 +78,12 @@ class TensegrityStructure:
 
         ax1, ax2, ax3 = axes
         if x0 is not None:
-            self.__plot(ax1, x0,  (25, 80),title="Initialisation")
+            self.__plot(ax1, x0,  (25, 10),title="Initialisation")
         else:
-            self.__plot(ax1, sol,  (25, 80))
+            self.__plot(ax1, sol,  (25, 10))
         
-        self.__plot(ax2, sol, (25, 80),title="Solution")
-        self.__plot(ax3, sol, (90, 0),title="Solution seen from above",)
+        self.__plot(ax2, sol, (25, 10),title="Solution")
+        self.__plot(ax3, sol, (90, 10),title="Solution seen from above",)
 
         return fig, axes
 
