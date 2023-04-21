@@ -36,13 +36,13 @@ class TensegrityStructure:
 
         for i in range(len(p)):
             ax.scatter(p[i][0], p[i][1], p[i][2], c='k', s=100,zorder=-1)
-            ax.text(p[i][0], p[i][1], p[i][2],
-                    r'${%d}$' % i, size=12, zorder=1, color='b')
+            # ax.text(p[i][0], p[i][1], p[i][2],
+            #         r'${%d}$' % i, size=12, zorder=1, color='b')
 
         for i in range(len(x)):
             ax.scatter(x[i][0], x[i][1], x[i][2], facecolors='r', edgecolors='r', s=100,zorder=1)
-            ax.text(x[i][0], x[i][1], x[i][2],
-                    r'${%d}$' % i, size=12, zorder=-1, color='b')
+            # ax.text(x[i][0], x[i][1], x[i][2],
+            #         r'${%d}$' % i, size=12, zorder=-1, color='b')
 
         for elem in self.cables:
             a = elem[0]
@@ -83,7 +83,7 @@ class TensegrityStructure:
             self.__plot(ax1, sol,  (25, 10))
 
         self.__plot(ax2, sol, (25, 10),title="Solution")
-        self.__plot(ax3, sol, (90, 5),title="Solution, second above")
+        self.__plot(ax3, sol, (90, 5),title="Solution, seen from above")
 
         return fig, axes
 
