@@ -70,11 +70,11 @@ Since the function is non-convex, it means that we need the general optimality c
   \includegraphics[width=1\linewidth]{Bilder/localminneg.pdf}
   \label{fig:sub2}
 \end{subfigure}
-\caption{Local optimizer to the left, global optimizer to the right. The free node $x^{(0)}$ is connected through bars to three fixed nodes  $p^{(0)}$, $p^{(1)}$, and $p^{(2)}$.}
+\caption{Local optimizer to the left, global optimizer to the right. The free node $x^{(0)}$ is connected through bars to three fixed nodes  $p^{(0)}$, $p^{(1)}$, and $p^{(2)}$. Numerics will be discussed later in the paper.}
 \label{fig:local_optimizer}
 \end{figure}
 
-Fix a three nodes $p^{(0)}$, $p^{(1)}$, and $p^{(2)}$, and consider a free node $x^{(0)}$ that initially is placed above the $xy$-plane. The position of $x^{(0)}$ will be determined by  
+Fix a three nodes $p^{(0)}$, $p^{(1)}$, and $p^{(2)}$, and consider a free node $x^{(0)}$ that initially is placed above the $xy$-plane. The position of $x^{(0)}$ will be determined by the equilibrium between external load, gravity, and elastic energy of the bar. However, if we initialize the
 At this starting position the bar will not have any elastic energy, so the gravity will bring the node downwards until the gravity is equally strong as the elastic force from the bar, which will be a local minima. However, it will not be a global minima as we will have lower energy if we instead placed $x^{(2)}$ below $p^{(1)}$ as seen in the rightmost illustration. 
 
 
