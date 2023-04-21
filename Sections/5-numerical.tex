@@ -4,17 +4,17 @@ Section \ref{sec:experiments} includes a number of numerical experiments and res
 \subsubsection{BFGS}
 This is a completely generic implementation of the BFGS method in the \href{https://github.com/otkulseng/Opt1_Project/blob/main/Kode/algoritmer.py}{algoritmer.py} file. The implementation follows closely that of algorithm 6.1 in \cite{NW}, the only difference being the choice of steplength. Our implementation uses a line search method to find a steplength that satisfies the \emph{strong} Wolfe conditions, rather than the regular ones used in the book.
 
-The linesearch method is based on algorithm 3.5 in \cite{NW}, with a bisecting interpolation implementation of zoom (algorithm 3.6). The next steplength is chosen according to $\alpha_{k+1} = \rho \alpha_k$. The number $\rho$ together with $c_1$ and $c_2$ completely specify the algorithm, and are preset as
-\begin{gather}    
+The linesearch method is based on algorithm 3.5 in \cite{NW}, with a bisecting interpolation implementation of zoom (algorithm 3.6). The next steplength is chosen according to $\alpha_{k+1} = \gamma \alpha_k$. The number $\rho$ together with $c_1$ and $c_2$ completely specify the algorithm, and are preset as
+\begin{gather*}    
 \begin{tabular}{||c c c||} 
  \hline
- $\rho$ & $c_1$ & $c_2$ \\ [0.5ex] 
+ $\gamma$ & $c_1$ & $c_2$ \\ [0.5ex] 
  \hline
 2 & 0.01 & 0.9  \\ 
  \hline
 \end{tabular}
-\end{gather}
-The BFGS iterations stop either when some predetermined maximum iterations has been reached, or when the norm of the gradient is below a threshold of $\num{1e-10}$.
+\end{gather*}
+The BFGS iterations stop either when some predetermined maximum iterations has been reached, or when the norm of the gradient is below a threshold of $\num{1e-14}$.
 
 BFGS has been shown to converge under certain assumptions, most notably convexity and the objective function being twice continiously differentiable. The objective functions we consider in this project are not $C^2$, and only \eqref{cableNet} is convex. One could consider applying other methods such as gradient descent as they have better theoretical guarantees of convergence, but they are significantly slower than BFGS. As BFGS is known to work very well in practice, we will exclusively use this algorithm in this project.
 
@@ -27,6 +27,7 @@ When creating a TensegrityStructure, the functions \lstinline{gen_E}  and \lstin
 Instead of solving \eqref{totalEnergy} subject to \eqref{z_positive}, we added quadratic penalization to the energy and gradient functions. The objective function thus gained a term of the from 
 \begin{equation}
     E_{qp} = \sum_{i \in \mathcal{N}} \frac{1}{2} \mu (x_3^{(i)})^2
+    \label{eq:quadraticpenalty}
 \end{equation}
 where $\mathcal{N}$ is the set of all points with z-component smaller than zero. This $\mu$ should be large enough to counteract the gravitational pull on the nodes. To avoid having to modify the BFGS method to account for quadratic penalty, we ran BFGS multiple times for increasing values of $\mu$ like in the code snippet below.
 \begin{lstlisting}
@@ -52,7 +53,7 @@ Freestanding structures may be shifted along any vector in the $x_1$ - $x_2$ pla
 \begin{equation}
     x_{1}^{(1)} = x_{2}^{(1)} = 0 \textbf{ and } x_{1}^{(1)} = x_{1}^{(2)}
 \end{equation}
-The first two constraints fix the position of the structure so that one point ends up close to $(0, 0, 0)$. The last one fixes the orientation of the structure, by requiring that two neigboring points share the same $x_1$ value. We should only do this with structures having at least two points on the ground. 
+The first two constraints fix the position of the structure so that one point ends up close to $(0, 0, 0)$. The last one fixes the orientation of the structure, by requiring that two neigboring points share the same $x_1$ value. We should only do this with structures having at least two points on the ground. Both of these were added as a quadratic penalty using the same $\mu$ as in \eqref{eq:quadraticpenalty}
 
 \subsection{Experiments}\label{sec:experiments}
 The setup for all numerical experiments may be found in the \href{https://github.com/otkulseng/Opt1_Project/blob/main/Kode/tests.py}{tests.py} file. The Tensegrity structure setup is also for convenience given below, before every experiment.
@@ -68,12 +69,12 @@ For the first experiment we consider $4$ free and $4$ fixed nodes along with the
     k = 3, \quad m_i g = \frac{1}{6}, \quad i= 5,6,7,8 
 \end{gathered}
 \end{equation*}
-We will initialise the free nodes with a random node placement. This problem has a analytical solution which is given in \eqref{P25Table} along with the numerically obtained solution. 
+This problem has an analytical solution which is given in \eqref{P25Table} along with the numerically obtained solution. We see from figure \ref{P25} that we indeed reach this configuration of nodes. We see from the convergence plot that the error norm never increases, presumably a consequence of the function being convex. 
 
 \begin{figure}    
 \caption{Comparison of numerical and analytical solution for the cable net.}
 \label{P25Table}
-\begin{gather}
+\begin{gather*}
 \begin{tabular}{||c c c||} 
     \hline
     Node & Numerical solution & Analytical solution \\ [0.5ex] 
@@ -87,7 +88,7 @@ We will initialise the free nodes with a random node placement. This problem has
     $x^{(8)}$ & $(2,-2,-1.5)$ & $(2,-2,-1.5)$ \\ 
     \hline
 \end{tabular}
-\end{gather}
+\end{gather*}
 \end{figure}
 
 
@@ -102,25 +103,25 @@ We will initialise the free nodes with a random node placement. This problem has
   \centering
   \includegraphics[width=0.99\linewidth]{Bilder/P25conv.pdf}
 \end{subfigure}
-\caption{Cable net. Left: Randomized initial node placement. Centre left: Solution. Centre right: Solution from a different viewpoint. Right: Convergence plot using analytical solution.}
+\caption{Cable net. Left: Initial node placement. Centre left: Solution. Centre right: Solution from a different viewpoint. Right: Convergence plot using analytical solution.}
 \label{P25}
 \end{figure}
 
-We see from figure \ref{P25} that we indeed reach this configuration of nodes. We see from the convergence plot that the error norm never increases, presumably a consequence of the function being convex. \subsubsection{Tensegrity domes}
+\subsubsection{Tensegrity domes}
 We now consider bars as well. The objective function is no longer convex. As discussed previously, $E(X)$ is technically not $C^1$, but as long as we do not initialize free nodes in the same position, it will be fine in practice. We will test our algorithm with $4$ fixed nodes and the following parameters:
 \begin{equation*}
     \begin{gathered}
     p^{(1)} = (1,1,0),\; p^{(2)} = (-1,1,0),\; p^{(3)} = (-1,-1,0),\; p^{(4)} = (1,-1,0)\\
-    \text{Cables: } \ell_{18} = \ell_{25} = \ell_{36} = \ell_{47} = 8, \qquad \ell_{56} = \ell_{67} = \ell_{78} = \ell_{58} = 1\\
+    \text{Cables: } \ell_{18} = \ell_{25} = \ell_{36} = \ell_{47} = 8 \quad\text{and} \quad  \ell_{56} = \ell_{67} = \ell_{78} = \ell_{58} = 1\\
     \text{Bars: }\ell_{15} = \ell_{26} = \ell_{37} = \ell_{48} = 10\\
     c=1, \quad k= 0.1, \quad g \rho = 0,\quad m_i g = 0, \quad i = 5,6,7,8
     \end{gathered}
 \end{equation*}
 
-We have an analytical solution to this problem, a comparison is given in \ref{P69Table}. 
+We have an analytical solution to this problem, a comparison is given in \ref{P69Table}. Again, we see from \eqref{P69} that we reach the desired configuration of nodes from our initial node placement. 
 \begin{figure}
 \caption{Comparison of numerical and analytical solution for the cable net}
-\begin{gather}   
+\begin{gather*}   
 \begin{tabular}{||c c c||} 
  \hline
  Node & Numerical solution & Analytical solution \\ [0.5ex] 
@@ -134,9 +135,8 @@ $x^{(5)}$ & $(0.70971,2.30372 \cdot 10^{-8},9.54287)$ & $(-0.70970,0,9.54287)$  
  $x^{(8)}$ & $(5.14925 \cdot 10^{-10},0.70970,9.54287)$ & $(0,0.70970,9.54287)$ \\ 
  \hline
 \end{tabular}
-\end{gather}
+\end{gather*}
 \label{P69Table}
-
 \end{figure}
 
 \begin{figure}[!ht]
@@ -149,15 +149,13 @@ $x^{(5)}$ & $(0.70971,2.30372 \cdot 10^{-8},9.54287)$ & $(-0.70970,0,9.54287)$  
   \centering
   \includegraphics[width=0.99\linewidth]{Bilder/P69conv.pdf}
 \end{subfigure}
-\caption{Tensegrity dome. Left: Randomized initial node placement. Centre left: Solution. Centre right: Solution from a different viewpoint. Right: Convergence plot using analytical solution.}
+\caption{Tensegrity dome. Left: Initial node placement. Centre left: Solution. Centre right: Solution from a different viewpoint. Right: Convergence plot using analytical solution.}
 \label{P69}
 \end{figure}
-
-Again, we see from \eqref{P69} that we reach the desired configuration of nodes from our randomized initial node placement. 
-
-
 As for the free standing structure, we will consider a configuration fairly close to the Tensegrity dome in order to verify the results. We use the same parameters, but in addition we add the cables 
-$\ell_{12} = \ell_{23} = \ell_{34} = \ell_{41} = 2 $ and use a small positive value of $\rho = 10^{-10}$.
+$\ell_{12} = \ell_{23} = \ell_{34} = \ell_{41} = 2 $ and use a small positive value of $g \rho = 10^{-10}$. We see in \eqref{Freestanding} that we indeed obtain a solution very similar to the tensegrity dome.
+
+As a final experiment, we stack two domes on top of eachother in \ref{2free}. Note that the convergence plot in this particular case is measuring the norm of the gradient, and not the comparison between some analytic or approximately analytic function evaluation.
 
 \begin{figure}[!ht]
 \centering
@@ -169,13 +167,9 @@ $\ell_{12} = \ell_{23} = \ell_{34} = \ell_{41} = 2 $ and use a small positive va
   \centering
   \includegraphics[width=0.99\linewidth]{Bilder/FREESTANDINGconv.pdf}
 \end{subfigure}
-\caption{Free standing tensegrity dome. Left: Randomized initial node placement. Centre left: Solution. Centre right: Solution from a different viewpoint. Right: Convergence plot using approximate solution.}
+\caption{Free standing tensegrity dome. Left:  Initial node placement. Centre left: Solution. Centre right: Solution from a different viewpoint. Right: Convergence plot using approximate solution.}
 \label{Freestanding}
 \end{figure}
-
-We see in \eqref{Freestanding} that we indeed obtain a solution very similar to the tensegrity dome.
-
-As a final experiment, we stack two domes on top of eachother:
 
 \begin{figure}[!ht]
 \centering
@@ -185,10 +179,9 @@ As a final experiment, we stack two domes on top of eachother:
 \end{subfigure}%
 \begin{subfigure}{.3\textwidth}
   \centering
-  \includegraphics[width=0.99\linewidth]{Bilder/2.pdf}
+  \includegraphics[width=0.99\linewidth]{Bilder/2freestandingconv.pdf}
 \end{subfigure}
-\caption{Two free standing tensegrity domes stacked on top of eachothers. Left: Randomized initial node placement. Centre left: Solution. Centre right: Solution from a different viewpoint. Right: Convergence plot.}
+\caption{Two free standing tensegrity domes stacked on top of eachothers. Left: Initial node placement. Centre left: Solution. Centre right: Solution from a different viewpoint. Right: Convergence plot.}
 \label{2free}
 \end{figure}
 
-Note that the convergence plot in this particular case is measuring the norm of the gradient, and not the comparison between some analytic or approximately analytic function evaluation.
