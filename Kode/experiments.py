@@ -91,7 +91,7 @@ if RUNALL:
     conv_plot(conv)
     plt.savefig("Bilder/P25conv.pdf", bbox_inches='tight',pad_inches = 0) # Used in report.
 
-    fig, ax = ts.plot(res)
+    fig, ax = ts.plot(res, x0)
     plt.savefig("Bilder/P25.pdf", bbox_inches='tight',pad_inches = 0) # Used in report.
     print("END TEST P25")
 ################################################################################
@@ -158,7 +158,7 @@ if RUNALL:
     conv_plot(conv)
     plt.savefig("Bilder/sanitycheckconv.pdf", bbox_inches='tight',pad_inches = 0)
 
-    fig, ax = ts.plot(res)
+    fig, ax = ts.plot(res, x0)
     plt.savefig("Bilder/sanitycheck.pdf", bbox_inches='tight',pad_inches = 0)
     print("END SANITYCHECK")
 ################################################################################
@@ -198,7 +198,7 @@ if RUNALL:
     conv_plot(conv)
     plt.savefig("Bilder/freestandingconv.pdf", bbox_inches='tight',pad_inches = 0) # Used in report.
 
-    fig, ax = ts.plot(res)
+    fig, ax = ts.plot(res, x0)
     plt.savefig("Bilder/freestanding.pdf", bbox_inches='tight',pad_inches = 0) # Used in report.
     print("END FREESTANDING")
 ################################################################################
@@ -231,10 +231,15 @@ if RUNALL:
 
         prev = res
 
-    res = bfgs(res, ts.func(mu), ts.grad(mu), Niter=1000)
+    res, conv = bfgs(res, ts.func(mu), ts.grad(mu), Niter=1000, convergence_plot=True)
+
+    plt.figure()
+    conv_plot(conv)
+    plt.savefig(f'Bilder/{n}freestandingconv.pdf', bbox_inches='tight',pad_inches = 0) # Used in report.
 
     fig, ax = ts.plot(res, x0)
     plt.savefig(f'Bilder/{n}freestanding.pdf', bbox_inches='tight',pad_inches = 0) # Used in report.
+
     print("END FREESTANDING2")
 ################################################################################
 
