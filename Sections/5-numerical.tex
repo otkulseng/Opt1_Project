@@ -23,11 +23,14 @@ When creating a TensegrityStructure, the functions \lstinline{gen_E}  and \lstin
 
 All tests can be found in the \href{https://github.com/otkulseng/Opt1_Project/blob/main/Kode/tests.py}{tests.py} file, but the Tensegrity setup for all the numerical experiments below is given before the corresponding results.
 
-\subsection{Freestanding structures}
+\subsubsection{Freestanding structures}
 Instead of solving \eqref{energy} subject to \eqref{eq:aboveground}, we added quadratic penalization to the energy and gradient functions. The objective function thus gained a term of the from 
 \begin{equation}
-    E_{qp} = \frac{1}{2} \mu 
+    E_{qp} = \sum_{i \in \mathcal{N}} \frac{1}{2} \mu (x_3^{(i)})^2
 \end{equation}
+where $\mathcal{N}$ is the set of all points with z-component smaller than zero. 
+
+$\mu$ is initialized as 1, an
 
 \subsection{Experiments}
 \subsubsection{Cable nets}
@@ -50,13 +53,13 @@ This problem has a analytical solution for the free nodes:
 
 \begin{figure}
 \centering
-\begin{subfigure}{.4\textwidth}
+\begin{subfigure}{.72\textwidth}
   \centering
-  \includegraphics[width=0.4\linewidth]{Bilder/p25.pdf}
+  \includegraphics[width=0.99\linewidth]{Bilder/p25.pdf}
 \end{subfigure}%
-\begin{subfigure}{.4\textwidth}
+\begin{subfigure}{.3\textwidth}
   \centering
-  \includegraphics[width=0.3\linewidth]{Bilder/P25conv.pdf}
+  \includegraphics[width=0.99\linewidth]{Bilder/P25conv.pdf}
   \label{fig:sub2}
 \end{subfigure}
 \caption{Cable net structure}
