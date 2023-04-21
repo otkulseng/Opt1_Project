@@ -1,11 +1,12 @@
 \section{Cable net structures}
-In this section, we are analysing the situation where all members of the structure are cables, and where we fix certain nodes in order to ensure that a solution exists. This gives us the following optimization problem:
+In this section, we are analyzing the situation where all members of the structure are cables, and where we fix certain nodes in order to ensure that a solution exists. This gives us the following optimization problem:
 \begin{equation}
     \underset{X}{\text{min }} E(X) = \sumset{E} \ece + \ee \quad \text{s.t. } x^{(i)} = p^{(i)}, i = 1,...,M
     \label{cableNet}
 \end{equation}
 In order to solve this optimization problem, we first have to show some properties about the function. We have already shown that the more general problem \eqref{totalEnergy} is continuous, therefore \eqref{cableNet} is continuous.
 
+\subsection{Differentiability}
 \textbf{Theorem: The function given in \eqref{cableNet} is $C^1$.}
 
 We will consider this function term by term.
@@ -15,49 +16,54 @@ The gradient of $\ee$ is
     = (0,0,m_1 g, 0,0,m_2 g,...,0,0,m_N g)
     \label{gradient_external_force}
 \end{equation}
-which is continuous. In fact, it's clear that $\ee \in C^{\infty}$.
-
-On the other hand, the term $\ece$ is obviously differentiable when $\xnorm \neq \el$. If $\ece$ is to be different from zero in it's entire domain we need 
+which is continuous. In fact, it's clear that $\ee \in C^{\infty}$. The term $\ece$ is obviously differentiable when $\xnorm \neq \el$. A trivial calculation yields
+\begin{equation}
+    \underset{\xnorm \to \el ^-}{\text{lim}} \nabla \ece = 0    
+\end{equation}
+If the gradient is to be continuous, one must have
 \begin{equation}
     \underset{\xnorm \to \el ^+}{\text{lim}} \nabla \ece = 0    
 \end{equation}
-We will calculate the partial derivative with respect to $x_s^{(i)}$ where $s$ represents one of the three directions: $s=1,2,3$. As we take the limit from above, we only consider the expression of $\ece$ when $\xnorm > \el$.
+
+% As we take the limit from above, we only consider the expression of $\ece$ when $\xnorm > \el$.
+The partial derivatives with respect to $x_s^{(i)}$ where $s$ represents one of the three directions $s=1,2,3$, are given by
 \begin{align}
     \delx \ece = &\delx  \frac{k}{2 \el^2} (\xnorm - \el)^2 = \frac{k}{\el^2} (1- \frac{\el}{\xnorm}) (x_s^{(i)} - x_s^{(j)})
 \end{align}
 
-Similarly, we have 
-\begin{equation}
-    \frac{\partial}{\partial x_s^{(j)}} \ece =  \frac{k}{\el^2} (1- \frac{\el}{\xnorm}) (x_s^{(j)} - x_s^{(i)})
-\end{equation} where the only difference is a factor of $-1$.
+% Similarly, we have 
+% \begin{equation}
+%     \frac{\partial}{\partial x_s^{(j)}} \ece =  \frac{k}{\el^2} (1- \frac{\el}{\xnorm}) (x_s^{(j)} - x_s^{(i)})
+% \end{equation} where the only difference is a factor of $-1$.
 
-We take the limit:
-\begin{equation}
-    \underset{\xnorm \to \el ^+}{\text{lim}} \delx \ece =    \underset{\xnorm \to \el ^+}{\text{lim}} \frac{k}{\el^2} (1- \frac{\el}{\xnorm}) (x_s^{(i)} - x_s^{(j)}) = 0
-\end{equation}
+The limit as $\xnorm \to \el^{+}$ is clearly $0$.
+
+%\begin{equation}
+%    \underset{\xnorm \to \el ^+}{\text{lim}} \delx \ece =    \underset{\xnorm \to \el ^+}{\text{lim}} \frac{k}{\el^2} (1- \frac{\el}{\xnorm}) (x_s^{(i)} - x_s^{(j)}) = 0
+%\end{equation}
 This holds for all partial derivatives, which shows that the function is $C^1$. Note that $\xnorm>\el$, so we never divide by zero. Thus we have a sum of $C^1$ functions, which is $C^1$. \hfill $\square$ 
 
 However, the function is not $C^2$. Again consider the situation when $\xnorm > \el$:
 \begin{equation*}
-    \frac{\partial}{\partial x_2^{(i)}} \frac{\partial}{\partial x_1^{(i)}} \ece = \frac{\partial}{\partial x_2^{(i)}}  \bigg (\frac{k}{\el^2} (1- \frac{\el}{\xnorm}) (x_1^{(i)} - x_1^{(j)}) \bigg) = \frac{k}{\el} \frac{(x_1^{(i)} - x_1^{(j)}) (x_2^{(i)}-x_2^{(j)})}{\xnorm^3} = 
+    \frac{\partial}{\partial x_2^{(i)}} \frac{\partial}{\partial x_1^{(i)}} \ece = \frac{\partial}{\partial x_2^{(i)}}  \bigg (\frac{k}{\el^2} (1- \frac{\el}{\xnorm}) (x_1^{(i)} - x_1^{(j)}) \bigg) = \frac{k}{\el} \frac{(x_1^{(i)} - x_1^{(j)}) (x_2^{(i)}-x_2^{(j)})}{\xnorm^3} 
 \end{equation*}
-Now look at the limit: $$ \underset{\xnorm \to \el ^+}{\text{lim}} \frac{k}{\el}\frac{ (x_1^{(i)} - x_1^{(j)}) (x_2^{(i)}-x_2^{(j)})}{\xnorm^3} = \frac{k (x_1^{(i)} - x_1^{(j)}) (x_2^{(i)}-x_2^{(j)})}{\el^4} \neq 0 $$ and therefore the function is not $C^2$ in general.
-
+Which we see is not zero in the limit as $\xnorm \to \el^{+}$.  
+%$$ \underset{\xnorm \to \el ^+}{\text{lim}} \frac{k}{\el}\frac{ (x_1^{(i)} - x_1^{(j)}) (x_2^{(i)}-x_2^{(j)})}{\xnorm^3} = \frac{k (x_1^{(i)} - x_1^{(j)}) (x_2^{(i)}-x_2^{(j)})}{\el^4} \neq 0 $$
 
 \subsection{Convexity}
-Convexity is another property that is of great importance when considering the choice of optimization algorithm. 
+% Convexity is another property that is of great importance when considering the choice of optimization algorithm. 
 
 \textbf{Theorem: The cable net objective function \eqref{cableNet} is convex, but not strictly convex}
 
-We will look at the convexity term by term.
-$\ee =\sum_{i=1}^N m_i g x_3^{(i)}$ is convex, but not strictly convex:
-\begin{equation*}
-    E(\lambda X +(1-\lambda) Y) = \sum_{i=1}^N m_i g (\lambda x_3^{(i)} + (1-\lambda) y_3^{(i)})
-    =\sum_{i=1}^N \lambda m_i g x_3^{(i)} + (1-\lambda) m_i g  y_3^{(i)} = \lambda E(X) + (1-\lambda) E(Y)
-\end{equation*} 
-Now we show that $\sumset{E} \ece$ in \eqref{cableNet} is convex. \\
-Let $\mu > 0, \kappa > 0$  be constants, $g: \mathbb{R}^3 \times \mathbb{R}^3 \rightarrow \mathbb{R}$ and $f: \mathbb{R} \rightarrow \mathbb{R}$ where 
+As a sum of convex functions is itself convex, we will again consider the function term by term.
 
+First consider $\ee =\sum_{i=1}^N m_i g x_3^{(i)}$. This is convex, but not strictly convex due to linearity.
+% \begin{equation*}
+%     E(\lambda X +(1-\lambda) Y) = \sum_{i=1}^N m_i g (\lambda x_3^{(i)} + (1-\lambda) y_3^{(i)})
+%     =\sum_{i=1}^N \lambda m_i g x_3^{(i)} + (1-\lambda) m_i g  y_3^{(i)} = \lambda E(X) + (1-\lambda) E(Y)
+% \end{equation*} 
+
+Next consider $\sumset{E} \ece$. Let $\mu > 0, \kappa > 0$  be constants. Further, let $g: \mathbb{R}^3 \times \mathbb{R}^3 \rightarrow \mathbb{R}$ and $f: \mathbb{R} \rightarrow \mathbb{R}$ be functions defined by 
 \begin{align*}
     g(x^{(i)},x^{(j)}) := \kappa f(\|x^{(i)} - x^{(j)}\|) && 
     f(t) := \begin{cases}
@@ -65,32 +71,43 @@ Let $\mu > 0, \kappa > 0$  be constants, $g: \mathbb{R}^3 \times \mathbb{R}^3 \r
             0           & , t \leq \mu
             \end{cases}
 \end{align*}
-By definition of norms, $g$ is a convex function. Next, we must show that $f$ is convex.
-By differentiating $f$, we obtain 
+
+Observing that 
+\begin{equation*}
+    \ece = g(x^{(i)}, x^{(j)}) = \kappa f(t)   
+\end{equation*} 
+
+for $t = \|x^{(i)} - x^{(j)}\|, \mu = l_{ij} \text{ and } \kappa = \frac{k}{2l^2_{ij}}$, it is sufficient to show that $f$ and $g$ is convex. $g$ is a norm, and is therefore known to be convex. Differentiating $f$, one obtain(s)
 $$
 f'(t) := \begin{cases}
         2(t-\mu) &, t > \mu \\
         0       &, t \leq \mu
         \end{cases}
 $$ 
-This shows for all $t > \mu$, $f'(t)$ is non-negative and the function value increases. Hence, $f(t)$ is a convex function. By setting 
-$t = \|x^{(i)} - x^{(j)}\|, \mu = l_{ij} \text{ and } \kappa = \frac{k}{2l^2_{ij}}$ where $k > 0$ is material parameter from \eqref{cableElast}, we obtain 
-\begin{equation*}
-    \ece = g(e_{i, j}) = g(x^{(i)}, x^{(j)}) = \kappa f(t) \Longrightarrow f(t) = \frac{1}{\kappa} \ece.  
-\end{equation*} 
-Since $\kappa$ is a constant and $f(t)$ is a convex function, it implies that $\ece$ is a convex function.
+This shows for all $t > \mu$, $f'(t)$ is non-negative and thus the function value increases. Hence, $f(t)$ is a convex function. \hfill $\square$
 
-Thus proving that \eqref{cableNet} is a convex function as it is a sum of convex functions. \hfill $\square$
+% By setting 
+% $t = \|x^{(i)} - x^{(j)}\|, \mu = l_{ij} \text{ and } \kappa = \frac{k}{2l^2_{ij}}$ where $k > 0$ is the material parameter from \eqref{cableElast}, we obtain 
+% \begin{equation*}
+%     \ece = g(e_{i, j}) = g(x^{(i)}, x^{(j)}) = \kappa f(t) \Longrightarrow f(t) = \frac{1}{\kappa} \ece.  
+% \end{equation*} 
 
-Note that \eqref{cableNet} is not strictly convex as it's possible to exclusively place cables between nodes positioned such that no cable has any energy, resulting in $\ece = 0 \implies E(X) = \ee$
+% Since $\kappa$ is a constant and $f(t)$ is a convex function, it implies % that $\ece$ is a convex function.
 
-The fact that this energy expression is convex means that Quasi-Newton methods are a good candidate. As our function is not $C^2$, Newton's Method is not an option. 
+% Thus proving that \eqref{cableNet} is a convex function as it is a sum of convex functions. \hfill 
+
+Note that \eqref{cableNet} is not strictly convex as neither $f$ nor $\ee$ are strictly convex.
+
+%It is possible to exclusively place cables between nodes positioned such that no cable has any energy, resulting in $\ece = 0 \implies E(X) = \ee$ \textbf{SKAL DETTE BLI VÆRENDE?}
+
+
+The fact that this energy expression is convex means that Quasi-Newton methods are a good candidate. Newton's method is, of course, not an option, as our function is not $C^2$,
 
 \subsection{Necessary and sufficient optimality conditions}
 As we have a convex function that is differentiable, the necessary and sufficient optimality condition for a solution $X^*$ is simply \begin{equation}
     \nabla E(X^*) = 0
 \end{equation}
-This will be a global minimizer, again due to convexity. It will not necessarily be unique, as that would require strict convexity.
+This will be a global minimizer due to convexity. It will not necessarily be unique, as that would require strict convexity.
 
 
 
