@@ -47,15 +47,18 @@ if RUNALL:
 
 
 ################################################################################
-if RUNALL:
+if True:
     print("START TEST P69")
     ts =  TEST.P69
     x0 = np.arange(3 * len(ts.free_weights))
     res, conv = bfgs(x0, ts.func, ts.grad, Niter=1000, convergence_plot=True)
+
+    #ts.plot(res, x0)
+    
     plt.figure()
     plt.plot(np.log10(conv))
     plt.savefig("Bilder/P69conv.pdf") # Used in report.
-    fig, ax = ts.plot(res)
+    fig, ax = ts.plot(res,x0)
     plt.savefig("Bilder/P69.pdf") # Used in report.
     print("END TEST P69")
 ################################################################################
