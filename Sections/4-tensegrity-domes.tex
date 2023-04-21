@@ -74,7 +74,9 @@ Since the function is non-convex, it means that we need the general optimality c
 \label{fig:local_optimizer}
 \end{figure}
 
-Fix a three nodes $p^{(0)}$, $p^{(1)}$, and $p^{(2)}$, and consider a free node $x^{(0)}$ that initially is placed above the $xy$-plane. The position of $x^{(0)}$ will be determined by the equilibrium between external load, gravity, and elastic energy of the bar. However, if we initialize the
+Fix a three nodes $p^{(0)}$, $p^{(1)}$, and $p^{(2)}$, and consider a free node $x^{(0)}$ that initially is placed above the $xy$-plane. The position of $x^{(0)}$ will be determined by the equilibrium between external load, gravity, and elastic energy of the bar. However, if we initialize the free node bwlos the $xy$-plane, we will reach a global minima. Notice that the $x_1$ and $y$-position is equal, only the $z$-component differs.
+
+
 At this starting position the bar will not have any elastic energy, so the gravity will bring the node downwards until the gravity is equally strong as the elastic force from the bar, which will be a local minima. However, it will not be a global minima as we will have lower energy if we instead placed $x^{(2)}$ below $p^{(1)}$ as seen in the rightmost illustration. 
 
 
@@ -93,9 +95,7 @@ Where $c_i(X) = x^{(i)}_3$.
 The first order optimality conditions for a given $(X^*,\lambda^*)$ are \begin{equation}
 \begin{aligned}
        &\nabla_x \mathcal{L}(X,\lambda^*)=0\\ 
-       &x^{*(i)}_3 \geq 0,\quad i = 1,...,N\\
-       &\lambda_i^* \geq 0 ,\quad i = 1,...,N\\
-       & \lambda_i^* x^{*(i)}_3 = 0,\quad i = 1,...,N
+       &x^{*(i)}_3 \geq 0,\quad \lambda_i^* \geq 0 \quad \lambda_i^* x^{*(i)}_3 = 0,\quad i = 1,...,N\\
 \end{aligned}
 \end{equation}
 As for LICQ we have 
