@@ -30,26 +30,34 @@ Unfortunately our objective function is not $C^2$. For all practical purposes as
 Similarly, the typical sufficient condition of $H_f(X^*)$ being positive definite is not applicable. For convex functions, the one condition we actually do have of $\nabla E(X)=0$ would be sufficient. However it turns out that our objective function is no longer convex.
 
 \subsection{Non-convexity}
-In order for a function to be convex we need it to hold for all $X,Y \in \mathbb{R}^{3N}$ and any $0\leq \lambda \leq 1$ Therefore, we will consider $\lambda = \frac{1}{2}$, and $X,Y$ such that 
-\begin{equation*}
+In order for a function to be convex we need it to hold for all $X,Y \in \mathbb{R}^{3N}$ and any $0\leq \lambda \leq 1$. Therefore, we will consider $\lambda = \frac{1}{2}$, and $X,Y$ such that 
+\begin{equation}
+\label{restingLengthAssumption}
     \rVert x^{(i)}-x^{(j)} \lVert, \rVert y^{(i)}-y^{(j)} \lVert = \el \quad \forall \quad i,j \in N
-\end{equation*}
+\end{equation}
 Now let $Y = -X$, that is: $\xx = -(y^{(i)}-y^{(j)}) = y^{(j)}-y^{(i)}$ such that
 \begin{equation}
-    \label{energyConv1}
-    E^{bar}_{elast}(\lambda X + (1-\lambda) Y) = E^{bar}_{elast}(\frac{1}{2}X + \frac{1}{2}(-X)) = E^{bar}_{elast}(0) = \sumset{B} \frac{c}{2 \el^2} ( \rVert 0 \lVert - \el)^2 = \sumset{B}\frac{c}{2}
-\end{equation} Which is greater than zero as $c>0$.
-On the other hand, we have
+\label{energyConv1}
+    E^{bar}_{elast}(\lambda X + (1-\lambda) Y) = E^{bar}_{elast}(\frac{1}{2}X + \frac{1}{2}(-X)) 
+    = E^{bar}_{elast}(0) = \sumset{B} \frac{c}{2 \el^2} ( \rVert 0 \lVert - \el)^2 = \sumset{B}\frac{c}{2}     
+\end{equation}
+which is greater than zero as $c>0$.
+On the other hand with assumption \eqref{restingLengthAssumption}, we get the following result,
 \begin{equation}
 \label{energyConv2}
 \begin{aligned}    
-    &\lambda E^{bar}_{elast}(X) + (1-\lambda)E^{bar}_{elast}(Y) = \frac{1}{2}E^{bar}_{elast}(X) + \frac{1}{2}E^{bar}_{elast}(-X) \\& 
+    &\lambda E^{bar}_{elast}(X) + (1-\lambda)E^{bar}_{elast}(Y) = \frac{1}{2}E^{bar}_{elast}(X) + \frac{1}{2}E^{bar}_{elast}(-X) \\&
     = \frac{1}{2}\sumset{B} \frac{c}{2\el^2} (\xnorm - \el)^2 + \frac{1}{2} \sumset{B}\frac{c}{2\el^2} (\rVert \xx\lVert-\el)^2 = 0
     \end{aligned}
 \end{equation}
-Thus, the objective function is not convex. \hfill $\square$
 
-The fact that the function is non-convex means that we need the general optimality conditions, as well as restricting our choice of algorithms. It also means that there can exist local minima that are not global, as seen in figure \ref{fig:local_optimizer}. 
+\begin{equation*}
+     E^{bar}_{elast}(\lambda X + (1-\lambda) Y) = \sumset{B}\frac{c}{2}  \nleq 0  = \lambda E^{bar}_{elast}(X) + (1-\lambda)E^{bar}_{elast}(Y)
+\end{equation*}
+
+Thus showing that the objective function is not convex. \hfill $\square$
+
+Since the function is non-convex, it means that we need the general optimality conditions, as well as restricting our choice of algorithms. This also means that there can exist local minima that are not global, as seen in figure \ref{fig:local_optimizer}. 
 \begin{figure}
 \centering
 \begin{subfigure}{.5\textwidth}
@@ -67,7 +75,7 @@ The fact that the function is non-convex means that we need the general optimali
 \end{figure}
 
 Fix a three nodes $p^{(0)}$, $p^{(1)}$, and $p^{(2)}$, and consider a free node $x^{(0)}$ that initially is placed above the $xy$-plane. The position of $x^{(0)}$ will be determined by  
-At this starting position the bar will not have any elastic energy, so the gravity will bring the node downwards until the gravity is equally strong as the elastic force from the bar, which will be a local minima. However, it will not be a global minima as we will have lower energy if we instead placed $x^{(2)}$ below $p^{(1)}$ as seen in the rightmost drawing. 
+At this starting position the bar will not have any elastic energy, so the gravity will bring the node downwards until the gravity is equally strong as the elastic force from the bar, which will be a local minima. However, it will not be a global minima as we will have lower energy if we instead placed $x^{(2)}$ below $p^{(1)}$ as seen in the rightmost illustration. 
 
 
 

@@ -1,4 +1,15 @@
 \section{Numerical}
+The code used to solve the optimization problems and to generate the plots used can be found in \href{https://github.com/otkulseng/Opt1_Project}{this} Github repository.
+
+There are two major parts of the code. 
+
+One part is a completely generic implementation of the BFGS method in the \href{https://github.com/otkulseng/Opt1_Project/blob/main/Kode/algoritmer.py}{algoritmer.py} file. This implementation follows closely that of algorithm 6.1 in \cite{NW}, the only difference being the choice of steplength. Our implementation use a linesearch method to find a steplength that satisfies the \emph{strong} Wolfe conditions, rather than the regular ones used in the book. The linesearch metjhod
+
+The BFGS iterations stop either when some predetermined maximum iterations has been reached, or when the norm of the gradient is below a threshold of $\num{1e-10}$
+
+
+
+
 
 \subsection{Cable nets}
 For the first experiment we will consider $4$ free and $4$ fixed nodes along with following parameters:
@@ -42,7 +53,7 @@ We now consider bars as well, and will use the $4$ fixed nodes and the following
 \begin{figure}
     \centering
     \includegraphics[width=0.6\columnwidth]{Bilder/P69.pdf}
-    \caption{Caption}
+    \caption{Tensegrity dome}
     \label{P69}
 \end{figure}
 Again, we have an analytical solution to this problem, namely 
@@ -51,4 +62,19 @@ Again, we have an analytical solution to this problem, namely
     x^{(5)} = (-s,0,t),x^{(6)} = (0,-s,t),x^{(7)} = (s,0,t),x^{(8)} = (0,s,t),  \text{with}\; s \approx 0.70970, \; t \approx 9.54287
     \end{gathered}
 \end{equation*}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\columnwidth]{Bilder/FREESTANDING.pdf}
+    \caption{Free standing}
+    \label{fig:freestanding}
+\end{figure}
+
+\begin{figure}
+    \centering
+\includegraphics[width=0.6\columnwidth]{Bilder/2FREESTANDING.pdf}
+    \caption{2 free standing stacked}
+    \label{fig:2freestanding}
+\end{figure}
+
 
