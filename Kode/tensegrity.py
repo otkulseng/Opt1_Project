@@ -35,27 +35,27 @@ class TensegrityStructure:
             points = x
 
         for i in range(len(p)):
-            ax.scatter(p[i][0], p[i][1], p[i][2], c='k', s=200)
+            ax.scatter(p[i][0], p[i][1], p[i][2], c='k', s=100)
             ax.text(p[i][0], p[i][1], p[i][2],
-                    r'$p_{%d}$' % i, size=20, zorder=1, color='k')
+                    r'$p_{%d}$' % i, size=10, zorder=1, color='b')
 
         for i in range(len(x)):
-            ax.scatter(x[i][0], x[i][1], x[i][2], c='g', s=200)
+            ax.scatter(x[i][0], x[i][1], x[i][2], c='g', s=100)
             ax.text(x[i][0], x[i][1], x[i][2],
-                    r'$x_{%d}$' % i, size=20, zorder=1, color='k')
+                    r'$x_{%d}$' % i, size=10, zorder=1, color='b')
 
         for elem in self.cables:
             a = elem[0]
             b = elem[1]
             cable = np.array([points[a], points[b]]).T
             ax.plot(cable[0], cable[1], cable[2], c='k',
-                    linestyle='dashed', linewidth=3)
+                    linestyle='dashed', linewidth=2)
 
         for elem in self.bars:
             a = elem[0]
             b = elem[1]
             bar = np.array([points[a], points[b]]).T
-            ax.plot(bar[0], bar[1], bar[2], c='k', linewidth=3)
+            ax.plot(bar[0], bar[1], bar[2], c='k', linewidth=2)
 
         if angle is not None:
             elev, azim = angle
