@@ -12,8 +12,8 @@ except FileExistsError:
 
 def conv_plot(y):
     plt.plot(y)
-    plt.title("Convergence",fontsize=26)
-    plt.xlabel("Iterations",fontsize=16)
+    plt.title("Convergence",fontsize=20)
+    plt.xlabel("Iterations",fontsize=14)
     plt.ylabel(r"$log \Vert E(X) \Vert $",fontsize=14)
     plt.yscale("log")
 
@@ -32,7 +32,7 @@ if RUNALL:
     x0 = -np.arange(3 * len(ts.free_weights))
     res, conv = bfgs(x0, ts.func, ts.grad, Niter=1000, convergence_plot=True)
     fig, ax = ts.plot(res, x0)
-    plt.savefig("Bilder/localminneg.pdf") # Used in report.
+    plt.savefig("Bilder/localminneg.pdf", bbox_inches='tight',pad_inches = 0) # Used in report.
 
     print("END LOCALMIN")
 ################################################################################¨
@@ -89,10 +89,10 @@ if RUNALL:
 
     plt.figure()
     conv_plot(conv)
-    plt.savefig("Bilder/P25conv.pdf") # Used in report.
+    plt.savefig("Bilder/P25conv.pdf", bbox_inches='tight',pad_inches = 0) # Used in report.
 
     fig, ax = ts.plot(res)
-    plt.savefig("Bilder/P25.pdf") # Used in report.
+    plt.savefig("Bilder/P25.pdf", bbox_inches='tight',pad_inches = 0) # Used in report.
     print("END TEST P25")
 ################################################################################
 
@@ -117,9 +117,9 @@ if RUNALL:
 
     plt.figure()
     conv_plot(conv)
-    plt.savefig("Bilder/P69conv.pdf") # Used in report.
+    plt.savefig("Bilder/P69conv.pdf", bbox_inches='tight',pad_inches = 0) # Used in report.
     fig, ax = ts.plot(res, x0)
-    plt.savefig("Bilder/P69.pdf") # Used in report.
+    plt.savefig("Bilder/P69.pdf", bbox_inches='tight',pad_inches = 0) # Used in report.
 
     print("END TEST P69")
 ################################################################################
@@ -156,10 +156,10 @@ if RUNALL:
 
     plt.figure()
     conv_plot(conv)
-    plt.savefig("Bilder/sanitycheckconv.pdf")
+    plt.savefig("Bilder/sanitycheckconv.pdf", bbox_inches='tight',pad_inches = 0)
 
     fig, ax = ts.plot(res)
-    plt.savefig("Bilder/sanitycheck.pdf")
+    plt.savefig("Bilder/sanitycheck.pdf", bbox_inches='tight',pad_inches = 0)
     print("END SANITYCHECK")
 ################################################################################
 
@@ -168,7 +168,7 @@ if RUNALL:
     print("START FREESTANDING")
     ts = TEST.FREESTANDING
 
-    x0 = np.random.uniform(0, 10, size=(3 * len(ts.free_weights)))
+    x0 = np.arange(3 * len(ts.free_weights))
 
     mu = 1
     prev = x0
@@ -196,10 +196,10 @@ if RUNALL:
 
     plt.figure()
     conv_plot(conv)
-    plt.savefig("Bilder/freestandingconv.pdf") # Used in report.
+    plt.savefig("Bilder/freestandingconv.pdf", bbox_inches='tight',pad_inches = 0) # Used in report.
 
     fig, ax = ts.plot(res)
-    plt.savefig("Bilder/freestanding.pdf") # Used in report.
+    plt.savefig("Bilder/freestanding.pdf", bbox_inches='tight',pad_inches = 0) # Used in report.
     print("END FREESTANDING")
 ################################################################################
 
@@ -233,8 +233,8 @@ if RUNALL:
 
     res = bfgs(res, ts.func(mu), ts.grad(mu), Niter=1000)
 
-    fig, ax = ts.plot(res)
-    plt.savefig(f'Bilder/{n}freestanding.pdf') # Used in report.
+    fig, ax = ts.plot(res, x0)
+    plt.savefig(f'Bilder/{n}freestanding.pdf', bbox_inches='tight',pad_inches = 0) # Used in report.
     print("END FREESTANDING2")
 ################################################################################
 
